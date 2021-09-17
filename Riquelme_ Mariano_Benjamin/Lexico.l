@@ -1,141 +1,136 @@
 %{
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include <conio.h>
+#include "y.tab.h"
 FILE *yyin;
-int yylval;
 char *yyltext;
 %}
-
 %option noyywrap
 %option yylineno
 
+DISPLAY	"DISPLAY"
+GET "GET"
+WHILE "WHILE"
+START "START"
+END "END"
+OR "OR"
+AND "AND"
+IF "IF"
+THEN "THEN"
+ELSE "ELSE"
+ENDIF "ENDIF"
+DIM "DIM"
+LONG "long"
+IN "IN"
+DO "DO"
+ENDWHILE "ENDWHILE"
+NOT "NOT"
+AS "AS"
+TIPO "integer"|"real"|"string"
 
-
-WHILE		"WHILE"
-ENDWHILE	"ENDWHILE"
-DO			"DO"
-IF			"IF"
-ENDIF		"ENDIF"
-INTEGER     "integer"
-REAL 		"real"
-STRING 		"string"
-AS			"AS"
-DISPLAY		"DISPLAY"
-GET			"GET"
-AND 		"AND"
-OR          "OR"
-NOT 		"NOT"
-DIM			"DIM"
-LONG		"long"
-IN 			"IN"
-
-COMILLA			["]
-ASIG			":="
-PAR_I			"("
-PAR_F			")"
-LLAVE_I			"{"
-LLAVE_F			"}"
-OP_SUM			"+"
-OP_RES			"-"
-OP_MUL			"*"
-OP_DIV			"/"
+CORA "["
+CORC "]"
+COMA ","
+COMILLA			["] 
+COMPARADOR ">="|"<="|">"|"<"|"=="|"!="
+PUNTO			"."
+OP_ASIG  ":="
+DIGITO	[0-9]
+LETRA	[a-zA-Z]
+ID	({DIGITO}|{LETRA})*
+CTE	{DIGITO}+
+CTE_R {DIGITO}+.{PUNTO}.{DIGITO}*|{DIGITO}*.{PUNTO}.{DIGITO}+
+CAR_ESP			"@"|"%"|":"|" "
+CTE_S		{COMILLA}.({CAR_ESP}|{DIGITO}|{LETRA})*.{COMILLA}
 COM_ABRE		"*/"
 COM_CIER      	"/*"
-PUNTO			"."
-COMA			","
-CAR_ESP			"@"|"%"|" "|":"
-MAYOR  			">"
-MENOR  			"<"
-IGUAL		 	"=="
-MAY_IGUAL 		">="
-MEN_IGUAL 		"<="
-DISTINTO  		"!="|"<>"	
-COR_ABRE		"["
-COR_CIER		"]"
-
-
-DIGITO		[0-9]
-CTE_R		{DIGITO}+.{PUNTO}.{DIGITO}*|{DIGITO}*.{PUNTO}.{DIGITO}+
-CTE_E		{DIGITO}+
-LETRA		[a-zA-Z]
-CTE_S		{COMILLA}.({CAR_ESP}|{DIGITO}|{LETRA})*.{COMILLA}
-COMEN		{COM_ABRE}.({CAR_ESP}|{DIGITO}|{LETRA})*.{COM_CIER}
-VARIABLE	({DIGITO}|{LETRA})*
-
+COMEN		{COM_ABRE}.({CAR_ESP}*|{DIGITO}*|{LETRA}*)*.{COM_CIER}
+ENTER 	"\n"
+OP_SUM "+"
+OP_RES "-"
+OP_DIV [/]
+PARA "("
+PARC ")"
+OP_MUL [*]
 
 %%
-
-{WHILE}		{printf("\nDetectado WHILE: %s",yytext);}
-{ENDWHILE}	{printf("\nDetectado ENDWHILE: %s",yytext);}
-{DO}		{printf("\nDetectado DO: %s",yytext);}
-{IF}		{printf("\nDetectado IF: %s",yytext);}
-{ENDIF}		{printf("\nDetectado ENDIF: %s",yytext);}
-{INTEGER}   {printf("\nDetectado INTEGER: %s",yytext);}
-{REAL} 		{printf("\nDetectado REAL: %s",yytext);}
-{STRING} 	{printf("\nDetectado STRING: %s",yytext);}
-{AS}		{printf("\nDetectado AS: %s",yytext);}
-{DISPLAY}	{printf("\nDetectado DISPLAY: %s",yytext);}
-{GET}		{printf("\nDetectado GET: %s",yytext);}
-{AND} 		{printf("\nDetectado AND: %s",yytext);}
-{OR}        {printf("\nDetectado OR: %s",yytext);}
-{NOT} 		{printf("\nDetectado NOT: %s",yytext);}
-{DIM}		{printf("\nDetectado DIM: %s",yytext);}
-{LONG}		{printf("\nDetectado LONG: %s",yytext);}
-{IN}		{printf("\nDetectado IN: %s",yytext);}
-{ASIG}		{printf("\nDetectado ASIG: %s",yytext);}
-{PAR_I}		{printf("\nDetectado PAR_I: %s",yytext);}
-{PAR_F}		{printf("\nDetectado PAR_F: %s",yytext);}
-{LLAVE_I}	{printf("\nDetectado LLAVE_I: %s",yytext);}
-{LLAVE_F}	{printf("\nDetectado LLAVE_F: %s",yytext);}
-{OP_SUM}	{printf("\nDetectado OP_SUM: %s",yytext);}
-{OP_RES}	{printf("\nDetectado OP_RES: %s",yytext);}
-{OP_MUL}	{printf("\nDetectado OP_MUL: %s",yytext);}
-{OP_DIV}	{printf("\nDetectado OP_DIV: %s",yytext);}
-{COM_ABRE}	{printf("\nDetectado COM_ABRE: %s",yytext);}
-{COM_CIER}  {printf("\nDetectado COM_CIER: %s",yytext);}
-{PUNTO}		{printf("\nDetectado PUNTO: %s",yytext);}
-{COMA}		{printf("\nDetectado COMA: %s",yytext);}
-{CAR_ESP}	{printf("\nDetectado CAR_ESP: %s",yytext);}
-{MAYOR}  	{printf("\nDetectado MAYOR: %s",yytext);}
-{MENOR}  	{printf("\nDetectado MENOR: %s",yytext);}
-{IGUAL}		{printf("\nDetectado IGUAL: %s",yytext);}
-{MAY_IGUAL} {printf("\nDetectado MAY_IGUAL: %s",yytext);}
-{MEN_IGUAL} {printf("\nDetectado MEN_IGUAL: %s",yytext);}
-{DISTINTO}  {printf("\nDetectado DISTINTO: %s",yytext);}
-{COMILLA}	{printf("\nDetectado COMILLA: %s",yytext);}
-{COR_ABRE}	{printf("\nDetectado COR_ABRE: %s",yytext);}
-{COR_CIER}	{printf("\nDetectado COR_CIER: %s",yytext);}
-{CTE_R}		{printf("\nDetectado CTE_R: %s",yytext);}
-{CTE_E}		{printf("\nDetectado CTE_E: %s",yytext);}
-{LETRA}		{printf("\nDetectado LETRA: %s",yytext);}
-{CTE_S}		{printf("\nDetectado CTE_S: %s",yytext);}
-{COMEN}		{printf("\nDetectado COMEN: %s",yytext);}
-{VARIABLE}	{printf("\nDetectado VARIABLE: %s",yytext);}
-
-"\n"
+{WHILE} {printf("\ntoken WHILE");return WHILE;}
+{OR} {printf("\ntoken OR");return OR;}
+{AND} {printf("\ntoken AND");return AND;}
+{START} {printf("\ntoken START");return START;}
+{END} {printf("\ntoken END");return END;}
+{IF} {printf("\ntoken IF");return IF;}
+{THEN} {printf("\ntoken THEN");return THEN;}
+{ELSE} {printf("\ntoken ELSE");return ELSE;}
+{ENDIF} {printf("\ntoken ENDIF");return ENDIF;}
+{DIM} {printf("\ntoken DIM");return DIM;}
+{CORA} {printf("\ntoken CORA");return CORA;}
+{CORC} {printf("\ntoken CORC");return CORC;}
+{TIPO} {printf("\ntoken TIPO");return TIPO;}
+{AS} {printf("\ntoken AS");return AS;}
+{LONG} {printf("\ntoken LONG");return LONG;}
+{IN} {printf("\ntoken IN");return IN;}
+{DO} {printf("\ntoken DO");return DO;}
+{ENDWHILE} {printf("\ntoken ENDWHILE");return ENDWHILE;}
+{NOT} {printf("\ntoken NOT");return NOT;}
+{COMEN}		{printf("\nDetectado COMEN: %s",yytext);return COMEN;}
+{COMPARADOR} {return COMPARADOR;}
+{OP_ASIG} {printf("\ntoken OP_ASIG");return OP_ASIG;}
+{GET} {printf("\ntoken GET: %s",yytext);return GET;}
+{CTE} {
+		printf("\ntoken CTE: %s",yytext);
+		if(atoi(yytext) < 65535)
+		{
+			yylval.stringValue = strdup(yytext); 
+			return CTE;
+		}
+		else
+		{
+			printf("\nError lexico - Se supero el limite de enteros (16 bits):  %s\n",yytext);
+		}
+		
+	  }
+{CTE_R} { 	
+			printf("\ntoken CTE_R: %s",yytext);
+			
+			if(atof(yytext)>=-3.40282347e+38F && atof(yytext)<=3.40282347e+38F)
+			{ 
+				yylval.stringValue = strdup(yytext); 
+				return CTE_R;
+			}
+			else 
+			{
+				printf("\nError lexico - Se supero el limite de reales (32 bits) %s:\n",yytext); 
+			}
+		}
+{DISPLAY} {printf("\ntoken DISPLAY");return DISPLAY;}
+{CTE_S} { 	
+			printf("\ntoken CTE_S");
+			if(strlen(yytext) < 31)
+			{
+				return CTE_S;
+			}
+			else
+			{
+				printf("\nError lexico - Se supero el limite DE caracteres para constantes alfanumericas %s:\n",yytext);
+			}
+			
+	    }
+{ENTER} {return ENTER;}
+{ID} {
+		printf("\ntoken ID: %s",yytext);
+		yylval.stringValue = strdup(yytext); 
+		return ID;
+	}
+{OP_SUM} {printf("\ntoken OP_SUM: %s",yytext);return OP_SUM;}
+{OP_RES} {printf("\ntoken OP_RES: %s",yytext);return OP_RES;}
+{OP_DIV} {printf("\ntoken OP_DIV: %s",yytext);return OP_DIV;}
+{PARA} {printf("\ntoken PARA: %s",yytext);return PARA;}
+{PARC} {printf("\ntoken PARC: %s",yytext);return PARC;}
+{COMA} {printf("\ntoken COMA: %s",yytext);return COMA;}
+{OP_MUL} {printf("\ntoken OP_MUL: %s",yytext);return OP_MUL;}
 "\t"
-
+.
 %%
-
-int main (int argc,char *argv[]){
-	
-	
-	if( (yyin = fopen(argv[1],"rt")) == NULL){
-		printf("\nNo se pudeo abrir el archivo: %s\n",argv[1]);
-		return 1;
-	}
-	else {
-		printf("\nSe pudeo abrir el archivo: %s\n",argv[1]);
-		yylex();
-	}
-	fclose(yyin);
-	return 0;
-}
-
-int yyerror(void){ 
- 	  printf("Syntax Error\n");
-          exit(1);
-}

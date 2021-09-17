@@ -1,22 +1,20 @@
-DIM [ contador,promedio,actual ] AS [ integer,real,real ]
+DIM [ contador,promedio,actual] AS [ integer,real,real]
 DIM [ suma ] AS [ real ]
-DISPLAY "Prueba txt LyC Tema 2"
+DISPLAY "Prueba txt LyC Tema 2Prueb"
 DISPLAY "Ingrese un valor"
 GET actual
-contador:= 0
-suma:= 99999.99
-WHILE (contador <= 9) {
-contador:= contador + 1
-actual:= (contador/0.342) 
-suma:= suma + actual
-}
+contador:= 65534
+WHILE (contador <= 9) START
+	contador:= contador + 1
+	actual:= (contador/0.342) 
+	suma:= suma + actual
+END
 DISPLAY "La suma es: "
 DISPLAY suma
-IF (actual > 1 AND actual <> 0)
-DISPLAY "actual es mayor que 2 "
-
+IF (actual > 1 AND actual != 0)THEN
+	DISPLAY "actual es mayor que 2 "
 ENDIF
 */ COMENTARIO /*
-IF (actual < 10.)
+IF  (NOT actual < 10 )THEN
 	DISPLAY "no es mayor que 2" */ COMENTARIO /* */ COMENTARIO2 /*
 ENDIF
