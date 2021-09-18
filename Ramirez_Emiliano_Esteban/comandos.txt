@@ -1,0 +1,3 @@
+bison -dyv Sintactico.y
+flex Lexico.l
+gcc lex.yy.c y.tab.c -o Primera.exe
