@@ -75,7 +75,7 @@ OP_MUL [*]
 {DO} {printf("\ntoken DO");return DO;}
 {ENDWHILE} {printf("\ntoken ENDWHILE");return ENDWHILE;}
 {NOT} {printf("\ntoken NOT");return NOT;}
-{COMEN}		{printf("\nDetectado COMEN: %s",yytext);return COMEN;}
+{COMEN}		{return COMEN;}
 {COMPARADOR} {return COMPARADOR;}
 {OP_ASIG} {printf("\ntoken OP_ASIG");return OP_ASIG;}
 {GET} {printf("\ntoken GET: %s",yytext);return GET;}

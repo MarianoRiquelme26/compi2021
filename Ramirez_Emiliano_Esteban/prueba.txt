@@ -1,5 +1,6 @@
-DIM [ contador,promedio,actual] AS [ integer,real,real]
+DIM [ contador,promedio,prueba] AS [ integer,real, string]
 DIM [ suma ] AS [ real ]
+
 DISPLAY "Prueba txt LyC Tema 2Prueb"
 DISPLAY "Ingrese un valor"
 GET actual
@@ -17,4 +18,14 @@ ENDIF
 */ COMENTARIO /*
 IF  (NOT actual < 10 )THEN
 	DISPLAY "no es mayor que 2" */ COMENTARIO /* */ COMENTARIO2 /*
+
+ELSE
+	DISPLAY "no es mayor que 2" */ COMENTARIO /* */ COMENTARIO2 /*
+	long (a,b,c,e)
+
+	WHILE a IN [ 1+3 , 2+b ] DO
+		suma:= suma + actual
+		suma:= suma + actual
+		suma:= suma + actual
+	ENDWHILE
 ENDIF

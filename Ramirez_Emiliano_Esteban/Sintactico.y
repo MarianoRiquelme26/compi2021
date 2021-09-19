@@ -7,9 +7,11 @@
 
 int yystopparser=0;
 FILE *yyin;
-int yyerror();
+int yyerror(char *mensaje);
 int yylex();
 char *yyltext;
+int conadorDeclaracionesV = 0;
+int conadorDeclaracionesT = 0;
 
 %}
 %union 
@@ -121,28 +123,41 @@ declaracion : DIM CORA listav CORC AS CORA listat CORC
 				guardar_variables_ts();
 				freeArray(&array_nombres_variables);
 				initArray(&array_nombres_variables);
+				int controlDeclaracion = conadorDeclaracionesV - conadorDeclaracionesT;
+				conadorDeclaracionesV = 0;
+				conadorDeclaracionesT = 0;
+				if(controlDeclaracion != 0){
+					yyerror("NO COINCIDEN LA CANTIDAD DE PARAMETROS CON LA CANTIDAD DE TIPOS");
+					exit(1);
+				}
+					
+				
 			};
 
 listav : listav COMA ID 
 		{
 			printf("\n---------------------->lista de variables");
 			insertArray(&array_nombres_variables,$<stringValue>3);
+			conadorDeclaracionesV += 1;
 		}
 		| ID 
 		{	
 			printf("\n---------------------->lista de variables - id");
 			insertArray(&array_nombres_variables,$<stringValue>1);
+			conadorDeclaracionesV += 1;
 		}
 		;
 listat : listat COMA TIPO 
 		{
 			printf("\n---------------------->lista tipos");
 			strcpy(tipo_dato,$<stringValue>3);
+			conadorDeclaracionesT += 1;
 		}
 		| TIPO 
 		{
 			printf("\n---------------------->lista TIPOS - corte");
-			strcpy(tipo_dato,$<stringValue>1);
+			strcpy(tipo_dato,$<stringValue>3);
+			conadorDeclaracionesT += 1;
 		};
 		
 lista : lista COMA factor {printf("\n---------------------->lista");}
@@ -174,9 +189,9 @@ int main (int argc,char *argv[]){
  return 0;
 }
 
-int yyerror(void)
+int yyerror(char *mensaje)
 	{ 
- 	  printf("Syntax Error\n");
+ 	  printf("\nSyntax Error: %s\n", mensaje);
 	  system("Pause");
           exit (1);
 	}

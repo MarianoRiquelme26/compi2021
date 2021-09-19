@@ -89,7 +89,7 @@ char* guardar_cte_int(int valor) {
       if(existe_simbolo(nombre_constante) == FALSE && cant_elem_ts <= TAM_TABLA){
         strcpy(ts[cant_elem_ts].nombre,nombre_constante);
         ts[cant_elem_ts].longitud = 0;
-        strcpy(ts[cant_elem_ts].tipo_dato,"int");
+        strcpy(ts[cant_elem_ts].tipo_dato,"integer");
         strcpy(ts[cant_elem_ts].valor,constante_string);
         cant_elem_ts++;
       }
@@ -122,7 +122,7 @@ char* guardar_cte_float(float valor) {
       if(existe_simbolo(nombre_constante) == FALSE && cant_elem_ts <= TAM_TABLA){
         strcpy(ts[cant_elem_ts].nombre,nombre_constante);
         ts[cant_elem_ts].longitud = 0;
-        strcpy(ts[cant_elem_ts].tipo_dato,"float");
+        strcpy(ts[cant_elem_ts].tipo_dato,"real");
         strcpy(ts[cant_elem_ts].valor,constante_string);
         cant_elem_ts++; 
       }
@@ -171,7 +171,7 @@ int verificar_asignacion(char * valor) {
   if(!existe_simbolo(valor)){
         return 1;
   } else {
-        if(strcmp(ultima_expresion, simbolo_busqueda.tipo_dato) == 0 || (strcmp(simbolo_busqueda.tipo_dato, "float") == 0 && strcmp(ultima_expresion, "int") == 0)){ //float
+        if(strcmp(ultima_expresion, simbolo_busqueda.tipo_dato) == 0 || (strcmp(simbolo_busqueda.tipo_dato, "real") == 0 && strcmp(ultima_expresion, "int") == 0)){ //float
               return 2;
         }
         else {
