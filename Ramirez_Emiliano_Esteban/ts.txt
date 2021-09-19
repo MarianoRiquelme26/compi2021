@@ -1,8 +1,8 @@
 NOMBRE|TIPODATO|VALOR|LONGITUD
-contador|real|-|-
-promedio|real|-|-
-prueba|real|-|-
-suma|real|-|-
+contador|prueba|-|-
+promedio|prueba|-|-
+prueba|prueba|-|-
+suma|suma|-|-
 _65534|integer|65534|-
 _9|integer|9|-
 _1|integer|1|-

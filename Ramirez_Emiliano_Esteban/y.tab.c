@@ -1806,7 +1806,7 @@ yyreduce:
 #line 151 "Sintactico.y"
     {
 			printf("\n---------------------->lista tipos");
-			strcpy(tipo_dato,"real");
+			strcpy(tipo_dato,(yyvsp[(3) - (3)].stringValue));
 			conadorDeclaracionesT += 1;
 		}
     break;
@@ -1817,7 +1817,7 @@ yyreduce:
 #line 157 "Sintactico.y"
     {
 			printf("\n---------------------->lista TIPOS - corte");
-			strcpy(tipo_dato,"real");
+			strcpy(tipo_dato,(yyvsp[(1) - (1)].stringValue));
 			conadorDeclaracionesT += 1;
 		}
     break;

@@ -156,7 +156,7 @@ listat : listat COMA TIPO
 		| TIPO 
 		{
 			printf("\n---------------------->lista TIPOS - corte");
-			strcpy(tipo_dato,$<stringValue>3);
+			strcpy(tipo_dato,$<stringValue>1);
 			conadorDeclaracionesT += 1;
 		};
 		

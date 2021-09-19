@@ -42,7 +42,7 @@ LETRA	[a-zA-Z]
 ID	({DIGITO}|{LETRA})*
 CTE	{DIGITO}+
 CTE_R {DIGITO}+.{PUNTO}.{DIGITO}*|{DIGITO}*.{PUNTO}.{DIGITO}+
-CAR_ESP			"@"|"%"|":"|" "
+CAR_ESP			"@"|"%"|":"|" "|"~"|"¿"|"?"|"="|"@"|"!"|"¡"|"_"|"%"|" "|"."|"|"|","|"{"|"}"|"["|"]"|":"|"\""|"#"|"$"|"*"|"\/"|"\\"|"¬"|"+"|"-"|";"
 CTE_S		{COMILLA}.({CAR_ESP}|{DIGITO}|{LETRA})*.{COMILLA}
 COM_ABRE		"*/"
 COM_CIER      	"/*"
@@ -132,5 +132,5 @@ OP_MUL [*]
 {COMA} {printf("\ntoken COMA: %s",yytext);return COMA;}
 {OP_MUL} {printf("\ntoken OP_MUL: %s",yytext);return OP_MUL;}
 "\t"
-.
+. 
 %%

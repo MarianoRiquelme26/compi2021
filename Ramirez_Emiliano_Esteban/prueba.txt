@@ -1,6 +1,6 @@
 DIM [ contador,promedio,prueba] AS [ integer,real, string]
 DIM [ suma ] AS [ real ]
-
+*/ DIM [ contador,promedio,prueba] AS [ integer,real, string] /*
 DISPLAY "Prueba txt LyC Tema 2Prueb"
 DISPLAY "Ingrese un valor"
 GET actual
