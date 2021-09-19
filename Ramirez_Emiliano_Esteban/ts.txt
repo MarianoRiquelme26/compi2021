@@ -1,2 +1,11 @@
-token: ID	 lexemas:  suma,actual,promedio,contador
-token: CTE	 lexemas:  10,0,0.342,1,9,65534
+NOMBRE|TIPODATO|VALOR|LONGITUD
+contador|actual|-|-
+promedio|actual|-|-
+actual|actual|-|-
+suma|suma|-|-
+_65534|int|65534|-
+_9|int|9|-
+_1|int|1|-
+_0.342000|float|0.342000|-
+_0|int|0|-
+_10|int|10|-

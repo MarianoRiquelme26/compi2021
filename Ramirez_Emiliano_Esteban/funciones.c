@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <conio.h>
 #include <stdarg.h>
 #include <string.h>
 #include <math.h>
@@ -8,7 +7,7 @@
 
 #define INITIAL_CAPACITY 1
 #define MAX_STRING_LENGTH 30
-#define TABLA_SIMBOLOS "tablaSimbolos.txt"
+#define TABLA_SIMBOLOS "ts.txt"
 #define TAM_TABLA 350
 #define TAM_NOMBRE 32
 #define TRUE 1
