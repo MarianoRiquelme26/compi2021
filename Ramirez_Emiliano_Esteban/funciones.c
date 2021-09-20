@@ -57,7 +57,7 @@ void guardar_variables_ts(){
     if(cant_elem_ts<=TAM_TABLA && !existe_simbolo(array_nombres_variables.array[i])){
       strcpy(ts[cant_elem_ts].nombre,array_nombres_variables.array[i]);
       ts[cant_elem_ts].longitud = 0;
-      strcpy(ts[cant_elem_ts].tipo_dato,tipo_dato);
+      strcpy(ts[cant_elem_ts].tipo_dato,array_tipos_variables.array[i]);
       strcpy(ts[cant_elem_ts].valor,"-");
       cant_elem_ts++;
     }

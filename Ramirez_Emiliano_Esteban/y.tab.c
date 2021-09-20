@@ -527,8 +527,8 @@ static const yytype_uint8 yyrline[] =
        0,    62,    62,    63,    66,    67,    68,    69,    70,    71,
       72,    73,    74,    75,    77,    79,    80,    82,    84,    85,
       86,    88,    90,    91,    94,    95,    96,    97,    99,   100,
-     104,   105,   106,   108,   109,   113,   119,   121,   137,   143,
-     150,   156,   163,   164,   166,   168,   169
+     104,   105,   106,   108,   109,   113,   119,   121,   141,   147,
+     154,   161,   169,   170,   172,   174,   175
 };
 #endif
 
@@ -1765,7 +1765,11 @@ yyreduce:
     { 
 				guardar_variables_ts();
 				freeArray(&array_nombres_variables);
+				freeArray(&array_tipos_variables);
+				
 				initArray(&array_nombres_variables);
+				initArray(&array_tipos_variables);
+				
 				int controlDeclaracion = conadorDeclaracionesV - conadorDeclaracionesT;
 				conadorDeclaracionesV = 0;
 				conadorDeclaracionesT = 0;
@@ -1781,7 +1785,7 @@ yyreduce:
   case 38:
 
 /* Line 1455 of yacc.c  */
-#line 138 "Sintactico.y"
+#line 142 "Sintactico.y"
     {
 			printf("\n---------------------->lista de variables");
 			insertArray(&array_nombres_variables,(yyvsp[(3) - (3)].stringValue));
@@ -1792,7 +1796,7 @@ yyreduce:
   case 39:
 
 /* Line 1455 of yacc.c  */
-#line 144 "Sintactico.y"
+#line 148 "Sintactico.y"
     {	
 			printf("\n---------------------->lista de variables - id");
 			insertArray(&array_nombres_variables,(yyvsp[(1) - (1)].stringValue));
@@ -1803,10 +1807,11 @@ yyreduce:
   case 40:
 
 /* Line 1455 of yacc.c  */
-#line 151 "Sintactico.y"
+#line 155 "Sintactico.y"
     {
 			printf("\n---------------------->lista tipos");
-			strcpy(tipo_dato,(yyvsp[(3) - (3)].stringValue));
+			printf("********* tipo %s *********",(yyvsp[(3) - (3)].stringValue));
+			insertArray(&array_tipos_variables,(yyvsp[(3) - (3)].stringValue));
 			conadorDeclaracionesT += 1;
 		}
     break;
@@ -1814,10 +1819,11 @@ yyreduce:
   case 41:
 
 /* Line 1455 of yacc.c  */
-#line 157 "Sintactico.y"
+#line 162 "Sintactico.y"
     {
 			printf("\n---------------------->lista TIPOS - corte");
-			strcpy(tipo_dato,(yyvsp[(1) - (1)].stringValue));
+			printf("********* tipo %s *********",(yyvsp[(1) - (1)].stringValue));
+			insertArray(&array_tipos_variables,(yyvsp[(1) - (1)].stringValue));
 			conadorDeclaracionesT += 1;
 		}
     break;
@@ -1825,42 +1831,42 @@ yyreduce:
   case 42:
 
 /* Line 1455 of yacc.c  */
-#line 163 "Sintactico.y"
+#line 169 "Sintactico.y"
     {printf("\n---------------------->lista");}
     break;
 
   case 43:
 
 /* Line 1455 of yacc.c  */
-#line 164 "Sintactico.y"
+#line 170 "Sintactico.y"
     {printf("\n---------------------->lista - factor");}
     break;
 
   case 44:
 
 /* Line 1455 of yacc.c  */
-#line 166 "Sintactico.y"
+#line 172 "Sintactico.y"
     {printf("\n---------------------->ciclo especial");}
     break;
 
   case 45:
 
 /* Line 1455 of yacc.c  */
-#line 168 "Sintactico.y"
+#line 174 "Sintactico.y"
     {printf("\n---------------------->lista de expresiones");}
     break;
 
   case 46:
 
 /* Line 1455 of yacc.c  */
-#line 169 "Sintactico.y"
+#line 175 "Sintactico.y"
     {printf("\n---------------------->expresion - corte");}
     break;
 
 
 
 /* Line 1455 of yacc.c  */
-#line 1864 "y.tab.c"
+#line 1870 "y.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -2072,7 +2078,7 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 172 "Sintactico.y"
+#line 178 "Sintactico.y"
 
 
 int main (int argc,char *argv[]){
@@ -2082,11 +2088,13 @@ int main (int argc,char *argv[]){
   	printf("\nNo se puede abrir el archivo: %s\n",argv[1]);
  }
  else{
+	initArray(&array_tipos_variables);
 	initArray(&array_nombres_variables);
     crearTabla();
 	yyparse();
 	guardar_ts();
-    freeArray(&array_nombres_variables);
+    freeArray(&array_tipos_variables);
+	freeArray(&array_nombres_variables);
  }
  fclose(yyin);
 

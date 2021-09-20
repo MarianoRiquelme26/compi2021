@@ -122,7 +122,11 @@ declaracion : DIM CORA listav CORC AS CORA listat CORC
 			{ 
 				guardar_variables_ts();
 				freeArray(&array_nombres_variables);
+				freeArray(&array_tipos_variables);
+				
 				initArray(&array_nombres_variables);
+				initArray(&array_tipos_variables);
+				
 				int controlDeclaracion = conadorDeclaracionesV - conadorDeclaracionesT;
 				conadorDeclaracionesV = 0;
 				conadorDeclaracionesT = 0;
@@ -150,13 +154,15 @@ listav : listav COMA ID
 listat : listat COMA TIPO 
 		{
 			printf("\n---------------------->lista tipos");
-			strcpy(tipo_dato,$<stringValue>3);
+			printf("********* tipo %s *********",$<stringValue>3);
+			insertArray(&array_tipos_variables,$<stringValue>3);
 			conadorDeclaracionesT += 1;
 		}
 		| TIPO 
 		{
 			printf("\n---------------------->lista TIPOS - corte");
-			strcpy(tipo_dato,$<stringValue>1);
+			printf("********* tipo %s *********",$<stringValue>1);
+			insertArray(&array_tipos_variables,$<stringValue>1);
 			conadorDeclaracionesT += 1;
 		};
 		
@@ -178,11 +184,13 @@ int main (int argc,char *argv[]){
   	printf("\nNo se puede abrir el archivo: %s\n",argv[1]);
  }
  else{
+	initArray(&array_tipos_variables);
 	initArray(&array_nombres_variables);
     crearTabla();
 	yyparse();
 	guardar_ts();
-    freeArray(&array_nombres_variables);
+    freeArray(&array_tipos_variables);
+	freeArray(&array_nombres_variables);
  }
  fclose(yyin);
 

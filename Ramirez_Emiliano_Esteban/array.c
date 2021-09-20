@@ -15,6 +15,7 @@ typedef struct {
 } Array;
 
 Array array_nombres_variables;
+Array array_tipos_variables;
 
 
 void initArray(Array *a);
