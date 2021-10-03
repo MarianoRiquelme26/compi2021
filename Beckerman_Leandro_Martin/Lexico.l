@@ -68,7 +68,7 @@ OP_MUL [*]
 {DIM} {printf("\ntoken DIM");return DIM;}
 {CORA} {printf("\ntoken CORA");return CORA;}
 {CORC} {printf("\ntoken CORC");return CORC;}
-{TIPO} {printf("\ntoken TIPO");return TIPO;}
+{TIPO} {printf("\ntoken TIPO");yylval.stringValue = strdup(yytext); return TIPO;}
 {AS} {printf("\ntoken AS");return AS;}
 {LONG} {printf("\ntoken LONG");return LONG;}
 {IN} {printf("\ntoken IN");return IN;}

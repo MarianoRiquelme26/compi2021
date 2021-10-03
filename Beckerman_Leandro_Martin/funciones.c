@@ -19,7 +19,7 @@
 void crearTabla();
 void guardar_variables_ts();
 char* guardar_cte_int(int valor);
-char* guardar_cte_string(char * valor);
+void guardar_cte_string(char * valor);
 char* guardar_cte_float(float valor);
 void guardar_ts();
 int existe_simbolo(char * comp);
@@ -38,12 +38,14 @@ typedef struct {
 simbolo ts[TAM_TABLA];
 simbolo simbolo_busqueda;
 
+
 FILE * file;
 int between_flag = 0;
 int cant_elem_ts = 0;
 int cantidad_cuerpos;
 int cantidad_bloques = 0;
 char tipo_dato[30];
+char str_aux[30];
 char * ultima_expresion;
 char * ultimo_comparador;
 
@@ -57,7 +59,7 @@ void guardar_variables_ts(){
     if(cant_elem_ts<=TAM_TABLA && !existe_simbolo(array_nombres_variables.array[i])){
       strcpy(ts[cant_elem_ts].nombre,array_nombres_variables.array[i]);
       ts[cant_elem_ts].longitud = 0;
-      strcpy(ts[cant_elem_ts].tipo_dato,tipo_dato);
+      strcpy(ts[cant_elem_ts].tipo_dato,array_tipos_variables.array[i]);
       strcpy(ts[cant_elem_ts].valor,"-");
       cant_elem_ts++;
     }
@@ -76,7 +78,7 @@ void guardar_variables_ts(){
 
 void crearTabla(){
   file = fopen(TABLA_SIMBOLOS, "w");
-  fprintf(file,"%s\n","NOMBRE|TIPODATO|VALOR|LONGITUD");
+  fprintf(file,"%-s\n","NOMBRE                        \tTIPODATO\t\tVALOR\tLONGITUD");
   fclose(file);
 }
 
@@ -89,27 +91,27 @@ char* guardar_cte_int(int valor) {
       if(existe_simbolo(nombre_constante) == FALSE && cant_elem_ts <= TAM_TABLA){
         strcpy(ts[cant_elem_ts].nombre,nombre_constante);
         ts[cant_elem_ts].longitud = 0;
-        strcpy(ts[cant_elem_ts].tipo_dato,"integer");
+        strcpy(ts[cant_elem_ts].tipo_dato,"CTE_INTEGER");
         strcpy(ts[cant_elem_ts].valor,constante_string);
         cant_elem_ts++;
       }
       return nombre_constante;
 }
 
-char* guardar_cte_string(char * valor) {
+void guardar_cte_string(char * valor) {
       char nombre_constante[32];
       sprintf(nombre_constante,"_cte_string_%d", contadorCteString);
       char * returnValue = malloc(sizeof(char)*100);
       strcpy(returnValue, nombre_constante);
       if(existe_simbolo(nombre_constante) == FALSE && cant_elem_ts <= TAM_TABLA){
-        strcpy(ts[cant_elem_ts].nombre,nombre_constante);
-        ts[cant_elem_ts].longitud = strlen(nombre_constante);
-        strcpy(ts[cant_elem_ts].tipo_dato,"string");
+        strcpy(ts[cant_elem_ts].nombre,valor);
+        ts[cant_elem_ts].longitud = strlen(valor);
+        strcpy(ts[cant_elem_ts].tipo_dato,"CTE_STRING");
         strcpy(ts[cant_elem_ts].valor,valor);
         cant_elem_ts++;
         contadorCteString++;
       }
-      return returnValue;
+
 }
 
 char* guardar_cte_float(float valor) {
@@ -122,7 +124,7 @@ char* guardar_cte_float(float valor) {
       if(existe_simbolo(nombre_constante) == FALSE && cant_elem_ts <= TAM_TABLA){
         strcpy(ts[cant_elem_ts].nombre,nombre_constante);
         ts[cant_elem_ts].longitud = 0;
-        strcpy(ts[cant_elem_ts].tipo_dato,"real");
+        strcpy(ts[cant_elem_ts].tipo_dato,"CTE_FLOAT");
         strcpy(ts[cant_elem_ts].valor,constante_string);
         cant_elem_ts++; 
       }
@@ -136,12 +138,15 @@ void guardar_ts(){
   for(i;i<cant_elem_ts;i++){
     if(ts[i].longitud == 0){
       strcpy(longitud,"-");
+	   fprintf(file,"%-30s\t%-s\t%20s\t%-30s\n",ts[i].nombre,ts[i].tipo_dato,ts[i].valor,longitud);
     }
     else{
       sprintf(longitud,"%d",ts[i].longitud);
-      strcpy(longitud,longitud);
+      //strcpy(longitud,longitud);
+	  //strcpy(longitud,ts[i].longitud);
+	   fprintf(file,"%-30s\t%-s\t%20s\t%-30s\n",ts[i].nombre,ts[i].tipo_dato,longitud);
     }
-    fprintf(file,"%s|%s|%s|%s\n",ts[i].nombre,ts[i].tipo_dato,ts[i].valor,longitud);
+
 
     //%-35s%-20s%-35s%-5s
   }

@@ -890,7 +890,7 @@ YY_RULE_SETUP
 case 13:
 YY_RULE_SETUP
 #line 71 "Lexico.l"
-{printf("\ntoken TIPO");return TIPO;}
+{printf("\ntoken TIPO");yylval.stringValue = strdup(yytext); return TIPO;}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP

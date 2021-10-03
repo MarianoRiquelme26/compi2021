@@ -1,1 +1,8 @@
-archivo de prueba.txt
+DIM [ contador,promedio,prueba] AS [ integer,real, string]
+DIM [ suma ] AS [ real ]
+DISPLAY "Prueba txt LyC Tema 2Prueb"
+
+IF (actual > 1 AND actual != 0)THEN
+	DISPLAY "actual es mayor que 2 "
+ENDIF
+*/ COMENTARIO /*
