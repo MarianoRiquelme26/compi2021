@@ -21,8 +21,8 @@ int conadorDeclaracionesT = 0;
     char *stringValue; 
 } 
 %start programa
-%token <stringValue> ID	  
-%token OP_ASIG 
+%token <stringValue> ID
+%token OP_ASIG
 %token CTE
 %token COMEN
 %token DISPLAY
@@ -77,15 +77,13 @@ sentencia : asignacion {printf("\n---------------------->sentencia - asignacion"
 asignacion : ID OP_ASIG expresion {printf("\n---------------------->asignacion");};
 		
 salida :    DISPLAY factor {printf("\n---------------------->salida - display");}
-		  | DISPLAY CTE_S {printf("\n---------------------->salida - display");
-		  
-			sprintf(str_aux,"_%s",$<stringValue>2);
-			guardar_cte_string(str_aux);
+		  /*| DISPLAY CTE_S {printf("\n---------------------->salida - display");
+			
 		  		  
-		  };
+		  };*/
 		  
 		  
-		  
+		  ;
 		  
 		
 		  
@@ -128,6 +126,13 @@ factor :    ID {printf("\n---------------------->factor - id");}
 					char* nombre_cte_float = guardar_cte_float(valor);
 					
 		 }
+		 |CTE_S {
+					printf("\n---------------------->factor cte STRING");
+					sprintf(str_aux,"%s",$<stringValue>1);
+					guardar_cte_string(str_aux);
+		 }
+		 
+		 
 		 | PARA expresion PARC {printf("\n---------------------->factor - expresion");};
 		 
 declaracion : DIM CORA listav CORC AS CORA listat CORC 
