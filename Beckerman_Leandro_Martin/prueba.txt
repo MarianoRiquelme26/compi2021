@@ -17,8 +17,8 @@ END
 DISPLAY "La suma es: "
 DISPLAY suma
 
-b:="HOLAMUNDO"
-DISPLAY "b"
+
+DISPLAY "HOLA MUNDO DOS"
 
 IF (actual > 1 AND actual != 0)THEN
 	DISPLAY "actual es mayor que 2 "

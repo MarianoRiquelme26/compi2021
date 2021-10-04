@@ -583,7 +583,18 @@ char *yytext;
 #include "y.tab.h"
 FILE *yyin;
 char *yyltext;
-#line 587 "lex.yy.c"
+
+
+
+char auxS[100];
+
+
+void quitarComillas();
+
+
+
+
+#line 598 "lex.yy.c"
 
 /* Macros after this point can all be overridden by user definitions in
  * section 1.
@@ -734,9 +745,9 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
 
-#line 58 "Lexico.l"
+#line 69 "Lexico.l"
 
-#line 740 "lex.yy.c"
+#line 751 "lex.yy.c"
 
 	if ( yy_init )
 		{
@@ -829,122 +840,122 @@ do_action:	/* This label is used only to access EOF actions. */
 	{ /* beginning of action switch */
 case 1:
 YY_RULE_SETUP
-#line 59 "Lexico.l"
+#line 70 "Lexico.l"
 {printf("\ntoken WHILE");return WHILE;}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 60 "Lexico.l"
+#line 71 "Lexico.l"
 {printf("\ntoken OR");return OR;}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 61 "Lexico.l"
+#line 72 "Lexico.l"
 {printf("\ntoken AND");return AND;}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 62 "Lexico.l"
+#line 73 "Lexico.l"
 {printf("\ntoken START");return START;}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 63 "Lexico.l"
+#line 74 "Lexico.l"
 {printf("\ntoken END");return END;}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 64 "Lexico.l"
+#line 75 "Lexico.l"
 {printf("\ntoken IF");return IF;}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 65 "Lexico.l"
+#line 76 "Lexico.l"
 {printf("\ntoken THEN");return THEN;}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 66 "Lexico.l"
+#line 77 "Lexico.l"
 {printf("\ntoken ELSE");return ELSE;}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 67 "Lexico.l"
+#line 78 "Lexico.l"
 {printf("\ntoken ENDIF");return ENDIF;}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 68 "Lexico.l"
+#line 79 "Lexico.l"
 {printf("\ntoken DIM");return DIM;}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 69 "Lexico.l"
+#line 80 "Lexico.l"
 {printf("\ntoken CORA");return CORA;}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 70 "Lexico.l"
+#line 81 "Lexico.l"
 {printf("\ntoken CORC");return CORC;}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 71 "Lexico.l"
+#line 82 "Lexico.l"
 {printf("\ntoken TIPO");yylval.stringValue = strdup(yytext); return TIPO;}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 72 "Lexico.l"
+#line 83 "Lexico.l"
 {printf("\ntoken AS");return AS;}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 73 "Lexico.l"
+#line 84 "Lexico.l"
 {printf("\ntoken LONG");return LONG;}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 74 "Lexico.l"
+#line 85 "Lexico.l"
 {printf("\ntoken IN");return IN;}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 75 "Lexico.l"
+#line 86 "Lexico.l"
 {printf("\ntoken DO");return DO;}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 76 "Lexico.l"
+#line 87 "Lexico.l"
 {printf("\ntoken ENDWHILE");return ENDWHILE;}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 77 "Lexico.l"
+#line 88 "Lexico.l"
 {printf("\ntoken NOT");return NOT;}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 78 "Lexico.l"
+#line 89 "Lexico.l"
 {return COMEN;}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 79 "Lexico.l"
+#line 90 "Lexico.l"
 {return COMPARADOR;}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 80 "Lexico.l"
+#line 91 "Lexico.l"
 {printf("\ntoken OP_ASIG");return OP_ASIG;}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 81 "Lexico.l"
+#line 92 "Lexico.l"
 {printf("\ntoken GET: %s",yytext);return GET;}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 82 "Lexico.l"
+#line 93 "Lexico.l"
 {
 		printf("\ntoken CTE: %s",yytext);
 		if(atoi(yytext) < 65535)
@@ -961,7 +972,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 95 "Lexico.l"
+#line 106 "Lexico.l"
 { 	
 			printf("\ntoken CTE_R: %s",yytext);
 			
@@ -978,33 +989,43 @@ YY_RULE_SETUP
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 108 "Lexico.l"
+#line 119 "Lexico.l"
 {printf("\ntoken DISPLAY");return DISPLAY;}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 109 "Lexico.l"
+#line 120 "Lexico.l"
 { 	
 			printf("\ntoken CTE_S");
 			if(strlen(yytext) < 31)
 			{
+			
+				sprintf(auxS,"%s", yytext);
+				quitarComillas();
+				yylval.stringValue=auxS;    
 				return CTE_S;
 			}
 			else
 			{
 				printf("\nError lexico - Se supero el limite DE caracteres para constantes alfanumericas %s:\n",yytext);
 			}
+										
+			
+                             
+  
+
+										
 			
 	    }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 121 "Lexico.l"
+#line 142 "Lexico.l"
 {return ENTER;}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 122 "Lexico.l"
+#line 143 "Lexico.l"
 {
 		printf("\ntoken ID: %s",yytext);
 		yylval.stringValue = strdup(yytext); 
@@ -1013,55 +1034,55 @@ YY_RULE_SETUP
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 127 "Lexico.l"
+#line 148 "Lexico.l"
 {printf("\ntoken OP_SUM: %s",yytext);return OP_SUM;}
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 128 "Lexico.l"
+#line 149 "Lexico.l"
 {printf("\ntoken OP_RES: %s",yytext);return OP_RES;}
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 129 "Lexico.l"
+#line 150 "Lexico.l"
 {printf("\ntoken OP_DIV: %s",yytext);return OP_DIV;}
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 130 "Lexico.l"
+#line 151 "Lexico.l"
 {printf("\ntoken PARA: %s",yytext);return PARA;}
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 131 "Lexico.l"
+#line 152 "Lexico.l"
 {printf("\ntoken PARC: %s",yytext);return PARC;}
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 132 "Lexico.l"
+#line 153 "Lexico.l"
 {printf("\ntoken COMA: %s",yytext);return COMA;}
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 133 "Lexico.l"
+#line 154 "Lexico.l"
 {printf("\ntoken OP_MUL: %s",yytext);return OP_MUL;}
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 134 "Lexico.l"
+#line 160 "Lexico.l"
 
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 135 "Lexico.l"
+#line 161 "Lexico.l"
 
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 136 "Lexico.l"
+#line 162 "Lexico.l"
 ECHO;
 	YY_BREAK
-#line 1065 "lex.yy.c"
+#line 1086 "lex.yy.c"
 			case YY_STATE_EOF(INITIAL):
 				yyterminate();
 
@@ -1945,4 +1966,19 @@ int main()
 	return 0;
 	}
 #endif
-#line 136 "Lexico.l"
+#line 162 "Lexico.l"
+
+
+
+
+
+
+void quitarComillas() {
+	int i = 0;
+	while(auxS[i+1] != '\"') {
+		auxS[i] = auxS[i+1];
+		i++;
+	}
+	auxS[i] = '\0';
+}
+

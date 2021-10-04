@@ -100,7 +100,7 @@ char* guardar_cte_int(int valor) {
 
 void guardar_cte_string(char * valor) {
       char nombre_constante[32];
-      sprintf(nombre_constante,"_cte_string_%d", contadorCteString);
+      /*sprintf(nombre_constante,"_cte_string_%d", contadorCteString);
       char * returnValue = malloc(sizeof(char)*100);
       strcpy(returnValue, nombre_constante);
       if(existe_simbolo(nombre_constante) == FALSE && cant_elem_ts <= TAM_TABLA){
@@ -110,7 +110,14 @@ void guardar_cte_string(char * valor) {
         strcpy(ts[cant_elem_ts].valor,valor);
         cant_elem_ts++;
         contadorCteString++;
-      }
+      }*/
+	  strcpy(ts[cant_elem_ts].nombre,valor);
+      ts[cant_elem_ts].longitud = strlen(valor);
+      strcpy(ts[cant_elem_ts].tipo_dato,"CTE_STRING");
+      strcpy(ts[cant_elem_ts].valor,"-");
+      cant_elem_ts++;
+      contadorCteString++;
+	  
 
 }
 
@@ -144,7 +151,7 @@ void guardar_ts(){
       sprintf(longitud,"%d",ts[i].longitud);
       //strcpy(longitud,longitud);
 	  //strcpy(longitud,ts[i].longitud);
-	   fprintf(file,"%-30s\t%-s\t%20s\t%-30s\n",ts[i].nombre,ts[i].tipo_dato,longitud);
+	   fprintf(file,"%-30s\t%-s\t%20s\t%-30s\n",ts[i].nombre,ts[i].tipo_dato,ts[i].valor,longitud);
     }
 
 

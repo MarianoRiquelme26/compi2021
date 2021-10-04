@@ -19,34 +19,34 @@ Gramática
    13 asignacion: ID OP_ASIG expresion
 
    14 salida: DISPLAY factor
+   15       | DISPLAY CTE_S
 
-   15 entrada: GET ID
+   16 entrada: GET ID
 
-   16 expresion: expresion OP_SUM termino
-   17          | expresion OP_RES termino
-   18          | termino
+   17 expresion: expresion OP_SUM termino
+   18          | expresion OP_RES termino
+   19          | termino
 
-   19 iteracion: WHILE condicion START programa END
+   20 iteracion: WHILE condicion START programa END
 
-   20 seleccion: IF condicion THEN programa ELSE programa ENDIF
-   21          | IF condicion THEN programa ENDIF
+   21 seleccion: IF condicion THEN programa ELSE programa ENDIF
+   22          | IF condicion THEN programa ENDIF
 
-   22 condicion: PARA condicion AND comparacion PARC
-   23          | PARA condicion OR comparacion PARC
-   24          | PARA NOT condicion PARC
-   25          | comparacion
+   23 condicion: PARA condicion AND comparacion PARC
+   24          | PARA condicion OR comparacion PARC
+   25          | PARA NOT condicion PARC
+   26          | comparacion
 
-   26 comparacion: expresion COMPARADOR expresion
-   27            | PARA expresion COMPARADOR expresion PARC
+   27 comparacion: expresion COMPARADOR expresion
+   28            | PARA expresion COMPARADOR expresion PARC
 
-   28 termino: termino OP_MUL factor
-   29        | termino OP_DIV factor
-   30        | factor
+   29 termino: termino OP_MUL factor
+   30        | termino OP_DIV factor
+   31        | factor
 
-   31 factor: ID
-   32       | CTE
-   33       | CTE_R
-   34       | CTE_S
+   32 factor: ID
+   33       | CTE
+   34       | CTE_R
    35       | PARA expresion PARC
 
    36 declaracion: DIM CORA listav CORC AS CORA listat CORC
@@ -70,30 +70,30 @@ Terminales con las reglas donde aparecen
 
 $end (0) 0
 error (256)
-ID (258) 13 15 31 37 38 43
+ID (258) 13 16 32 37 38 43
 OP_ASIG (259) 13
-CTE (260) 32
+CTE (260) 33
 COMEN (261) 9
-DISPLAY (262) 14
-CTE_S (263) 34
+DISPLAY (262) 14 15
+CTE_S (263) 15
 ENTER (264) 12
-OP_SUM (265) 16
-OP_RES (266) 17
-OP_MUL (267) 28
-OP_DIV (268) 29
-PARA (269) 10 22 23 24 27 35
-PARC (270) 10 22 23 24 27 35
-GET (271) 15
-WHILE (272) 19 43
-START (273) 19
-END (274) 19
-OR (275) 23
-AND (276) 22
-COMPARADOR (277) 26 27
-IF (278) 20 21
-THEN (279) 20 21
-ELSE (280) 20
-ENDIF (281) 20 21
+OP_SUM (265) 17
+OP_RES (266) 18
+OP_MUL (267) 29
+OP_DIV (268) 30
+PARA (269) 10 23 24 25 28 35
+PARC (270) 10 23 24 25 28 35
+GET (271) 16
+WHILE (272) 20 43
+START (273) 20
+END (274) 20
+OR (275) 24
+AND (276) 23
+COMPARADOR (277) 27 28
+IF (278) 21 22
+THEN (279) 21 22
+ELSE (280) 21
+ENDIF (281) 21 22
 DIM (282) 36
 CORA (283) 36 43
 CORC (284) 36 43
@@ -104,8 +104,8 @@ LONG (288) 10
 IN (289) 43
 DO (290) 43
 ENDWHILE (291) 43
-CTE_R (292) 33
-NOT (293) 24
+CTE_R (292) 34
+NOT (293) 25
 
 
 No terminales con las reglas donde aparecen
@@ -113,31 +113,30 @@ No terminales con las reglas donde aparecen
 $accept (39)
     en la izquierda: 0
 programa (40)
-    en la izquierda: 1 2, en la derecha: 0 1 19 20 21 43
+    en la izquierda: 1 2, en la derecha: 0 1 20 21 22 43
 sentencia (41)
     en la izquierda: 3 4 5 6 7 8 9 10 11 12, en la derecha: 1 2
 asignacion (42)
     en la izquierda: 13, en la derecha: 3
 salida (43)
-    en la izquierda: 14, en la derecha: 4
+    en la izquierda: 14 15, en la derecha: 4
 entrada (44)
-    en la izquierda: 15, en la derecha: 5
+    en la izquierda: 16, en la derecha: 5
 expresion (45)
-    en la izquierda: 16 17 18, en la derecha: 13 16 17 26 27 35 44
+    en la izquierda: 17 18 19, en la derecha: 13 17 18 27 28 35 44
     45
 iteracion (46)
-    en la izquierda: 19, en la derecha: 6
+    en la izquierda: 20, en la derecha: 6
 seleccion (47)
-    en la izquierda: 20 21, en la derecha: 7
+    en la izquierda: 21 22, en la derecha: 7
 condicion (48)
-    en la izquierda: 22 23 24 25, en la derecha: 19 20 21 22 23 24
+    en la izquierda: 23 24 25 26, en la derecha: 20 21 22 23 24 25
 comparacion (49)
-    en la izquierda: 26 27, en la derecha: 22 23 25
+    en la izquierda: 27 28, en la derecha: 23 24 26
 termino (50)
-    en la izquierda: 28 29 30, en la derecha: 16 17 18 28 29
+    en la izquierda: 29 30 31, en la derecha: 17 18 19 29 30
 factor (51)
-    en la izquierda: 31 32 33 34 35, en la derecha: 14 28 29 30 41
-    42
+    en la izquierda: 32 33 34 35, en la derecha: 14 29 30 31 41 42
 declaracion (52)
     en la izquierda: 36, en la derecha: 8
 listav (53)
@@ -194,6 +193,7 @@ estado 2
 estado 3
 
    14 salida: DISPLAY . factor
+   15       | DISPLAY . CTE_S
 
     ID     desplazar e ir al estado 20
     CTE    desplazar e ir al estado 21
@@ -213,19 +213,18 @@ estado 4
 
 estado 5
 
-   15 entrada: GET . ID
+   16 entrada: GET . ID
 
     ID  desplazar e ir al estado 26
 
 
 estado 6
 
-   19 iteracion: WHILE . condicion START programa END
+   20 iteracion: WHILE . condicion START programa END
    43 ciclo_especial: WHILE . ID IN CORA lista_expre CORC DO programa ENDWHILE
 
     ID     desplazar e ir al estado 27
     CTE    desplazar e ir al estado 21
-    CTE_S  desplazar e ir al estado 22
     PARA   desplazar e ir al estado 28
     CTE_R  desplazar e ir al estado 24
 
@@ -238,12 +237,11 @@ estado 6
 
 estado 7
 
-   20 seleccion: IF . condicion THEN programa ELSE programa ENDIF
-   21          | IF . condicion THEN programa ENDIF
+   21 seleccion: IF . condicion THEN programa ELSE programa ENDIF
+   22          | IF . condicion THEN programa ENDIF
 
     ID     desplazar e ir al estado 20
     CTE    desplazar e ir al estado 21
-    CTE_S  desplazar e ir al estado 22
     PARA   desplazar e ir al estado 28
     CTE_R  desplazar e ir al estado 24
 
@@ -356,7 +354,6 @@ estado 19
 
     ID     desplazar e ir al estado 20
     CTE    desplazar e ir al estado 21
-    CTE_S  desplazar e ir al estado 22
     PARA   desplazar e ir al estado 23
     CTE_R  desplazar e ir al estado 24
 
@@ -367,23 +364,23 @@ estado 19
 
 estado 20
 
-   31 factor: ID .
-
-    $default  reduce usando la regla 31 (factor)
-
-
-estado 21
-
-   32 factor: CTE .
+   32 factor: ID .
 
     $default  reduce usando la regla 32 (factor)
 
 
+estado 21
+
+   33 factor: CTE .
+
+    $default  reduce usando la regla 33 (factor)
+
+
 estado 22
 
-   34 factor: CTE_S .
+   15 salida: DISPLAY CTE_S .
 
-    $default  reduce usando la regla 34 (factor)
+    $default  reduce usando la regla 15 (salida)
 
 
 estado 23
@@ -392,7 +389,6 @@ estado 23
 
     ID     desplazar e ir al estado 20
     CTE    desplazar e ir al estado 21
-    CTE_S  desplazar e ir al estado 22
     PARA   desplazar e ir al estado 23
     CTE_R  desplazar e ir al estado 24
 
@@ -403,9 +399,9 @@ estado 23
 
 estado 24
 
-   33 factor: CTE_R .
+   34 factor: CTE_R .
 
-    $default  reduce usando la regla 33 (factor)
+    $default  reduce usando la regla 34 (factor)
 
 
 estado 25
@@ -417,32 +413,31 @@ estado 25
 
 estado 26
 
-   15 entrada: GET ID .
+   16 entrada: GET ID .
 
-    $default  reduce usando la regla 15 (entrada)
+    $default  reduce usando la regla 16 (entrada)
 
 
 estado 27
 
-   31 factor: ID .
+   32 factor: ID .
    43 ciclo_especial: WHILE ID . IN CORA lista_expre CORC DO programa ENDWHILE
 
     IN  desplazar e ir al estado 41
 
-    $default  reduce usando la regla 31 (factor)
+    $default  reduce usando la regla 32 (factor)
 
 
 estado 28
 
-   22 condicion: PARA . condicion AND comparacion PARC
-   23          | PARA . condicion OR comparacion PARC
-   24          | PARA . NOT condicion PARC
-   27 comparacion: PARA . expresion COMPARADOR expresion PARC
+   23 condicion: PARA . condicion AND comparacion PARC
+   24          | PARA . condicion OR comparacion PARC
+   25          | PARA . NOT condicion PARC
+   28 comparacion: PARA . expresion COMPARADOR expresion PARC
    35 factor: PARA . expresion PARC
 
     ID     desplazar e ir al estado 20
     CTE    desplazar e ir al estado 21
-    CTE_S  desplazar e ir al estado 22
     PARA   desplazar e ir al estado 28
     CTE_R  desplazar e ir al estado 24
     NOT    desplazar e ir al estado 42
@@ -456,9 +451,9 @@ estado 28
 
 estado 29
 
-   16 expresion: expresion . OP_SUM termino
-   17          | expresion . OP_RES termino
-   26 comparacion: expresion . COMPARADOR expresion
+   17 expresion: expresion . OP_SUM termino
+   18          | expresion . OP_RES termino
+   27 comparacion: expresion . COMPARADOR expresion
 
     OP_SUM      desplazar e ir al estado 45
     OP_RES      desplazar e ir al estado 46
@@ -467,41 +462,41 @@ estado 29
 
 estado 30
 
-   19 iteracion: WHILE condicion . START programa END
+   20 iteracion: WHILE condicion . START programa END
 
     START  desplazar e ir al estado 48
 
 
 estado 31
 
-   25 condicion: comparacion .
+   26 condicion: comparacion .
 
-    $default  reduce usando la regla 25 (condicion)
+    $default  reduce usando la regla 26 (condicion)
 
 
 estado 32
 
-   18 expresion: termino .
-   28 termino: termino . OP_MUL factor
-   29        | termino . OP_DIV factor
+   19 expresion: termino .
+   29 termino: termino . OP_MUL factor
+   30        | termino . OP_DIV factor
 
     OP_MUL  desplazar e ir al estado 49
     OP_DIV  desplazar e ir al estado 50
 
-    $default  reduce usando la regla 18 (expresion)
+    $default  reduce usando la regla 19 (expresion)
 
 
 estado 33
 
-   30 termino: factor .
+   31 termino: factor .
 
-    $default  reduce usando la regla 30 (termino)
+    $default  reduce usando la regla 31 (termino)
 
 
 estado 34
 
-   20 seleccion: IF condicion . THEN programa ELSE programa ENDIF
-   21          | IF condicion . THEN programa ENDIF
+   21 seleccion: IF condicion . THEN programa ELSE programa ENDIF
+   22          | IF condicion . THEN programa ENDIF
 
     THEN  desplazar e ir al estado 51
 
@@ -521,7 +516,6 @@ estado 36
 
     ID     desplazar e ir al estado 20
     CTE    desplazar e ir al estado 21
-    CTE_S  desplazar e ir al estado 22
     PARA   desplazar e ir al estado 23
     CTE_R  desplazar e ir al estado 24
 
@@ -546,8 +540,8 @@ estado 38
 estado 39
 
    13 asignacion: ID OP_ASIG expresion .
-   16 expresion: expresion . OP_SUM termino
-   17          | expresion . OP_RES termino
+   17 expresion: expresion . OP_SUM termino
+   18          | expresion . OP_RES termino
 
     OP_SUM  desplazar e ir al estado 45
     OP_RES  desplazar e ir al estado 46
@@ -557,8 +551,8 @@ estado 39
 
 estado 40
 
-   16 expresion: expresion . OP_SUM termino
-   17          | expresion . OP_RES termino
+   17 expresion: expresion . OP_SUM termino
+   18          | expresion . OP_RES termino
    35 factor: PARA expresion . PARC
 
     OP_SUM  desplazar e ir al estado 45
@@ -575,11 +569,10 @@ estado 41
 
 estado 42
 
-   24 condicion: PARA NOT . condicion PARC
+   25 condicion: PARA NOT . condicion PARC
 
     ID     desplazar e ir al estado 20
     CTE    desplazar e ir al estado 21
-    CTE_S  desplazar e ir al estado 22
     PARA   desplazar e ir al estado 28
     CTE_R  desplazar e ir al estado 24
 
@@ -592,10 +585,10 @@ estado 42
 
 estado 43
 
-   16 expresion: expresion . OP_SUM termino
-   17          | expresion . OP_RES termino
-   26 comparacion: expresion . COMPARADOR expresion
-   27            | PARA expresion . COMPARADOR expresion PARC
+   17 expresion: expresion . OP_SUM termino
+   18          | expresion . OP_RES termino
+   27 comparacion: expresion . COMPARADOR expresion
+   28            | PARA expresion . COMPARADOR expresion PARC
    35 factor: PARA expresion . PARC
 
     OP_SUM      desplazar e ir al estado 45
@@ -606,8 +599,8 @@ estado 43
 
 estado 44
 
-   22 condicion: PARA condicion . AND comparacion PARC
-   23          | PARA condicion . OR comparacion PARC
+   23 condicion: PARA condicion . AND comparacion PARC
+   24          | PARA condicion . OR comparacion PARC
 
     OR   desplazar e ir al estado 60
     AND  desplazar e ir al estado 61
@@ -615,11 +608,10 @@ estado 44
 
 estado 45
 
-   16 expresion: expresion OP_SUM . termino
+   17 expresion: expresion OP_SUM . termino
 
     ID     desplazar e ir al estado 20
     CTE    desplazar e ir al estado 21
-    CTE_S  desplazar e ir al estado 22
     PARA   desplazar e ir al estado 23
     CTE_R  desplazar e ir al estado 24
 
@@ -629,11 +621,10 @@ estado 45
 
 estado 46
 
-   17 expresion: expresion OP_RES . termino
+   18 expresion: expresion OP_RES . termino
 
     ID     desplazar e ir al estado 20
     CTE    desplazar e ir al estado 21
-    CTE_S  desplazar e ir al estado 22
     PARA   desplazar e ir al estado 23
     CTE_R  desplazar e ir al estado 24
 
@@ -643,11 +634,10 @@ estado 46
 
 estado 47
 
-   26 comparacion: expresion COMPARADOR . expresion
+   27 comparacion: expresion COMPARADOR . expresion
 
     ID     desplazar e ir al estado 20
     CTE    desplazar e ir al estado 21
-    CTE_S  desplazar e ir al estado 22
     PARA   desplazar e ir al estado 23
     CTE_R  desplazar e ir al estado 24
 
@@ -658,7 +648,7 @@ estado 47
 
 estado 48
 
-   19 iteracion: WHILE condicion START . programa END
+   20 iteracion: WHILE condicion START . programa END
 
     ID       desplazar e ir al estado 1
     COMEN    desplazar e ir al estado 2
@@ -683,11 +673,10 @@ estado 48
 
 estado 49
 
-   28 termino: termino OP_MUL . factor
+   29 termino: termino OP_MUL . factor
 
     ID     desplazar e ir al estado 20
     CTE    desplazar e ir al estado 21
-    CTE_S  desplazar e ir al estado 22
     PARA   desplazar e ir al estado 23
     CTE_R  desplazar e ir al estado 24
 
@@ -696,11 +685,10 @@ estado 49
 
 estado 50
 
-   29 termino: termino OP_DIV . factor
+   30 termino: termino OP_DIV . factor
 
     ID     desplazar e ir al estado 20
     CTE    desplazar e ir al estado 21
-    CTE_S  desplazar e ir al estado 22
     PARA   desplazar e ir al estado 23
     CTE_R  desplazar e ir al estado 24
 
@@ -709,8 +697,8 @@ estado 50
 
 estado 51
 
-   20 seleccion: IF condicion THEN . programa ELSE programa ENDIF
-   21          | IF condicion THEN . programa ENDIF
+   21 seleccion: IF condicion THEN . programa ELSE programa ENDIF
+   22          | IF condicion THEN . programa ENDIF
 
     ID       desplazar e ir al estado 1
     COMEN    desplazar e ir al estado 2
@@ -778,7 +766,6 @@ estado 57
 
     ID     desplazar e ir al estado 20
     CTE    desplazar e ir al estado 21
-    CTE_S  desplazar e ir al estado 22
     PARA   desplazar e ir al estado 23
     CTE_R  desplazar e ir al estado 24
 
@@ -790,19 +777,18 @@ estado 57
 
 estado 58
 
-   24 condicion: PARA NOT condicion . PARC
+   25 condicion: PARA NOT condicion . PARC
 
     PARC  desplazar e ir al estado 75
 
 
 estado 59
 
-   26 comparacion: expresion COMPARADOR . expresion
-   27            | PARA expresion COMPARADOR . expresion PARC
+   27 comparacion: expresion COMPARADOR . expresion
+   28            | PARA expresion COMPARADOR . expresion PARC
 
     ID     desplazar e ir al estado 20
     CTE    desplazar e ir al estado 21
-    CTE_S  desplazar e ir al estado 22
     PARA   desplazar e ir al estado 23
     CTE_R  desplazar e ir al estado 24
 
@@ -813,11 +799,10 @@ estado 59
 
 estado 60
 
-   23 condicion: PARA condicion OR . comparacion PARC
+   24 condicion: PARA condicion OR . comparacion PARC
 
     ID     desplazar e ir al estado 20
     CTE    desplazar e ir al estado 21
-    CTE_S  desplazar e ir al estado 22
     PARA   desplazar e ir al estado 77
     CTE_R  desplazar e ir al estado 24
 
@@ -829,11 +814,10 @@ estado 60
 
 estado 61
 
-   22 condicion: PARA condicion AND . comparacion PARC
+   23 condicion: PARA condicion AND . comparacion PARC
 
     ID     desplazar e ir al estado 20
     CTE    desplazar e ir al estado 21
-    CTE_S  desplazar e ir al estado 22
     PARA   desplazar e ir al estado 77
     CTE_R  desplazar e ir al estado 24
 
@@ -845,21 +829,9 @@ estado 61
 
 estado 62
 
-   16 expresion: expresion OP_SUM termino .
-   28 termino: termino . OP_MUL factor
-   29        | termino . OP_DIV factor
-
-    OP_MUL  desplazar e ir al estado 49
-    OP_DIV  desplazar e ir al estado 50
-
-    $default  reduce usando la regla 16 (expresion)
-
-
-estado 63
-
-   17 expresion: expresion OP_RES termino .
-   28 termino: termino . OP_MUL factor
-   29        | termino . OP_DIV factor
+   17 expresion: expresion OP_SUM termino .
+   29 termino: termino . OP_MUL factor
+   30        | termino . OP_DIV factor
 
     OP_MUL  desplazar e ir al estado 49
     OP_DIV  desplazar e ir al estado 50
@@ -867,22 +839,34 @@ estado 63
     $default  reduce usando la regla 17 (expresion)
 
 
+estado 63
+
+   18 expresion: expresion OP_RES termino .
+   29 termino: termino . OP_MUL factor
+   30        | termino . OP_DIV factor
+
+    OP_MUL  desplazar e ir al estado 49
+    OP_DIV  desplazar e ir al estado 50
+
+    $default  reduce usando la regla 18 (expresion)
+
+
 estado 64
 
-   16 expresion: expresion . OP_SUM termino
-   17          | expresion . OP_RES termino
-   26 comparacion: expresion COMPARADOR expresion .
+   17 expresion: expresion . OP_SUM termino
+   18          | expresion . OP_RES termino
+   27 comparacion: expresion COMPARADOR expresion .
 
     OP_SUM  desplazar e ir al estado 45
     OP_RES  desplazar e ir al estado 46
 
-    $default  reduce usando la regla 26 (comparacion)
+    $default  reduce usando la regla 27 (comparacion)
 
 
 estado 65
 
     1 programa: programa . sentencia
-   19 iteracion: WHILE condicion START programa . END
+   20 iteracion: WHILE condicion START programa . END
 
     ID       desplazar e ir al estado 1
     COMEN    desplazar e ir al estado 2
@@ -907,23 +891,23 @@ estado 65
 
 estado 66
 
-   28 termino: termino OP_MUL factor .
+   29 termino: termino OP_MUL factor .
 
-    $default  reduce usando la regla 28 (termino)
+    $default  reduce usando la regla 29 (termino)
 
 
 estado 67
 
-   29 termino: termino OP_DIV factor .
+   30 termino: termino OP_DIV factor .
 
-    $default  reduce usando la regla 29 (termino)
+    $default  reduce usando la regla 30 (termino)
 
 
 estado 68
 
     1 programa: programa . sentencia
-   20 seleccion: IF condicion THEN programa . ELSE programa ENDIF
-   21          | IF condicion THEN programa . ENDIF
+   21 seleccion: IF condicion THEN programa . ELSE programa ENDIF
+   22          | IF condicion THEN programa . ENDIF
 
     ID       desplazar e ir al estado 1
     COMEN    desplazar e ir al estado 2
@@ -974,7 +958,6 @@ estado 72
 
     ID     desplazar e ir al estado 20
     CTE    desplazar e ir al estado 21
-    CTE_S  desplazar e ir al estado 22
     PARA   desplazar e ir al estado 23
     CTE_R  desplazar e ir al estado 24
 
@@ -983,8 +966,8 @@ estado 72
 
 estado 73
 
-   16 expresion: expresion . OP_SUM termino
-   17          | expresion . OP_RES termino
+   17 expresion: expresion . OP_SUM termino
+   18          | expresion . OP_RES termino
    45 lista_expre: expresion .
 
     OP_SUM  desplazar e ir al estado 45
@@ -1004,33 +987,32 @@ estado 74
 
 estado 75
 
-   24 condicion: PARA NOT condicion PARC .
+   25 condicion: PARA NOT condicion PARC .
 
-    $default  reduce usando la regla 24 (condicion)
+    $default  reduce usando la regla 25 (condicion)
 
 
 estado 76
 
-   16 expresion: expresion . OP_SUM termino
-   17          | expresion . OP_RES termino
-   26 comparacion: expresion COMPARADOR expresion .
-   27            | PARA expresion COMPARADOR expresion . PARC
+   17 expresion: expresion . OP_SUM termino
+   18          | expresion . OP_RES termino
+   27 comparacion: expresion COMPARADOR expresion .
+   28            | PARA expresion COMPARADOR expresion . PARC
 
     OP_SUM  desplazar e ir al estado 45
     OP_RES  desplazar e ir al estado 46
     PARC    desplazar e ir al estado 88
 
-    $default  reduce usando la regla 26 (comparacion)
+    $default  reduce usando la regla 27 (comparacion)
 
 
 estado 77
 
-   27 comparacion: PARA . expresion COMPARADOR expresion PARC
+   28 comparacion: PARA . expresion COMPARADOR expresion PARC
    35 factor: PARA . expresion PARC
 
     ID     desplazar e ir al estado 20
     CTE    desplazar e ir al estado 21
-    CTE_S  desplazar e ir al estado 22
     PARA   desplazar e ir al estado 23
     CTE_R  desplazar e ir al estado 24
 
@@ -1041,28 +1023,28 @@ estado 77
 
 estado 78
 
-   23 condicion: PARA condicion OR comparacion . PARC
+   24 condicion: PARA condicion OR comparacion . PARC
 
     PARC  desplazar e ir al estado 90
 
 
 estado 79
 
-   22 condicion: PARA condicion AND comparacion . PARC
+   23 condicion: PARA condicion AND comparacion . PARC
 
     PARC  desplazar e ir al estado 91
 
 
 estado 80
 
-   19 iteracion: WHILE condicion START programa END .
+   20 iteracion: WHILE condicion START programa END .
 
-    $default  reduce usando la regla 19 (iteracion)
+    $default  reduce usando la regla 20 (iteracion)
 
 
 estado 81
 
-   20 seleccion: IF condicion THEN programa ELSE . programa ENDIF
+   21 seleccion: IF condicion THEN programa ELSE . programa ENDIF
 
     ID       desplazar e ir al estado 1
     COMEN    desplazar e ir al estado 2
@@ -1087,9 +1069,9 @@ estado 81
 
 estado 82
 
-   21 seleccion: IF condicion THEN programa ENDIF .
+   22 seleccion: IF condicion THEN programa ENDIF .
 
-    $default  reduce usando la regla 21 (seleccion)
+    $default  reduce usando la regla 22 (seleccion)
 
 
 estado 83
@@ -1126,7 +1108,6 @@ estado 87
 
     ID     desplazar e ir al estado 20
     CTE    desplazar e ir al estado 21
-    CTE_S  desplazar e ir al estado 22
     PARA   desplazar e ir al estado 23
     CTE_R  desplazar e ir al estado 24
 
@@ -1137,16 +1118,16 @@ estado 87
 
 estado 88
 
-   27 comparacion: PARA expresion COMPARADOR expresion PARC .
+   28 comparacion: PARA expresion COMPARADOR expresion PARC .
 
-    $default  reduce usando la regla 27 (comparacion)
+    $default  reduce usando la regla 28 (comparacion)
 
 
 estado 89
 
-   16 expresion: expresion . OP_SUM termino
-   17          | expresion . OP_RES termino
-   27 comparacion: PARA expresion . COMPARADOR expresion PARC
+   17 expresion: expresion . OP_SUM termino
+   18          | expresion . OP_RES termino
+   28 comparacion: PARA expresion . COMPARADOR expresion PARC
    35 factor: PARA expresion . PARC
 
     OP_SUM      desplazar e ir al estado 45
@@ -1157,22 +1138,22 @@ estado 89
 
 estado 90
 
-   23 condicion: PARA condicion OR comparacion PARC .
+   24 condicion: PARA condicion OR comparacion PARC .
 
-    $default  reduce usando la regla 23 (condicion)
+    $default  reduce usando la regla 24 (condicion)
 
 
 estado 91
 
-   22 condicion: PARA condicion AND comparacion PARC .
+   23 condicion: PARA condicion AND comparacion PARC .
 
-    $default  reduce usando la regla 22 (condicion)
+    $default  reduce usando la regla 23 (condicion)
 
 
 estado 92
 
     1 programa: programa . sentencia
-   20 seleccion: IF condicion THEN programa ELSE programa . ENDIF
+   21 seleccion: IF condicion THEN programa ELSE programa . ENDIF
 
     ID       desplazar e ir al estado 1
     COMEN    desplazar e ir al estado 2
@@ -1231,8 +1212,8 @@ estado 94
 
 estado 95
 
-   16 expresion: expresion . OP_SUM termino
-   17          | expresion . OP_RES termino
+   17 expresion: expresion . OP_SUM termino
+   18          | expresion . OP_RES termino
    44 lista_expre: lista_expre COMA expresion .
 
     OP_SUM  desplazar e ir al estado 45
@@ -1243,11 +1224,10 @@ estado 95
 
 estado 96
 
-   27 comparacion: PARA expresion COMPARADOR . expresion PARC
+   28 comparacion: PARA expresion COMPARADOR . expresion PARC
 
     ID     desplazar e ir al estado 20
     CTE    desplazar e ir al estado 21
-    CTE_S  desplazar e ir al estado 22
     PARA   desplazar e ir al estado 23
     CTE_R  desplazar e ir al estado 24
 
@@ -1258,9 +1238,9 @@ estado 96
 
 estado 97
 
-   20 seleccion: IF condicion THEN programa ELSE programa ENDIF .
+   21 seleccion: IF condicion THEN programa ELSE programa ENDIF .
 
-    $default  reduce usando la regla 20 (seleccion)
+    $default  reduce usando la regla 21 (seleccion)
 
 
 estado 98
@@ -1307,9 +1287,9 @@ estado 100
 
 estado 101
 
-   16 expresion: expresion . OP_SUM termino
-   17          | expresion . OP_RES termino
-   27 comparacion: PARA expresion COMPARADOR expresion . PARC
+   17 expresion: expresion . OP_SUM termino
+   18          | expresion . OP_RES termino
+   28 comparacion: PARA expresion COMPARADOR expresion . PARC
 
     OP_SUM  desplazar e ir al estado 45
     OP_RES  desplazar e ir al estado 46

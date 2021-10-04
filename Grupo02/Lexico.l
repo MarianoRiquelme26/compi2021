@@ -6,6 +6,17 @@
 #include "y.tab.h"
 FILE *yyin;
 char *yyltext;
+
+
+
+char auxS[100];
+
+
+void quitarComillas();
+
+
+
+
 %}
 %option noyywrap
 %option yylineno
@@ -110,12 +121,22 @@ OP_MUL [*]
 			printf("\ntoken CTE_S");
 			if(strlen(yytext) < 31)
 			{
+			
+				sprintf(auxS,"%s", yytext);
+				quitarComillas();
+				yylval.stringValue=auxS;    
 				return CTE_S;
 			}
 			else
 			{
 				printf("\nError lexico - Se supero el limite DE caracteres para constantes alfanumericas %s:\n",yytext);
 			}
+										
+			
+                             
+  
+
+										
 			
 	    }
 {ENTER} {return ENTER;}
@@ -131,6 +152,25 @@ OP_MUL [*]
 {PARC} {printf("\ntoken PARC: %s",yytext);return PARC;}
 {COMA} {printf("\ntoken COMA: %s",yytext);return COMA;}
 {OP_MUL} {printf("\ntoken OP_MUL: %s",yytext);return OP_MUL;}
+
+
+
+
+
 "\t"
 . 
 %%
+
+
+
+
+
+void quitarComillas() {
+	int i = 0;
+	while(auxS[i+1] != '\"') {
+		auxS[i] = auxS[i+1];
+		i++;
+	}
+	auxS[i] = '\0';
+}
+

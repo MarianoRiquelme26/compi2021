@@ -12,6 +12,8 @@ int yylex();
 char *yyltext;
 int conadorDeclaracionesV = 0;
 int conadorDeclaracionesT = 0;
+char idAux[30];
+
 
 %}
 %union 
@@ -21,8 +23,8 @@ int conadorDeclaracionesT = 0;
     char *stringValue; 
 } 
 %start programa
-%token <stringValue> ID	  
-%token OP_ASIG 
+%token <stringValue> ID
+%token OP_ASIG
 %token CTE
 %token COMEN
 %token DISPLAY
@@ -77,7 +79,25 @@ sentencia : asignacion {printf("\n---------------------->sentencia - asignacion"
 asignacion : ID OP_ASIG expresion {printf("\n---------------------->asignacion");};
 		
 salida :    DISPLAY factor {printf("\n---------------------->salida - display");}
-		  | DISPLAY CTE_S {printf("\n---------------------->salida - display");};
+		  | DISPLAY CTE_S {printf("\n---------------------->salida - display");
+					printf("\n---------------------->factor cte STRING");
+			
+				
+				
+						strcpy(idAux,yylval.stringValue);	
+						guardar_cte_string(idAux);
+					
+					
+					
+		 }
+			
+		  		  	  
+		  
+		  ;
+		  
+		
+		  
+		  
 		  
 entrada:    GET ID {printf("\n---------------------->entrada");};
 
@@ -107,15 +127,17 @@ termino   : termino OP_MUL factor {printf("\n---------------------->termino");}
 
 factor :    ID {printf("\n---------------------->factor - id");}
 		  | CTE {
-				printf("\n---------------------->factor - cet");
+				printf("\n---------------------->factor - cte");
 				char* nombre_cte_int = guardar_cte_int(atoi($<stringValue>1));
 		}
 		 |CTE_R {
-					printf("\n---------------------->factor cet real");
+					printf("\n---------------------->factor cte real");
 					float valor = atof($<stringValue>1);
 					char* nombre_cte_float = guardar_cte_float(valor);
 					
 		 }
+		 	 
+		 
 		 | PARA expresion PARC {printf("\n---------------------->factor - expresion");};
 		 
 declaracion : DIM CORA listav CORC AS CORA listat CORC 

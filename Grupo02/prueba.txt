@@ -16,6 +16,10 @@ WHILE (contador <= 9) START
 END
 DISPLAY "La suma es: "
 DISPLAY suma
+
+
+DISPLAY "HOLA MUNDO DOS"
+
 IF (actual > 1 AND actual != 0)THEN
 	DISPLAY "actual es mayor que 2 "
 ENDIF
