@@ -33,7 +33,7 @@ IF  (NOT actual < 10 )THEN
 
 ELSE
 	DISPLAY "no es mayor que 2" */ COMENTARIO /* */ COMENTARIO2 /*
-	long (a,b,c,e)
+	a := long (a,b,c,e)
 
 	WHILE a IN [ 1+3 , 2+b ] DO
 		suma:= suma + actual

@@ -72,7 +72,7 @@ sentencia : asignacion {printf("\n---------------------->sentencia - asignacion"
 		  | seleccion {printf("\n---------------------->sentencia - seleccion");}
 		  |	declaracion {printf("\n---------------------->sentencia - declaracion");}
 		  | COMEN {printf("\n");}
-		  | LONG PARA lista PARC {printf("\n---------------------->sentencia - tema especial - long");}
+		  | ID OP_ASIG LONG PARA lista PARC {printf("\n---------------------->sentencia - tema especial - long");}
 		  | ciclo_especial {printf("\n---------------------->sentencia - tema especial - cilco especial");}
 		  | ENTER {printf("\n");};
 
