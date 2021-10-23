@@ -134,8 +134,15 @@ comparacion: expresion COMPARADOR expresion {printf("\n---------------------->3 
 			;
 
 
-termino   : termino OP_MUL factor {printf("\n---------------------->termino");}
-		  | termino OP_DIV factor {printf("\n---------------------->termino");}
+termino   : termino OP_MUL factor {printf("\n---------------------->termino");
+									insertar_en_polaca_operador("*", numeroPolaca);
+									numeroPolaca++;
+		  }
+		  | termino OP_DIV factor {printf("\n---------------------->termino");
+									insertar_en_polaca_operador("/", numeroPolaca);
+									numeroPolaca++;
+		  
+		  }
 		  | factor {printf("\n---------------------->termino - factor");};
 
 factor :    ID {printf("\n---------------------->factor - id");
@@ -154,7 +161,8 @@ factor :    ID {printf("\n---------------------->factor - id");
 					printf("\n---------------------->factor cte real");
 					float valor = atof($<stringValue>1);
 					char* nombre_cte_float = guardar_cte_float(valor);
-					
+					insertar_en_polaca_cte_real(atof($<stringValue>1), numeroPolaca);
+					numeroPolaca++;
 		 }
 		 	 
 		 

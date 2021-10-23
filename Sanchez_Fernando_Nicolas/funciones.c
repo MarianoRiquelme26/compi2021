@@ -31,6 +31,7 @@ int existe_between = 0;
 //funciones polaca inversa
 void crearPolaca();
 void insertar_en_polaca_cte_int(int cte, int num);
+void insertar_en_polaca_cte_real(float cte_real, int num);
 void insertar_en_polaca_id(char *valor, int num);
 void insertar_en_polaca_operador(char * valor, int num);
 void guardar_gci(int cantidad);
@@ -233,6 +234,15 @@ void insertar_en_polaca_cte_int(int cte, int num){
 	strcpy(gci[num].simbolo, constante_string);
 	gci[num].numero = num+10;
 }
+
+void insertar_en_polaca_cte_real(float cte_real, int num){
+	
+	char constante_string[100];
+    sprintf(constante_string,"%f",cte_real);
+	strcpy(gci[num].simbolo, constante_string);
+	gci[num].numero = num+10;
+}
+
 
 void insertar_en_polaca_id(char *valor, int num){
 	strcpy(gci[num].simbolo, valor);
