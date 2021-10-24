@@ -12,8 +12,9 @@ int yylex();
 char *yyltext;
 int conadorDeclaracionesV = 0;
 int conadorDeclaracionesT = 0;
+int numeroPolaca = 0;
 char idAux[30];
-
+char operadorAux[30];
 
 %}
 %union 
@@ -42,7 +43,15 @@ char idAux[30];
 %token END
 %token OR
 %token AND
-%token COMPARADOR
+
+%token OP_MAYOR
+%token OP_MAYORIGUAL       
+%token OP_MENORIGUAL         
+%token OP_IGUAL             
+%token OP_MENOR             
+%token OP_DISTINTO        
+
+
 %token IF
 %token THEN
 %token ELSE
@@ -76,7 +85,13 @@ sentencia : asignacion {printf("\n---------------------->sentencia - asignacion"
 		  | ciclo_especial {printf("\n---------------------->sentencia - tema especial - cilco especial");}
 		  | ENTER {printf("\n");};
 
-asignacion : ID OP_ASIG expresion {printf("\n---------------------->asignacion");};
+asignacion : ID OP_ASIG expresion {	printf("\n---------------------->asignacion");
+									insertar_en_polaca_operador(":=", numeroPolaca);
+									numeroPolaca++;
+									insertar_en_polaca_id($<stringValue>1, numeroPolaca);
+									numeroPolaca++;
+			
+			};
 		
 salida :    DISPLAY factor {printf("\n---------------------->salida - display");}
 		  | DISPLAY CTE_S {printf("\n---------------------->salida - display");
@@ -101,40 +116,108 @@ salida :    DISPLAY factor {printf("\n---------------------->salida - display");
 		  
 entrada:    GET ID {printf("\n---------------------->entrada");};
 
-expresion : expresion OP_SUM termino {printf("\n---------------------->expresion - SUM");}
-		  | expresion OP_RES termino {printf("\n---------------------->expresion - RES");}
+expresion : expresion OP_SUM termino {	printf("\n---------------------->expresion - SUM");
+										insertar_en_polaca_operador("+", numeroPolaca);
+										numeroPolaca++;
+		   }
+		  | expresion OP_RES termino {	printf("\n---------------------->expresion - RES");
+										insertar_en_polaca_operador("-", numeroPolaca);
+										numeroPolaca++;
+		   }
 		  | termino {printf("\n---------------------->expresion - termino");};
 		  
 iteracion: WHILE condicion START programa END {printf("\n---------------------->iteracion - while");};
 
 seleccion :   IF  condicion THEN programa ELSE programa ENDIF {printf("\n---------------------->seleccion - if");}
-			| IF condicion THEN programa ENDIF {printf("\n---------------------->seleccion - if");}
+			| IF condicion THEN programa ENDIF {printf("\n---------------------->seleccion - if");
+												desapilar_e_insertar_en_celda(numeroPolaca);}
 			;
 
 condicion :   PARA condicion AND comparacion PARC {printf("\n---------------------->condicion");}
 			| PARA condicion OR comparacion PARC {printf("\n---------------------->condicion");}
 			| PARA NOT condicion PARC	{printf("\n---------------------->condicion");}
-			| comparacion 	{printf("\n---------------------->condicion");};
+			| comparacion 	{	printf("\n---------------------->condicion");								
+			};
 			
-comparacion: expresion COMPARADOR expresion {printf("\n---------------------->3 - condicion");}
-			|PARA expresion COMPARADOR expresion PARC{printf("\n---------------------->3 - condicion");}
-			;
+comparacion: expresion COMPARADOR expresion {printf("\n---------------------->3 - condicion");
+											 //insertar_en_polaca_operador("CMP", numeroPolaca); //falta probar si con varias expresiones anidadas en una comparacion
+											 
+											 //numeroPolaca++;
+											 }
+			|PARA expresion COMPARADOR expresion PARC{printf("\n---------------------->3 - condicion");
+													  insertar_en_polaca_operador("CMP", numeroPolaca);
+													  numeroPolaca++;
+													  insertar_en_polaca_salto_condicion(operadorAux,numeroPolaca);
+													  numeroPolaca += 2;
+													  }
+													  
+COMPARADOR: OP_MAYORIGUAL       {printf("\n---------------------->OP_MAYORIGUAL");
+												
+									strcpy(operadorAux,">=");
+
+								}
+    | OP_MENORIGUAL         {printf("\n---------------------->OP_MENORIGUAL");
+
+									strcpy(operadorAux,"<=");
+
+								}
+    | OP_IGUAL              {printf("\n---------------------->OP_IGUAL");
+
+									strcpy(operadorAux,"==");
+
+		
+								}
+    | OP_MAYOR             {printf("\n---------------------->OP_MAYOR");
+
+									strcpy(operadorAux,">");
+
+								}
+    | OP_MENOR              {printf("\n---------------------->OP_MENOR");
+
+									strcpy(operadorAux,"<");
+
+								}
+    | OP_DISTINTO            {printf("\n---------------------->OP_DISTINTO");
+	
+									strcpy(operadorAux,"!=");
+
+								}
+    ;												
+													 
+													  
+													  
+												
 
 
-termino   : termino OP_MUL factor {printf("\n---------------------->termino");}
-		  | termino OP_DIV factor {printf("\n---------------------->termino");}
+termino   : termino OP_MUL factor {printf("\n---------------------->termino");
+									insertar_en_polaca_operador("*", numeroPolaca);
+									numeroPolaca++;
+		  }
+		  | termino OP_DIV factor {printf("\n---------------------->termino");
+									insertar_en_polaca_operador("/", numeroPolaca);
+									numeroPolaca++;
+		  
+		  }
 		  | factor {printf("\n---------------------->termino - factor");};
 
-factor :    ID {printf("\n---------------------->factor - id");}
+factor :    ID {printf("\n---------------------->factor - id");
+				insertar_en_polaca_id($<stringValue>1, numeroPolaca);
+				numeroPolaca++;
+
+		}
+		
 		  | CTE {
 				printf("\n---------------------->factor - cte");
 				char* nombre_cte_int = guardar_cte_int(atoi($<stringValue>1));
+				insertar_en_polaca_cte_int(atoi($<stringValue>1), numeroPolaca);
+				numeroPolaca++;
 		}
 		 |CTE_R {
 					printf("\n---------------------->factor cte real");
 					float valor = atof($<stringValue>1);
 					char* nombre_cte_float = guardar_cte_float(valor);
-					
+					insertar_en_polaca_cte_real(atof($<stringValue>1), numeroPolaca);
+					numeroPolaca++;
 		 }
 		 	 
 		 
@@ -209,8 +292,10 @@ int main (int argc,char *argv[]){
 	initArray(&array_tipos_variables);
 	initArray(&array_nombres_variables);
     crearTabla();
+	crearPolaca();
 	yyparse();
 	guardar_ts();
+	guardar_gci(numeroPolaca);
     freeArray(&array_tipos_variables);
 	freeArray(&array_nombres_variables);
  }

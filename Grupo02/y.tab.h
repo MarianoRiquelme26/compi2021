@@ -58,28 +58,23 @@
      END = 274,
      OR = 275,
      AND = 276,
-     OP_MAYOR = 277,
-     OP_MAYORIGUAL = 278,
-     OP_MENORIGUAL = 279,
-     OP_IGUAL = 280,
-     OP_MENOR = 281,
-     OP_DISTINTO = 282,
-     IF = 283,
-     THEN = 284,
-     ELSE = 285,
-     ENDIF = 286,
-     DIM = 287,
-     CORA = 288,
-     CORC = 289,
-     AS = 290,
-     TIPO = 291,
-     COMA = 292,
-     LONG = 293,
-     IN = 294,
-     DO = 295,
-     ENDWHILE = 296,
-     CTE_R = 297,
-     NOT = 298
+     COMPARADOR = 277,
+     IF = 278,
+     THEN = 279,
+     ELSE = 280,
+     ENDIF = 281,
+     DIM = 282,
+     CORA = 283,
+     CORC = 284,
+     AS = 285,
+     TIPO = 286,
+     COMA = 287,
+     LONG = 288,
+     IN = 289,
+     DO = 290,
+     ENDWHILE = 291,
+     CTE_R = 292,
+     NOT = 293
    };
 #endif
 /* Tokens.  */
@@ -102,28 +97,23 @@
 #define END 274
 #define OR 275
 #define AND 276
-#define OP_MAYOR 277
-#define OP_MAYORIGUAL 278
-#define OP_MENORIGUAL 279
-#define OP_IGUAL 280
-#define OP_MENOR 281
-#define OP_DISTINTO 282
-#define IF 283
-#define THEN 284
-#define ELSE 285
-#define ENDIF 286
-#define DIM 287
-#define CORA 288
-#define CORC 289
-#define AS 290
-#define TIPO 291
-#define COMA 292
-#define LONG 293
-#define IN 294
-#define DO 295
-#define ENDWHILE 296
-#define CTE_R 297
-#define NOT 298
+#define COMPARADOR 277
+#define IF 278
+#define THEN 279
+#define ELSE 280
+#define ENDIF 281
+#define DIM 282
+#define CORA 283
+#define CORC 284
+#define AS 285
+#define TIPO 286
+#define COMA 287
+#define LONG 288
+#define IN 289
+#define DO 290
+#define ENDWHILE 291
+#define CTE_R 292
+#define NOT 293
 
 
 
@@ -133,7 +123,7 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 21 "Sintactico.y"
+#line 20 "Sintactico.y"
  
     int intValue; 
     float floatValue; 
@@ -142,7 +132,7 @@ typedef union YYSTYPE
 
 
 /* Line 1676 of yacc.c  */
-#line 146 "y.tab.h"
+#line 136 "y.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

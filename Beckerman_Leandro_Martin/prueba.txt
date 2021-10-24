@@ -4,7 +4,7 @@ DIM [ suma ] AS [ real ]
 DISPLAY "Prueba txt LyC Tema 2Prueb"
 */ DISPLAY "Esto es una prueba para que supere la cantidad de 30 caracteres" /* */ Error para control de caracteres/*
 GET actual
-contador:= 65534
+contador:= 65
 */ contador:= 65536 /* */ Error para control de enteros de 16 bits /*
 WHILE (contador <= 9) START
 	contador:= contador + 1

@@ -8,7 +8,10 @@
 #define INITIAL_CAPACITY 1
 #define MAX_STRING_LENGTH 30
 #define TABLA_SIMBOLOS "ts.txt"
+#define POLACA "intermedia.txt"
 #define TAM_TABLA 350
+#define TAM_POLACA 350
+#define TAM_PILA 50
 #define TAM_NOMBRE 32
 #define TRUE 1
 #define FALSE 0
@@ -25,6 +28,20 @@ void guardar_ts();
 int existe_simbolo(char * comp);
 int verificar_asignacion(char * valor);
 int existe_between = 0;
+
+//funciones polaca inversa
+void crearPolaca();
+void insertar_en_polaca_cte_int(int cte, int num);
+void insertar_en_polaca_cte_real(float cte_real, int num);
+void insertar_en_polaca_id(char *valor, int num);
+void insertar_en_polaca_operador(char * valor, int num);
+void insertar_en_polaca_salto_condicion(char*,int num);
+void desapilar_e_insertar_en_celda(int num);
+void guardar_gci(int cantidad);
+
+char* ObtenerBranchComparador(char*);
+
+
 //funciones complementarias
 char* concat(const char *s1, const char *s2);
 
@@ -38,8 +55,30 @@ typedef struct {
 simbolo ts[TAM_TABLA];
 simbolo simbolo_busqueda;
 
+typedef struct {
+	char simbolo[TAM_NOMBRE];
+	int numero;
+} polaca;
+
+typedef struct
+{
+    int numeroPolaca[TAM_PILA];
+    int tope;
+}tPila;
+
+
+// funciones de pila
+void crearPila(tPila *p);
+int pilaLlena(tPila *p);
+int pilaVacia(tPila *p);
+int ponerEnPila(tPila *p, int num);
+int sacarDePila(tPila *p);
+
+tPila pila[TAM_PILA];
+polaca gci[TAM_POLACA];
 
 FILE * file;
+FILE * filePolaca;
 int between_flag = 0;
 int cant_elem_ts = 0;
 int cantidad_cuerpos;
@@ -201,4 +240,137 @@ char* concat(const char *s1, const char *s2)
     memcpy(result, s1, len1);
     memcpy(result + len1, s2, len2 + 1); // +1 to copy the null-terminator
     return result;
+}
+
+/*Funciones Pila*/
+void crearPila(tPila *p)
+{
+    p->tope = 0;
+}
+
+int pilaLlena(tPila *p)
+{
+    return p->tope == TAM_PILA;
+}
+
+int pilaVacia(tPila *p)
+{
+    return p->tope == 0;
+}
+
+int ponerEnPila(tPila *p, int numPolaca)
+{
+    if(p->tope == TAM_PILA)
+        return 0;
+    p->numeroPolaca[p->tope] = numPolaca;
+    p->tope++;
+    return 1;
+}
+
+int sacarDePila(tPila *p)
+{
+    if(p->tope == 0)
+        return 0;
+     p->tope--;
+    int valor =  p->numeroPolaca[p->tope];
+
+    return valor;
+}
+
+/* Funciones polaca*/
+
+void crearPolaca(){
+  filePolaca = fopen(POLACA, "w");
+  crearPila(pila);
+  fclose(filePolaca);
+}
+
+
+void insertar_en_polaca_cte_int(int cte, int num){
+	char constante_string[32];
+	sprintf(constante_string,"%d",cte);
+	strcpy(gci[num].simbolo, constante_string);
+	gci[num].numero = num+10;
+}
+
+void insertar_en_polaca_cte_real(float cte_real, int num){
+	
+	char constante_string[100];
+    sprintf(constante_string,"%f",cte_real);
+	strcpy(gci[num].simbolo, constante_string);
+	gci[num].numero = num+10;
+}
+
+
+void insertar_en_polaca_id(char *valor, int num){
+	strcpy(gci[num].simbolo, valor);
+	gci[num].numero = num+10;
+}
+
+
+void insertar_en_polaca_operador(char * valor, int num){
+	strcpy(gci[num].simbolo, valor);
+	gci[num].numero = num+10;
+}
+
+char* ObtenerBranchComparador(char* branch){
+	
+	if(strcmp(branch,">=")==0){
+		strcpy(branch,"BGE"); 
+	
+	}
+	if(strcmp(branch,"<=")==0){
+		strcpy(branch,"BLE"); 		
+	}
+	if(strcmp(branch,">")==0){	
+		strcpy(branch,"BGT"); 
+	}
+	if(strcmp(branch,"<")==0){
+		strcpy(branch,"BLT"); 
+	}
+	if(strcmp(branch,"==")==0){
+		strcpy(branch,"BE"); 
+	}
+	if(strcmp(branch,"!=")==0){
+		strcpy(branch,"BNE"); 
+	}
+	
+	return branch;
+}
+
+
+
+void insertar_en_polaca_salto_condicion(char* branch,int num){
+	char tipoBranch[4];
+	ObtenerBranchComparador(branch);
+	strcpy(tipoBranch,branch);
+	insertar_en_polaca_operador(tipoBranch, num);
+	insertar_en_polaca_operador(" ", num+1);
+	ponerEnPila(pila, num+1);
+}
+
+void desapilar_e_insertar_en_celda(int num){
+	num += 10;
+	char constante_string[32];
+	sprintf(constante_string,"%d",num);
+	int valor_celda = sacarDePila(pila);
+	strcpy(gci[valor_celda].simbolo, constante_string);
+}
+
+void guardar_gci(int cantidad){
+	
+  filePolaca = fopen(POLACA,"a");
+  int i = 0;
+  
+  for(i;i< cantidad;i++){
+
+	fprintf(filePolaca,"%s\t",gci[i].simbolo);
+  }
+  fprintf(filePolaca,"\n",gci[i].simbolo);
+  i = 0;
+  
+    for(i;i< cantidad;i++){
+	fprintf(filePolaca,"%d\t",gci[i].numero);
+  }
+  fclose(filePolaca);
 }
