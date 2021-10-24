@@ -1,5 +1,9 @@
 z := 15 + c / 7
 IF (a > 1)THEN
 	c := 8 + 5
+	x := 9 + 11
+ELSE
+	d := y + 3
 ENDIF
+
 w := 4 - t

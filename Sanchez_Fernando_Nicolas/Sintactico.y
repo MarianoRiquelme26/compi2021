@@ -120,7 +120,8 @@ expresion : expresion OP_SUM termino {	printf("\n---------------------->expresio
 		  
 iteracion: WHILE condicion START programa END {printf("\n---------------------->iteracion - while");};
 
-seleccion :   IF  condicion THEN programa ELSE programa ENDIF {printf("\n---------------------->seleccion - if");}
+seleccion :   IF  condicion THEN programa ELSE {printf("\n---------------------->seleccion - if");
+												desapilar_e_insertar_en_celda(numeroPolaca);} programa ENDIF {printf("\n---------------------->seleccion - if");}
 			| IF condicion THEN programa ENDIF {printf("\n---------------------->seleccion - if");
 												desapilar_e_insertar_en_celda(numeroPolaca);}
 			;
