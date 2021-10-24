@@ -1,2 +1,5 @@
 z := 15 + c / 7
-x := v - 5 * 8
+IF (a > 1)THEN
+	c := 8 + 5
+ENDIF
+w := 4 - t

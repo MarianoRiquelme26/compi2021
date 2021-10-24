@@ -121,16 +121,24 @@ expresion : expresion OP_SUM termino {	printf("\n---------------------->expresio
 iteracion: WHILE condicion START programa END {printf("\n---------------------->iteracion - while");};
 
 seleccion :   IF  condicion THEN programa ELSE programa ENDIF {printf("\n---------------------->seleccion - if");}
-			| IF condicion THEN programa ENDIF {printf("\n---------------------->seleccion - if");}
+			| IF condicion THEN programa ENDIF {printf("\n---------------------->seleccion - if");
+												desapilar_e_insertar_en_celda(numeroPolaca);}
 			;
 
 condicion :   PARA condicion AND comparacion PARC {printf("\n---------------------->condicion");}
 			| PARA condicion OR comparacion PARC {printf("\n---------------------->condicion");}
 			| PARA NOT condicion PARC	{printf("\n---------------------->condicion");}
-			| comparacion 	{printf("\n---------------------->condicion");};
+			| comparacion 	{	printf("\n---------------------->condicion");								
+			};
 			
-comparacion: expresion COMPARADOR expresion {printf("\n---------------------->3 - condicion");}
-			|PARA expresion COMPARADOR expresion PARC{printf("\n---------------------->3 - condicion");}
+comparacion: expresion COMPARADOR expresion {printf("\n---------------------->3 - condicion");
+											 insertar_en_polaca_operador("CMP", numeroPolaca);
+											 numeroPolaca++;}
+			|PARA expresion COMPARADOR expresion PARC{printf("\n---------------------->3 - condicion");
+													  insertar_en_polaca_operador("CMP", numeroPolaca);
+													  numeroPolaca++;
+													  insertar_en_polaca_salto_condicion(numeroPolaca);
+													  numeroPolaca += 2;}
 			;
 
 

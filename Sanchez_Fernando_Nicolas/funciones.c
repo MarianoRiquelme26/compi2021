@@ -11,6 +11,7 @@
 #define POLACA "intermedia.txt"
 #define TAM_TABLA 350
 #define TAM_POLACA 350
+#define TAM_PILA 50
 #define TAM_NOMBRE 32
 #define TRUE 1
 #define FALSE 0
@@ -34,7 +35,10 @@ void insertar_en_polaca_cte_int(int cte, int num);
 void insertar_en_polaca_cte_real(float cte_real, int num);
 void insertar_en_polaca_id(char *valor, int num);
 void insertar_en_polaca_operador(char * valor, int num);
+void insertar_en_polaca_salto_condicion(int num);
+void desapilar_e_insertar_en_celda(int num);
 void guardar_gci(int cantidad);
+
 
 //funciones complementarias
 char* concat(const char *s1, const char *s2);
@@ -54,6 +58,21 @@ typedef struct {
 	int numero;
 } polaca;
 
+typedef struct
+{
+    int numeroPolaca[TAM_PILA];
+    int tope;
+}tPila;
+
+
+// funciones de pila
+void crearPila(tPila *p);
+int pilaLlena(tPila *p);
+int pilaVacia(tPila *p);
+int ponerEnPila(tPila *p, int num);
+int sacarDePila(tPila *p);
+
+tPila pila[TAM_PILA];
 polaca gci[TAM_POLACA];
 
 FILE * file;
@@ -220,10 +239,47 @@ char* concat(const char *s1, const char *s2)
     memcpy(result + len1, s2, len2 + 1); // +1 to copy the null-terminator
     return result;
 }
+
+/*Funciones Pila*/
+void crearPila(tPila *p)
+{
+    p->tope = 0;
+}
+
+int pilaLlena(tPila *p)
+{
+    return p->tope == TAM_PILA;
+}
+
+int pilaVacia(tPila *p)
+{
+    return p->tope == 0;
+}
+
+int ponerEnPila(tPila *p, int numPolaca)
+{
+    if(p->tope == TAM_PILA)
+        return 0;
+    p->numeroPolaca[p->tope] = numPolaca;
+    p->tope++;
+    return 1;
+}
+
+int sacarDePila(tPila *p)
+{
+    if(p->tope == 0)
+        return 0;
+     p->tope--;
+    int valor =  p->numeroPolaca[p->tope];
+
+    return valor;
+}
+
 /* Funciones polaca*/
 
 void crearPolaca(){
   filePolaca = fopen(POLACA, "w");
+  crearPila(pila);
   fclose(filePolaca);
 }
 
@@ -255,6 +311,20 @@ void insertar_en_polaca_operador(char * valor, int num){
 	gci[num].numero = num+10;
 }
 
+void insertar_en_polaca_salto_condicion(int num){
+	insertar_en_polaca_operador("BI", num);
+	insertar_en_polaca_operador(" ", num+1);
+	ponerEnPila(pila, num+1);
+}
+
+void desapilar_e_insertar_en_celda(int num){
+	num += 10;
+	char constante_string[32];
+	sprintf(constante_string,"%d",num);
+	int valor_celda = sacarDePila(pila);
+	strcpy(gci[valor_celda].simbolo, constante_string);
+}
+
 void guardar_gci(int cantidad){
 	
   filePolaca = fopen(POLACA,"a");
@@ -268,7 +338,6 @@ void guardar_gci(int cantidad){
   i = 0;
   
     for(i;i< cantidad;i++){
-
 	fprintf(filePolaca,"%d\t",gci[i].numero);
   }
   fclose(filePolaca);
