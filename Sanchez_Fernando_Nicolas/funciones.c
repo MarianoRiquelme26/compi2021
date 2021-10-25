@@ -36,7 +36,9 @@ void insertar_en_polaca_cte_real(float cte_real, int num);
 void insertar_en_polaca_id(char *valor, int num);
 void insertar_en_polaca_operador(char * valor, int num);
 void insertar_en_polaca_salto_condicion(int num);
+void insertar_en_polaca_etiqueta_apilar(int num);
 void desapilar_e_insertar_en_celda(int num);
+void insertar_bi_desapilar(int num);
 void guardar_gci(int cantidad);
 
 
@@ -312,9 +314,10 @@ void insertar_en_polaca_operador(char * valor, int num){
 }
 
 void insertar_en_polaca_salto_condicion(int num){
-	insertar_en_polaca_operador("BI", num);
+	insertar_en_polaca_operador("BXX", num);
 	insertar_en_polaca_operador(" ", num+1);
 	ponerEnPila(pila, num+1);
+	printf("apile: %d\n", num+1);
 }
 
 void desapilar_e_insertar_en_celda(int num){
@@ -323,6 +326,25 @@ void desapilar_e_insertar_en_celda(int num){
 	sprintf(constante_string,"%d",num);
 	int valor_celda = sacarDePila(pila);
 	strcpy(gci[valor_celda].simbolo, constante_string);
+	printf("desapile: %d\n", valor_celda);
+}
+
+void insertar_en_polaca_etiqueta_apilar(int num){
+	insertar_en_polaca_operador("ET", num);
+	printf("inserte ET\n");
+	ponerEnPila(pila, num);
+	printf("apile: %d\n", num);
+}
+
+void insertar_bi_desapilar(int num){
+	insertar_en_polaca_operador("BI", num);
+	insertar_en_polaca_operador(" ", num+1);
+	char constante_string[32];
+	int valor_celda = sacarDePila(pila);
+	valor_celda += 10;
+	sprintf(constante_string,"%d", valor_celda);
+	printf("desapile: %s\n", constante_string);
+	strcpy(gci[num+1].simbolo, constante_string);
 }
 
 void guardar_gci(int cantidad){

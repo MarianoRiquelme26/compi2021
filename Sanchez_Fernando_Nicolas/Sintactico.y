@@ -118,7 +118,7 @@ expresion : expresion OP_SUM termino {	printf("\n---------------------->expresio
 		   }
 		  | termino {printf("\n---------------------->expresion - termino");};
 		  
-iteracion: WHILE condicion START programa END {printf("\n---------------------->iteracion - while");};
+iteracion: WHILE {insertar_en_polaca_etiqueta_apilar(numeroPolaca); numeroPolaca++;} condicion START programa {desapilar_e_insertar_en_celda(numeroPolaca+2);}END {insertar_bi_desapilar(numeroPolaca);numeroPolaca += 2; printf("\n---------------------->iteracion - while"); };
 
 seleccion :   IF  condicion THEN programa {desapilar_e_insertar_en_celda(numeroPolaca+2);insertar_en_polaca_salto_condicion(numeroPolaca);
 													  numeroPolaca += 2;} ELSE programa ENDIF {printf("\n---------------------->seleccion - if");desapilar_e_insertar_en_celda(numeroPolaca);

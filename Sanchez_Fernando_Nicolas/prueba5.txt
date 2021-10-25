@@ -1,10 +1,14 @@
 z := 15 + c / 7
-IF (a > 1)THEN
-	c := 8 + 5
-	x := 9 + 11
-	t := g * 5 + 1
-ELSE
-	d := y + 3
-ENDIF
+WHILE (a > 1) START
+
+	y := 6 * 5
+	IF(a < 0)THEN
+	z := 8 - 4	
+	ENDIF
+
+	WHILE (contador <= 9) START
+		s:= s + a
+	END
+END
 
 w := 4 - t
