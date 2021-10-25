@@ -6,7 +6,7 @@ WHILE (a > 1) START
 	z := 8 - 4	
 	ENDIF
 
-	WHILE (contador <= 9) START
+	WHILE (c <= 9) START
 		s:= s + a
 	END
 END
