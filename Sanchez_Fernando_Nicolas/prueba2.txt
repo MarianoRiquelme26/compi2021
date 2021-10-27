@@ -1,8 +1,4 @@
-DIM [ contador,promedio,prueba] AS [ integer,real, string]
-DIM [ suma ] AS [ real ]
-b="@sdADaSjfla%dfg"
-DISPLAY "b"
-IF (actual > 1 AND actual != 0)THEN
-	DISPLAY "actual es mayor que 2 "
+IF (actual > 1)THEN
+	z:= a + b * c - d / (e + f) + 20
 ENDIF
-*/ COMENTARIO /*
+z1:= 1
