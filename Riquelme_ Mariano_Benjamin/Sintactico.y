@@ -21,6 +21,7 @@ int _auxContador = 0;
 char _auxID[30];
 char _auxTemp[100];
 int iterador;
+int _contLong;
 
 %}
 %union 
@@ -80,7 +81,18 @@ sentencia : asignacion {printf("\n---------------------->sentencia - asignacion"
 		  | seleccion {printf("\n---------------------->sentencia - seleccion");}
 		  |	declaracion {printf("\n---------------------->sentencia - declaracion");}
 		  | COMEN {printf("\n");}
-		  | ID OP_ASIG LONG PARA lista PARC {printf("\n---------------------->sentencia - tema especial - long");}
+		  | ID OP_ASIG LONG{_contLong = 0;_aux = 0;}
+		  PARA lista PARC { printf("\n---------------------->sentencia - tema especial - long");
+							char str[30];
+							itoa(_contLong+1,str,10);
+							insertar_en_polaca_id(str, numeroPolaca);
+							numeroPolaca++;
+							insertar_en_polaca_id($<stringValue>1, numeroPolaca);
+							numeroPolaca++;
+							insertar_en_polaca_operador(":=", numeroPolaca);
+							numeroPolaca++;
+							_aux = -2;
+							}
 		  | ciclo_especial {printf("\n---------------------->sentencia - tema especial - cilco especial");}
 		  | ENTER {printf("\n");};
 
@@ -284,7 +296,7 @@ listat : listat COMA TIPO
 			conadorDeclaracionesT += 1;
 		};
 		
-lista : lista COMA factor {printf("\n---------------------->lista");}
+lista : lista COMA factor {printf("\n---------------------->lista");_contLong++;}
 		| factor {printf("\n---------------------->lista - factor");};
 		
 ciclo_especial : WHILEE {insertar_en_polaca_operador("0", numeroPolaca);numeroPolaca++; 
