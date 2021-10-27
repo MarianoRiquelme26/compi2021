@@ -22,6 +22,7 @@ char _auxID[30];
 char _auxTemp[100];
 int iterador;
 char operadorAux[30];
+int cantcomp = 1;
 
 %}
 %union 
@@ -155,12 +156,17 @@ seleccion :   IF condicion THEN programa
 					 insertar_en_polaca_salto_condicion("BI", numeroPolaca);
 					 numeroPolaca += 2;}
 			  ELSE programa ENDIF {printf("\n---------------------->seleccion - if");
-								   desapilar_e_insertar_en_celda(numeroPolaca);}
+								   while(cantcomp != 0){
+												desapilar_e_insertar_en_celda(numeroPolaca);
+												cantcomp--;} cantcomp = 1;
+								   }
 			| IF condicion THEN programa ENDIF {printf("\n---------------------->seleccion - if");
-												desapilar_e_insertar_en_celda(numeroPolaca);}
+												while(cantcomp != 0){
+												desapilar_e_insertar_en_celda(numeroPolaca);
+												cantcomp--;} cantcomp = 1;}
 			;
 
-condicion :   PARA condicion AND comparacion PARC {printf("\n---------------------->condicion");}
+condicion :   PARA condicion {cantcomp++;}AND comparacion PARC {printf("\n---------------------->condicion");}
 			| PARA condicion OR comparacion PARC {printf("\n---------------------->condicion");}
 			| PARA NOT condicion PARC	{printf("\n---------------------->condicion");}
 			| comparacion 	{	printf("\n---------------------->condicion");								
