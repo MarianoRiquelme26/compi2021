@@ -46,7 +46,12 @@ CORA "["
 CORC "]"
 COMA ","
 COMILLA			["] 
-COMPARADOR ">="|"<="|">"|"<"|"=="|"!="
+OP_MAYORIGUAL   ">="    
+OP_MENORIGUAL   "<="     
+OP_IGUAL        "=="     
+OP_MENOR        [<] 
+OP_MAYOR   		[>]
+OP_DISTINTO     "!="
 PUNTO			"."
 OP_ASIG  ":="
 DIGITO	[0-9]
@@ -91,7 +96,14 @@ OP_MUL [*]
 {ENDWHILE} {printf("\ntoken ENDWHILE");return ENDWHILE;}
 {NOT} {printf("\ntoken NOT");return NOT;}
 {COMEN}		{return COMEN;}
-{COMPARADOR} {return COMPARADOR;}
+
+{OP_MAYORIGUAL} {printf("\nToken OP_MAYORIGUAL");return OP_MAYORIGUAL;}     
+{OP_MENORIGUAL} {printf("\nToken OP_MENORIGUAL");return OP_MENORIGUAL;}     
+{OP_IGUAL}		{printf("\nToken OP_IGUAL");return OP_IGUAL;}
+{OP_MENOR}    	{printf("\nToken OP_MENOR");return OP_MENOR;}
+{OP_DISTINTO}	{printf("\nToken OP_DISTINTO");return OP_DISTINTO;}
+{OP_MAYOR}		{printf("\nToken OP_MAYOR");return OP_MAYOR;}
+
 {OP_ASIG} {printf("\ntoken OP_ASIG");return OP_ASIG;}
 {GET} {printf("\ntoken GET: %s",yytext);return GET;}
 {CTE} {

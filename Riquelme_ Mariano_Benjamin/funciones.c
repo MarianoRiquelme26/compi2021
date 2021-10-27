@@ -35,13 +35,15 @@ void insertar_en_polaca_cte_int(int cte, int num);
 void insertar_en_polaca_cte_real(float cte_real, int num);
 void insertar_en_polaca_id(char *valor, int num);
 void insertar_en_polaca_operador(char * valor, int num);
-void insertar_en_polaca_salto_condicion(int num);
+//void insertar_en_polaca_salto_condicion(int num);
+void insertar_en_polaca_salto_condicion(char *simbolo, int num, int negado);
 void insertar_en_polaca_etiqueta_apilar(int num);
 void desapilar_e_insertar_en_celda(int num);
 void insertar_bi_desapilar(int num);
 void guardar_gci(int cantidad);
 //Esta funcion ya no se utiliza mas
 char* ObtenerBranchComparador(char*);
+char * negarComparador(char* comparador);
 
 
 //funciones complementarias
@@ -317,36 +319,40 @@ void insertar_en_polaca_operador(char * valor, int num){
 //Esta funcion ya no se va a utilizar
 char* ObtenerBranchComparador(char* branch){
 	
-	if(strcmp(branch,">=")==0){
-		strcpy(branch,"BGE"); 
-	
-	}
-	if(strcmp(branch,"<=")==0){
-		strcpy(branch,"BLE"); 		
-	}
-	if(strcmp(branch,">")==0){	
-		strcpy(branch,"BGT"); 
-	}
-	if(strcmp(branch,"<")==0){
-		strcpy(branch,"BLT"); 
-	}
-	if(strcmp(branch,"==")==0){
-		strcpy(branch,"BE"); 
-	}
-	if(strcmp(branch,"!=")==0){
-		strcpy(branch,"BNE"); 
-	}
-	
+	if(strcmp(branch,">=")==0){	
+		strcpy(branch,"BLT"); 	
+		
+	}	
+	if(strcmp(branch,"<=")==0){	
+		strcpy(branch,"BGT"); 			
+	}	
+	if(strcmp(branch,">")==0){		
+		strcpy(branch,"BLE"); 	
+	}	
+	if(strcmp(branch,"<")==0){	
+		strcpy(branch,"BGE"); 	
+	}	
+	if(strcmp(branch,"==")==0){	
+		strcpy(branch,"BNE"); 	
+	}	
+	if(strcmp(branch,"!=")==0){	
+		strcpy(branch,"BE"); 	
+	}	
 	return branch;
 }
 
 
 
-void insertar_en_polaca_salto_condicion(int num){
-	insertar_en_polaca_operador("BXX", num);
-	insertar_en_polaca_operador(" ", num+1);
-	ponerEnPila(pila, num+1);
-	printf("apile: %d\n", num+1);
+void insertar_en_polaca_salto_condicion(char *simbolo, int num, int negado){	
+	char * valorAssembler = ObtenerBranchComparador(simbolo);
+	if(negado == 1)
+	{
+		valorAssembler = negarComparador(simbolo);
+	}	
+	insertar_en_polaca_operador(valorAssembler, num);	
+	insertar_en_polaca_operador(" ", num+1);	
+	ponerEnPila(pila, num+1);	
+	printf("apile: %d\n", num+1);	
 }
 
 void desapilar_e_insertar_en_celda(int num){
@@ -391,4 +397,21 @@ void guardar_gci(int cantidad){
 	fprintf(filePolaca,"%d\t",gci[i].numero);
   }
   fclose(filePolaca);
+}
+
+char * negarComparador(char* comparador)
+{
+	if(strcmp(comparador,"BGT") == 0)
+		return "BLE";
+	if(strcmp(comparador,"BLT") == 0)
+		return "BGE";
+	if(strcmp(comparador,"BGE") == 0)
+		return "BLT";
+	if(strcmp(comparador,"BLE") == 0)
+		return "BGT";
+	if(strcmp(comparador,"BEQ") == 0)
+		return "BNE";
+	if(strcmp(comparador,"BNE") == 0)
+		return "BEQ";
+	return NULL;
 }

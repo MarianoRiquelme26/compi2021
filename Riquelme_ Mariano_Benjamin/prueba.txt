@@ -35,7 +35,7 @@ ELSE
 	DISPLAY "no es mayor que 2" */ COMENTARIO /* */ COMENTARIO2 /*
 	a := long (a,b,c,e)
 
-	WHILE a IN [ 1+3 , 2+b ] DO
+	WHILEE a IN [ 1+3 , 2+b ] DO
 		suma:= suma + actual
 		suma:= suma + actual
 		suma:= suma + actual

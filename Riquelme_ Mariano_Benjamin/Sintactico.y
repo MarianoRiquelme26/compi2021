@@ -22,6 +22,7 @@ char _auxID[30];
 char _auxTemp[100];
 int iterador;
 int _contLong;
+int _not = 0;
 
 %}
 %union 
@@ -51,7 +52,14 @@ int _contLong;
 %token END
 %token OR
 %token AND
-%token COMPARADOR
+
+%token OP_MAYOR
+%token OP_MAYORIGUAL       
+%token OP_MENORIGUAL         
+%token OP_IGUAL             
+%token OP_MENOR             
+%token OP_DISTINTO 
+
 %token IF
 %token THEN
 %token ELSE
@@ -156,7 +164,7 @@ iteracion: WHILE {insertar_en_polaca_etiqueta_apilar(numeroPolaca); numeroPolaca
 
 seleccion :   IF condicion THEN programa 					    	
 					{desapilar_e_insertar_en_celda(numeroPolaca+2);
-					 insertar_en_polaca_salto_condicion(numeroPolaca);
+					 insertar_en_polaca_salto_condicion("BI", numeroPolaca,_not);
 					 numeroPolaca += 2;}
 			  ELSE programa ENDIF {printf("\n---------------------->seleccion - if");
 								   desapilar_e_insertar_en_celda(numeroPolaca);}
@@ -166,22 +174,59 @@ seleccion :   IF condicion THEN programa
 
 condicion :   PARA condicion AND comparacion PARC {printf("\n---------------------->condicion");}
 			| PARA condicion OR comparacion PARC {printf("\n---------------------->condicion");}
-			| PARA NOT condicion PARC	{printf("\n---------------------->condicion");}
+			| PARA NOT {_not = 1;} condicion PARC	{printf("\n---------------------->condicion");}
 			| comparacion 	{	printf("\n---------------------->condicion");								
 			};
 			
-comparacion: expresion COMPARADOR expresion {printf("\n---------------------->3 - condicion");
+comparacion: expresion comparador expresion {printf("\n---------------------->3 - condicion");
 											 insertar_en_polaca_operador("CMP", numeroPolaca); 
 											 numeroPolaca++;
-											 insertar_en_polaca_salto_condicion(numeroPolaca);
+											 insertar_en_polaca_salto_condicion(operadorAux,numeroPolaca,_not);
+											 _not = 0;
 											 numeroPolaca += 2;
 											 }
-			|PARA expresion COMPARADOR expresion PARC{printf("\n---------------------->3 - condicion");
+			|PARA expresion comparador expresion PARC{printf("\n---------------------->3 - condicion");
 													  insertar_en_polaca_operador("CMP", numeroPolaca);
 													  numeroPolaca++;
-													  insertar_en_polaca_salto_condicion(numeroPolaca);
+													  insertar_en_polaca_salto_condicion(operadorAux, numeroPolaca,_not);
+													  _not = 0;
 													  numeroPolaca += 2;
 													  }
+
+comparador: OP_MAYORIGUAL       {printf("\n---------------------->OP_MAYORIGUAL");
+												
+									strcpy(operadorAux,">=");
+
+								}
+    | OP_MENORIGUAL         {printf("\n---------------------->OP_MENORIGUAL");
+
+									strcpy(operadorAux,"<=");
+
+								}
+    | OP_IGUAL              {printf("\n---------------------->OP_IGUAL");
+
+									strcpy(operadorAux,"==");
+
+		
+								}
+    | OP_MAYOR             {printf("\n---------------------->OP_MAYOR");
+
+									strcpy(operadorAux,">");
+
+								}
+    | OP_MENOR              {printf("\n---------------------->OP_MENOR");
+
+									strcpy(operadorAux,"<");
+
+								}
+    | OP_DISTINTO            {printf("\n---------------------->OP_DISTINTO");
+	
+									strcpy(operadorAux,"!=");
+
+								}
+    ;	
+
+
 
 termino   : termino OP_MUL factor {
 									if( _aux == -2 )
@@ -323,7 +368,7 @@ ciclo_especial : WHILEE {insertar_en_polaca_operador("0", numeroPolaca);numeroPo
 						
 						 
 						char str[30];
-						itoa(_auxContador+1,str,10);
+						itoa(_auxContador,str,10);
 						 printf("\n!!!!!insertando la cantidad de iteraciones: %d en el id %d",_auxContador+1,numeroPolaca);
 					insertar_en_polaca_operador(str, numeroPolaca);numeroPolaca++;
 					 _aux = -2;_auxContador = 0;

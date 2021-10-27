@@ -1,4 +1,4 @@
-IF (actual > 1)THEN
+IF (NOT actual > 1)THEN
 	z:= a + b * c - d / (e + f) + 20
 ENDIF
 z1:= 1
