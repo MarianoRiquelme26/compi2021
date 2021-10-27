@@ -1,1 +1,6 @@
-ewr:="CTEstring"
+IF (actual > 1 AND a == 5)THEN
+	z:= a
+ELSE
+	z:= b
+ENDIF
+z:= c

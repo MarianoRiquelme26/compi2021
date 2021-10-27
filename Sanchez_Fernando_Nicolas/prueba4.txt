@@ -1,3 +1,4 @@
-DIM [ contador,promedio,prueba] AS [ integer,real, string]
-DIM [ suma ] AS [ real ]
-DISPLAY "HOLA MUNDO DOS"
+IF (actual > 1 AND actual < 5)THEN
+	z:= a
+ENDIF
+z:= c

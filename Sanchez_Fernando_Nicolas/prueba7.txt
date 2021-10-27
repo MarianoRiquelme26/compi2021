@@ -1,0 +1,2 @@
+GET actual
+DISPLAY "Prueba txt LyC Tema 2Prueb"

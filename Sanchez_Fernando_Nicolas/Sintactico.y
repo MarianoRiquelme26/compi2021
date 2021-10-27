@@ -14,7 +14,15 @@ int conadorDeclaracionesV = 0;
 int conadorDeclaracionesT = 0;
 int numeroPolaca = 0;
 char idAux[30];
-
+char operadorAux[30];
+int _aux = -2;
+int _auxComa = 0;
+int _auxContador = 0;
+char _auxID[30];
+char _auxTemp[100];
+int iterador;
+char operadorAux[30];
+int cantcomp = 1;
 
 %}
 %union 
@@ -39,6 +47,7 @@ char idAux[30];
 %token PARC
 %token GET
 %token WHILE
+%token WHILEE
 %token START
 %token END
 %token OR
@@ -60,6 +69,13 @@ char idAux[30];
 %token ENDWHILE
 %token CTE_R
 %token NOT
+
+%token OP_MAYOR
+%token OP_MAYORIGUAL       
+%token OP_MENORIGUAL         
+%token OP_IGUAL             
+%token OP_MENOR             
+%token OP_DISTINTO   
 %%
 
 programa : programa sentencia {printf("\n---------------------->programa - Start detectado");}
@@ -73,99 +89,189 @@ sentencia : asignacion {printf("\n---------------------->sentencia - asignacion"
 		  | seleccion {printf("\n---------------------->sentencia - seleccion");}
 		  |	declaracion {printf("\n---------------------->sentencia - declaracion");}
 		  | COMEN {printf("\n");}
-		  | LONG PARA lista PARC {printf("\n---------------------->sentencia - tema especial - long");}
+		  | ID OP_ASIG LONG PARA lista PARC {printf("\n---------------------->sentencia - tema especial - long");}
 		  | ciclo_especial {printf("\n---------------------->sentencia - tema especial - cilco especial");}
 		  | ENTER {printf("\n");};
 
-asignacion : ID OP_ASIG expresion {	printf("\n---------------------->asignacion");
-									insertar_en_polaca_operador(":=", numeroPolaca);
-									numeroPolaca++;
+asignacion : ID OP_ASIG expresion {	printf("\n---------------------->asignacion");									
 									insertar_en_polaca_id($<stringValue>1, numeroPolaca);
+									numeroPolaca++;
+									insertar_en_polaca_operador(":=", numeroPolaca);
 									numeroPolaca++;
 			
 			};
 		
-salida :    DISPLAY factor {printf("\n---------------------->salida - display");}
+salida :    DISPLAY factor {printf("\n---------------------->salida - display");
+					insertar_en_polaca_id($<stringValue>2, numeroPolaca);
+					numeroPolaca++;
+					insertar_en_polaca_operador("DISPLAY", numeroPolaca);
+					numeroPolaca++;
+					}
 		  | DISPLAY CTE_S {printf("\n---------------------->salida - display");
 					printf("\n---------------------->factor cte STRING");
-			
-				
-				
-						strcpy(idAux,yylval.stringValue);	
-						guardar_cte_string(idAux);
-					
-					
-					
-		 }
-			
-		  		  	  
+					strcpy(idAux,yylval.stringValue);	
+					guardar_cte_string(idAux);
+					insertar_en_polaca_id($<stringValue>2, numeroPolaca);
+					numeroPolaca++;
+					insertar_en_polaca_operador("DISPLAY", numeroPolaca);
+					numeroPolaca++;
+					};
 		  
-		  ;
-		  
-		
-		  
-		  
-		  
-entrada:    GET ID {printf("\n---------------------->entrada");};
+entrada:    GET ID {printf("\n---------------------->entrada");
+					insertar_en_polaca_id($<stringValue>2, numeroPolaca);
+					numeroPolaca++;
+					insertar_en_polaca_operador("GET", numeroPolaca);
+					numeroPolaca++;};
 
-expresion : expresion OP_SUM termino {	printf("\n---------------------->expresion - SUM");
+expresion : expresion OP_SUM termino {	if(_aux == -2)
+										{
+										printf("\n---------------------->expresion - SUM");
 										insertar_en_polaca_operador("+", numeroPolaca);
 										numeroPolaca++;
+										}
+										else
+										{//POR AHORA NO USO LA VARIABLE TEMPORAL
+											//strcat(_auxTemp,'+'); 
+										}
+
 		   }
-		  | expresion OP_RES termino {	printf("\n---------------------->expresion - RES");
-										insertar_en_polaca_operador("-", numeroPolaca);
-										numeroPolaca++;
+		  | expresion OP_RES termino {
+										if( _aux == -2 )
+										{			  
+											printf("\n---------------------->expresion - RES");
+											insertar_en_polaca_operador("-", numeroPolaca);
+											numeroPolaca++;
+										}
 		   }
 		  | termino {printf("\n---------------------->expresion - termino");};
 		  
-iteracion: WHILE {insertar_en_polaca_etiqueta_apilar(numeroPolaca); numeroPolaca++;} condicion START programa {desapilar_e_insertar_en_celda(numeroPolaca+2);}END {insertar_bi_desapilar(numeroPolaca);numeroPolaca += 2; printf("\n---------------------->iteracion - while"); };
+iteracion: WHILE {insertar_en_polaca_etiqueta_apilar(numeroPolaca); numeroPolaca++;}
+		   condicion START programa {desapilar_e_insertar_en_celda(numeroPolaca+2);}
+		   END {printf("\n---------------------->iteracion - while");
+		        insertar_bi_desapilar(numeroPolaca);numeroPolaca += 2;
+				};
 
-seleccion :   IF  condicion THEN programa {desapilar_e_insertar_en_celda(numeroPolaca+2);insertar_en_polaca_salto_condicion(numeroPolaca);
-													  numeroPolaca += 2;} ELSE programa ENDIF {printf("\n---------------------->seleccion - if");desapilar_e_insertar_en_celda(numeroPolaca);
-													  }
+seleccion :   IF condicion THEN programa 					    	
+					{desapilar_e_insertar_en_celda(numeroPolaca+2);
+					 insertar_en_polaca_salto_condicion("BI", numeroPolaca);
+					 numeroPolaca += 2;}
+			  ELSE programa ENDIF {printf("\n---------------------->seleccion - if");
+								   while(cantcomp != 0){
+												desapilar_e_insertar_en_celda(numeroPolaca);
+												cantcomp--;} cantcomp = 1;
+								   }
 			| IF condicion THEN programa ENDIF {printf("\n---------------------->seleccion - if");
-												desapilar_e_insertar_en_celda(numeroPolaca);}
+												while(cantcomp != 0){
+												desapilar_e_insertar_en_celda(numeroPolaca);
+												cantcomp--;} cantcomp = 1;}
 			;
 
-condicion :   PARA condicion AND comparacion PARC {printf("\n---------------------->condicion");}
+condicion :   PARA condicion {cantcomp++;}AND comparacion PARC {printf("\n---------------------->condicion");}
 			| PARA condicion OR comparacion PARC {printf("\n---------------------->condicion");}
 			| PARA NOT condicion PARC	{printf("\n---------------------->condicion");}
 			| comparacion 	{	printf("\n---------------------->condicion");								
 			};
 			
-comparacion: expresion COMPARADOR expresion {printf("\n---------------------->3 - condicion");
-											 insertar_en_polaca_operador("CMP", numeroPolaca);
-											 numeroPolaca++;}
-			|PARA expresion COMPARADOR expresion PARC{printf("\n---------------------->3 - condicion");
+comparacion: expresion comparador expresion {printf("\n---------------------->3 - condicion");
+											 insertar_en_polaca_operador("CMP", numeroPolaca); 
+											 numeroPolaca++;
+											 insertar_en_polaca_salto_condicion(operadorAux, numeroPolaca);
+											 numeroPolaca += 2;
+											 }
+			|PARA expresion comparador expresion PARC{printf("\n---------------------->3 - condicion");
 													  insertar_en_polaca_operador("CMP", numeroPolaca);
 													  numeroPolaca++;
-													  insertar_en_polaca_salto_condicion(numeroPolaca);
-													  numeroPolaca += 2;}
-			;
+													  insertar_en_polaca_salto_condicion(operadorAux, numeroPolaca);
+													  numeroPolaca += 2;
+													  }
+													  
 
+comparador: OP_MAYORIGUAL       {printf("\n---------------------->OP_MAYORIGUAL");
+												
+									strcpy(operadorAux,">=");
 
-termino   : termino OP_MUL factor {printf("\n---------------------->termino");
-									insertar_en_polaca_operador("*", numeroPolaca);
-									numeroPolaca++;
+								}
+    | OP_MENORIGUAL         {printf("\n---------------------->OP_MENORIGUAL");
+
+									strcpy(operadorAux,"<=");
+
+								}
+    | OP_IGUAL              {printf("\n---------------------->OP_IGUAL");
+
+									strcpy(operadorAux,"==");
+
+		
+								}
+    | OP_MAYOR             {printf("\n---------------------->OP_MAYOR");
+
+									strcpy(operadorAux,">");
+
+								}
+    | OP_MENOR              {printf("\n---------------------->OP_MENOR");
+
+									strcpy(operadorAux,"<");
+
+								}
+    | OP_DISTINTO            {printf("\n---------------------->OP_DISTINTO");
+	
+									strcpy(operadorAux,"!=");
+
+								}
+    ;	
+
+termino   : termino OP_MUL factor {
+									if( _aux == -2 )
+									{
+										printf("\n---------------------->termino");
+										insertar_en_polaca_operador("*", numeroPolaca);
+										numeroPolaca++;	
+									}
 		  }
-		  | termino OP_DIV factor {printf("\n---------------------->termino");
-									insertar_en_polaca_operador("/", numeroPolaca);
-									numeroPolaca++;
+		  | termino OP_DIV factor {
+									if( _aux == -2 )
+									{
+										printf("\n---------------------->termino");
+										insertar_en_polaca_operador("/", numeroPolaca);
+										numeroPolaca++;
+									}
 		  
 		  }
 		  | factor {printf("\n---------------------->termino - factor");};
 
 factor :    ID {printf("\n---------------------->factor - id");
-				insertar_en_polaca_id($<stringValue>1, numeroPolaca);
-				numeroPolaca++;
+				if( _aux == -2 )
+				{printf("\n!!!!!!lectura nomarl de variables");
+					insertar_en_polaca_id($<stringValue>1, numeroPolaca);
+					numeroPolaca++;
+				}
+				if( _aux == -1 )
+				{
+					strcpy(_auxID,yylval.stringValue);
+					printf("\n!!!!!!me quedo con la variable del ciclo %s",_auxID);
+				}
+				if( _aux >= 0 )
+				{printf("\n!!!!!!comparo si la variable esta en el item de la lista");
+					if(strcmp(_auxID,yylval.stringValue) == 0)
+					{printf("\n!!!!!!coincidencia encontrada");
+						_aux++;
+						printf("\n!!!!!!coincidencia encontrada: %d", _aux);
+					}
+						
+				}
+				
 
 		}
 		
 		  | CTE {
-				printf("\n---------------------->factor - cte");
-				char* nombre_cte_int = guardar_cte_int(atoi($<stringValue>1));
-				insertar_en_polaca_cte_int(atoi($<stringValue>1), numeroPolaca);
-				numeroPolaca++;
+				if( _aux < 0 )
+				{printf("\n---------------------->factor - cte");
+				 char* nombre_cte_int = guardar_cte_int(atoi($<stringValue>1));
+				 insertar_en_polaca_cte_int(atoi($<stringValue>1), numeroPolaca);
+				 numeroPolaca++;
+				}
+				
+			  
+				
 		}
 		 |CTE_R {
 					printf("\n---------------------->factor cte real");
@@ -229,10 +335,67 @@ listat : listat COMA TIPO
 lista : lista COMA factor {printf("\n---------------------->lista");}
 		| factor {printf("\n---------------------->lista - factor");};
 		
-ciclo_especial : WHILE ID IN CORA lista_expre CORC DO programa ENDWHILE {printf("\n---------------------->ciclo especial");};
+ciclo_especial : WHILEE {insertar_en_polaca_operador("0", numeroPolaca);numeroPolaca++; 
+						 insertar_en_polaca_operador("ice", numeroPolaca);numeroPolaca++;
+						 insertar_en_polaca_operador(":=", numeroPolaca);numeroPolaca++;
+						 insertar_en_polaca_operador("ET", numeroPolaca);
+						 //insertar_en_polaca_etiqueta_apilar(numeroPolaca);numeroPolaca++;
+						  printf("\n!!!!!!!!me guardo el id %d para la etiqueta del while",numeroPolaca);
+						 ponerEnPila(pila, numeroPolaca);numeroPolaca++;
+						 insertar_en_polaca_operador("ice", numeroPolaca);numeroPolaca++;
+						 iterador = 0;
+						 //prendo bandera para contar la cantidad de coincidencias
+						 _aux++;
+						 }
+				 ID {
+				     
+					 strcpy(_auxID,yylval.stringValue);
+					 //insertar_en_polaca_id(_auxID, numeroPolaca);
+					 printf("\nvariable a buscar: %s",_auxID);
+					//numeroPolaca++;
+					 _aux++;}
+				 IN CORA lista_expre
+				 CORC {//desapilar_e_insertar_en_celda(numeroPolaca+2);
+						
+						 
+						char str[30];
+						itoa(_auxContador+1,str,10);
+						 printf("\n!!!!!insertando la cantidad de iteraciones: %d en el id %d",_auxContador+1,numeroPolaca);
+					insertar_en_polaca_operador(str, numeroPolaca);numeroPolaca++;
+					 _aux = -2;_auxContador = 0;
+					 insertar_en_polaca_operador("CMP", numeroPolaca);numeroPolaca++;
+					 insertar_en_polaca_operador("BGT", numeroPolaca);numeroPolaca++;
+					  printf("\n!!!!!!!!me guardo el id %d para la BGT del while",numeroPolaca);
+					 //desapilar_e_insertar_en_celda(numeroPolaca);
+					 //desapilar_e_insertar_en_celda(numeroPolaca+2);
+					 //insertar_en_polaca_salto_condicion(numeroPolaca);
+					 //numeroPolaca += 2;
+					 ponerEnPila(pila, numeroPolaca);numeroPolaca++;
+					 }
+			     DO programa {insertar_en_polaca_operador("1", numeroPolaca);numeroPolaca++; 
+						 insertar_en_polaca_operador("ice", numeroPolaca);numeroPolaca++;
+						 insertar_en_polaca_operador("+", numeroPolaca);numeroPolaca++;
+						 insertar_en_polaca_operador("ice", numeroPolaca);numeroPolaca++;
+						 insertar_en_polaca_operador(":=", numeroPolaca);numeroPolaca++;}
+				 ENDWHILE {printf("\n---------------------->ciclo especial");
+				 desapilar_e_insertar_en_celda(numeroPolaca+2);
+				 insertar_bi_desapilar(numeroPolaca);numeroPolaca += 2;
+				 // desapilar_e_insertar_en_celda(numeroPolaca);
+				  printf("\n!!!!!!!!saco el numero guardado en la pila %d",sacarDePila(pila));
+				 //int valor_celda = sacarDePila(pila);
+				//strcpy(gci[sacarDePila(pila)].simbolo, constante_string);
+				 };
 
-lista_expre : lista_expre COMA expresion {printf("\n---------------------->lista de expresiones");}
-			| expresion {printf("\n---------------------->expresion - corte");}
+lista_expre : lista_expre COMA{
+								if (_aux > 0){
+									_auxContador++;
+									_aux = 0;
+								}
+									
+		
+							}	
+			expresion {printf("\n---------------------->lista de expresiones ");}
+			| expresion {printf("\n---------------------->expresion - inicio lista");}
 			;
 
 %%

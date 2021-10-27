@@ -1,14 +1,4 @@
-z := 15 + c / 7
-WHILE (a > 1) START
-
-	y := 6 * 5
-	IF(a < 0)THEN
-	z := 8 - 4	
-	ENDIF
-
-	WHILE (c <= 9) START
-		s:= s + a
-	END
-END
-
-w := 4 - t
+IF (actual > 1 AND actual < 5)THEN
+         z:= a
+ENDIF
+z:= c
