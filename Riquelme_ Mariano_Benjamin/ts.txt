@@ -1,0 +1,2 @@
+NOMBRE                        	TIPODATO		VALOR	LONGITUD
+_2                            	CTE_INTEGER	                   2	-                             

@@ -1,0 +1,6 @@
+IF (actual > 1)THEN
+	z:= a
+ELSE
+	z:= b
+ENDIF
+z:= c
