@@ -21,18 +21,18 @@ DISPLAY suma
 DISPLAY "HOLA"
 
 IF (actual > 1 AND actual != 0)THENS
-	DISPLAY "mayo0"
+	DISPLAY "mayor"
 ENDIF
 */ COMENTARIO /*
 IF  (NOT actual < 10 )THEN
-	DISPLAY "mayo1" */ COMENTARIO /* */ COMENTARIO2 /*
+	DISPLAY "mayor" */ COMENTARIO /* */ COMENTARIO2 /*
 	IF  (NOT actual < 10 )THENS
-		DISPLAY "meno2" */ COMENTARIO /* */ COMENTARIO2 /*
+		DISPLAY "menor" */ COMENTARIO /* */ COMENTARIO2 /*
 		GET actual
 	ENDIF
 
 ELSE
-	DISPLAY "mayo3" */ COMENTARIO /* */ COMENTARIO2 /*
+	DISPLAY "mayor" */ COMENTARIO /* */ COMENTARIO2 /*
 	a := long (a,b,c,e)
 
 	WHILEE a IN [ 1+3 , 2+b ] DO

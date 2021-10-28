@@ -1,0 +1,7 @@
+WHILE (con <= 9) START
+	a:=  1
+	WHILE (con <= 9) START
+		a:=  2
+	END
+END
+a:=  3

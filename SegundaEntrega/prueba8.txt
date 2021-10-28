@@ -1,0 +1,4 @@
+WHILEE abc IN [ 1+a , a*1, a-1, a/c+d] DO
+	va1:= va2 + v3
+ENDWHILE
+z := 2

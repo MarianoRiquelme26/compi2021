@@ -1,0 +1,6 @@
+IF (ab > 1 AND ab < 5)THEN
+	z:= a
+ELSE
+	z:= b
+ENDIF
+z:= c

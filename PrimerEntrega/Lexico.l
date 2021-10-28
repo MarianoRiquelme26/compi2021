@@ -20,11 +20,10 @@ void quitarComillas();
 %}
 %option noyywrap
 %option yylineno
-THENS "THENS"
+
 DISPLAY	"DISPLAY"
 GET "GET"
 WHILE "WHILE"
-WHILEE "WHILEE"
 START "START"
 END "END"
 OR "OR"
@@ -76,14 +75,12 @@ OP_MUL [*]
 
 %%
 {WHILE} {printf("\ntoken WHILE");return WHILE;}
-{WHILEE} {printf("\ntoken WHILEE");return WHILEE;}
 {OR} {printf("\ntoken OR");return OR;}
 {AND} {printf("\ntoken AND");return AND;}
 {START} {printf("\ntoken START");return START;}
 {END} {printf("\ntoken END");return END;}
 {IF} {printf("\ntoken IF");return IF;}
 {THEN} {printf("\ntoken THEN");return THEN;}
-{THENS} {printf("\ntoken THEN");return THENS;}
 {ELSE} {printf("\ntoken ELSE");return ELSE;}
 {ENDIF} {printf("\ntoken ENDIF");return ENDIF;}
 {DIM} {printf("\ntoken DIM");return DIM;}
@@ -98,12 +95,22 @@ OP_MUL [*]
 {NOT} {printf("\ntoken NOT");return NOT;}
 {COMEN}		{return COMEN;}
 
+
 {OP_MAYORIGUAL} {printf("\nToken OP_MAYORIGUAL");return OP_MAYORIGUAL;}     
 {OP_MENORIGUAL} {printf("\nToken OP_MENORIGUAL");return OP_MENORIGUAL;}     
 {OP_IGUAL}		{printf("\nToken OP_IGUAL");return OP_IGUAL;}
 {OP_MENOR}    	{printf("\nToken OP_MENOR");return OP_MENOR;}
 {OP_DISTINTO}	{printf("\nToken OP_DISTINTO");return OP_DISTINTO;}
 {OP_MAYOR}		{printf("\nToken OP_MAYOR");return OP_MAYOR;}
+
+
+
+
+
+
+
+
+
 
 {OP_ASIG} {printf("\ntoken OP_ASIG");return OP_ASIG;}
 {GET} {printf("\ntoken GET: %s",yytext);return GET;}
