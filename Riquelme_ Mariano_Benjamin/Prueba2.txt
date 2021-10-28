@@ -1,4 +1,4 @@
-IF (ac > 1 AND ac > 3)THENS
+IF ( ac > 1)THENS
 	z:= a + b
 ENDIF
 z1:= 1

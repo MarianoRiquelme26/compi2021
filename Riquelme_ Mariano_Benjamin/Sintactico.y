@@ -23,7 +23,7 @@ char _auxTemp[100];
 int iterador;
 int _contLong;
 int _not = 0;
-int celdaCondicionUno = -1;// no usar
+int celdaCondicionUno = -1;
 int cantcomp = 1;
 int _or = 0;
 int vecOr[4];
@@ -146,10 +146,6 @@ expresion : expresion OP_SUM termino {	if(_aux == -2)
 										insertar_en_polaca_operador("+", numeroPolaca);
 										numeroPolaca++;
 										}
-										else
-										{//POR AHORA NO USO LA VARIABLE TEMPORAL
-											//strcat(_auxTemp,'+'); 
-										}
 
 		   }
 		  | expresion OP_RES termino {
@@ -173,13 +169,11 @@ seleccion :   IF condicion {vecOr2[1] = numeroPolaca;}THEN programa
 					//vecOr2[1] = numeroPolaca;
 					//vecOr2[1] = sacarDePila(pila);
 					//ponerEnPila(pila,numeroPolaca);
-					printf("\n---------------------->131312DEBERIA TENER TODO celda:%d valor:%d",vecOr2[0],vecOr2[1]);
 					 while(cantcomp != 0){
 						 vecOr[0] = numeroPolaca+2;
 												vecOr[1] = desapilar_e_insertar_en_celda(numeroPolaca+2);
 												cantcomp--;} 
 												cantcomp = 1;
-					printf("\n---------------------->!!!aca tengo que poner la pimer condicion:%d valor:%d",numeroPolaca+1);
 					//ponerEnPila(pila,numeroPolaca+1);
 					 insertar_en_polaca_salto_condicion("BI", numeroPolaca,_not);
 					 numeroPolaca += 2;
@@ -190,7 +184,6 @@ seleccion :   IF condicion {vecOr2[1] = numeroPolaca;}THEN programa
 					vecOr[0] = numeroPolaca;
 					vecOr[1] =  desapilar_e_insertar_en_celda(numeroPolaca);
 					_or = 0;
-					printf("\n---------------------->DEBERIA TENER TODO2 celda:%d valor:%d",vecOr[0]+1,vecOr[1]);
 				}
 				
 			}
@@ -203,7 +196,6 @@ seleccion :   IF condicion {vecOr2[1] = numeroPolaca;}THEN programa
 												vecOr[2] = numeroPolaca;
 												vecOr[3] =  desapilar_e_insertar_en_celda(numeroPolaca);
 												cantcomp--;} 
-												printf("\n---------------------->MIRA ACA- valores a guardar son : (1)%d (2)%d (3)%d (4)%d",vecOr[0],vecOr[1],vecOr[2],vecOr[3]);
 												cantcomp = 1;
 												//correcionLogicaDelOr(vecOr[1]+10,vecOr[0],0,0,0);
 												vecOr[0]= vecOr[1] = vecOr[2] = vecOr[3] = 0;
@@ -225,7 +217,6 @@ seleccion :   IF condicion {vecOr2[1] = numeroPolaca;}THEN programa
 													cantcomp--;
 													} 
 													cantcomp = 1;
-												printf("\n---------------------->seleccion - if- valores a guardar son ~: (1)%d (2)%d (3)%d (4)%d",vecOr[1],vecOr[2],vecOr[3],vecOr[0]);
 												if(_or == 1)
 												{correcionLogicaDelOr(vecOr[1],vecOr[2],vecOr[3],vecOr[0],1);
 													_or = 0;
@@ -253,7 +244,7 @@ condicion :   PARA condicion {cantcomp++;}
 			| comparacion 	{	printf("\n---------------------->condicion");								
 			};
 			
-comparacion: expresion comparador expresion {printf("\n----------------------> condicion a tocar %d \n", numeroPolaca);
+comparacion: expresion comparador expresion {
 											 insertar_en_polaca_operador("CMP", numeroPolaca); 
 											 numeroPolaca++;
 											 //celdaCondicionUno = numeroPolaca;
@@ -261,7 +252,6 @@ comparacion: expresion comparador expresion {printf("\n----------------------> c
 											 vecOr[0] = numeroPolaca;
 											 _not = 0;
 											 vecOr2[0] = numeroPolaca;
-											  //ponerEnPila(pila, numeroPolaca);//PARA EL OR CON DOBLE CONDICION Y ELCE
 											 numeroPolaca += 2;
 											 }
 			|PARA expresion comparador expresion PARC{printf("\n---------------------->3 - condicion");
@@ -336,14 +326,12 @@ factor :    ID {printf("\n---------------------->factor - id");
 				if( _aux == -1 )
 				{
 					strcpy(_auxID,yylval.stringValue);
-					printf("\n!!!!!!me quedo con la variable del ciclo %s",_auxID);
 				}
 				if( _aux >= 0 )
-				{printf("\n!!!!!!comparo si la variable esta en el item de la lista");
+				{
 					if(strcmp(_auxID,yylval.stringValue) == 0)
-					{printf("\n!!!!!!coincidencia encontrada");
+					{
 						_aux++;
-						printf("\n!!!!!!coincidencia encontrada: %d", _aux);
 					}
 						
 				}
@@ -429,11 +417,10 @@ ciclo_especial : WHILEE {insertar_en_polaca_operador("0", numeroPolaca);numeroPo
 						 insertar_en_polaca_operador(":=", numeroPolaca);numeroPolaca++;
 						 insertar_en_polaca_operador("ET", numeroPolaca);
 						 //insertar_en_polaca_etiqueta_apilar(numeroPolaca);numeroPolaca++;
-						  printf("\n!!!!!!!!me guardo el id %d para la etiqueta del while",numeroPolaca);
 						 ponerEnPila(pila, numeroPolaca);numeroPolaca++;
 						 insertar_en_polaca_operador("ice", numeroPolaca);numeroPolaca++;
 						 iterador = 0;
-						 //prendo bandera para contar la cantidad de coincidencias
+
 						 _aux++;
 						 }
 				 ID {
@@ -449,12 +436,10 @@ ciclo_especial : WHILEE {insertar_en_polaca_operador("0", numeroPolaca);numeroPo
 						 
 						char str[30];
 						itoa(_auxContador,str,10);
-						 printf("\n!!!!!insertando la cantidad de iteraciones: %d en el id %d",_auxContador+1,numeroPolaca);
 					insertar_en_polaca_operador(str, numeroPolaca);numeroPolaca++;
 					 _aux = -2;_auxContador = 0;
 					 insertar_en_polaca_operador("CMP", numeroPolaca);numeroPolaca++;
 					 insertar_en_polaca_operador("BGT", numeroPolaca);numeroPolaca++;
-					  printf("\n!!!!!!!!me guardo el id %d para la BGT del while",numeroPolaca);
 					 //desapilar_e_insertar_en_celda(numeroPolaca);
 					 //desapilar_e_insertar_en_celda(numeroPolaca+2);
 					 //insertar_en_polaca_salto_condicion(numeroPolaca);
@@ -470,7 +455,6 @@ ciclo_especial : WHILEE {insertar_en_polaca_operador("0", numeroPolaca);numeroPo
 				 desapilar_e_insertar_en_celda(numeroPolaca+2);
 				 insertar_bi_desapilar(numeroPolaca);numeroPolaca += 2;
 				 // desapilar_e_insertar_en_celda(numeroPolaca);
-				  printf("\n!!!!!!!!saco el numero guardado en la pila %d",sacarDePila(pila));
 				 //int valor_celda = sacarDePila(pila);
 				//strcpy(gci[sacarDePila(pila)].simbolo, constante_string);
 				 };

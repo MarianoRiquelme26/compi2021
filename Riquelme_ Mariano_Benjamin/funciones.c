@@ -352,7 +352,7 @@ void insertar_en_polaca_salto_condicion(char *simbolo, int num, int negado){
 	insertar_en_polaca_operador(valorAssembler, num);	
 	insertar_en_polaca_operador(" ", num+1);	
 	ponerEnPila(pila, num+1);	
-	printf("apile: %d\n", num+1);	
+	//printf("apile: %d\n", num+1);	
 }
 
 int desapilar_e_insertar_en_celda(int num){
@@ -361,16 +361,16 @@ int desapilar_e_insertar_en_celda(int num){
 	sprintf(constante_string,"%d",num);
 	int valor_celda = sacarDePila(pila);
 	strcpy(gci[valor_celda].simbolo, constante_string);
-	printf("desapile: %d\n", valor_celda);
-	printf("\n---------------------->!!!!!!!!!!!!aca saco las cosas: (1)%d (2)%d ",num, valor_celda);
+	//printf("desapile: %d\n", valor_celda);
+	//printf("\n---------------------->!!!!!!!!!!!!aca saco las cosas: (1)%d (2)%d ",num, valor_celda);
 	return valor_celda;
 }
 
 	void insertar_en_polaca_etiqueta_apilar(int num){
 	insertar_en_polaca_operador("ET", num);
-	printf("inserte ET\n");
+	//printf("inserte ET\n");
 	ponerEnPila(pila, num);
-	printf("apile: %d\n", num);
+	//printf("apile: %d\n", num);
 }
 void insertar_bi_desapilar(int num){
 	insertar_en_polaca_operador("BI", num);
@@ -379,7 +379,7 @@ void insertar_bi_desapilar(int num){
 	int valor_celda = sacarDePila(pila);
 	valor_celda += 10;
 	sprintf(constante_string,"%d", valor_celda);
-	printf("desapile: %s\n", constante_string);
+	//printf("desapile: %s\n", constante_string);
 	strcpy(gci[num+1].simbolo, constante_string);
 }
 
@@ -426,7 +426,7 @@ void correcionLogicaDelOr(int v1, int c1, int v2, int c2,int flagInvertir)
 	sprintf(constante_string,"%d",c1);
 	int valor_celda = v1;
 	strcpy(gci[valor_celda].simbolo, constante_string);
-	printf("\ncorrecion del or, celda %d valor: %d\n",c1, valor_celda);
+	//printf("\ncorrecion del or, celda %d valor: %d\n",c1, valor_celda);
 	if(flagInvertir) {
 		c2 += 10;
 		char constante_string2[32];
