@@ -1,3 +1,1 @@
 NOMBRE                        	TIPODATO		VALOR	LONGITUD
-_1                            	CTE_INTEGER	                   1	-                             
-_20                           	CTE_INTEGER	                  20	-                             

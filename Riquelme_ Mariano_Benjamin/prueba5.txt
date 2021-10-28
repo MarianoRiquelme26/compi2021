@@ -1,4 +1,4 @@
-IF (actual > 1)THEN
+IF (a > 1)THENS
 	z:= a
 	IF (actual > 1)THEN
 		z:= b

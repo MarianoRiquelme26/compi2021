@@ -23,6 +23,11 @@ char _auxTemp[100];
 int iterador;
 int _contLong;
 int _not = 0;
+int celdaCondicionUno = -1;// no usar
+int cantcomp = 1;
+int _or = 0;
+int vecOr[4];
+int vecOr2[2];
 
 %}
 %union 
@@ -62,6 +67,7 @@ int _not = 0;
 
 %token IF
 %token THEN
+%token THENS
 %token ELSE
 %token ENDIF
 %token DIM
@@ -162,33 +168,107 @@ iteracion: WHILE {insertar_en_polaca_etiqueta_apilar(numeroPolaca); numeroPolaca
 		        insertar_bi_desapilar(numeroPolaca);numeroPolaca += 2;
 				};
 
-seleccion :   IF condicion THEN programa 					    	
-					{desapilar_e_insertar_en_celda(numeroPolaca+2);
+seleccion :   IF condicion {vecOr2[1] = numeroPolaca;}THEN programa 					    	
+					{//desapilar_e_insertar_en_celda(numeroPolaca+2);
+					//vecOr2[1] = numeroPolaca;
+					//vecOr2[1] = sacarDePila(pila);
+					//ponerEnPila(pila,numeroPolaca);
+					printf("\n---------------------->131312DEBERIA TENER TODO celda:%d valor:%d",vecOr2[0],vecOr2[1]);
+					 while(cantcomp != 0){
+						 vecOr[0] = numeroPolaca+2;
+												vecOr[1] = desapilar_e_insertar_en_celda(numeroPolaca+2);
+												cantcomp--;} 
+												cantcomp = 1;
+					printf("\n---------------------->!!!aca tengo que poner la pimer condicion:%d valor:%d",numeroPolaca+1);
+					//ponerEnPila(pila,numeroPolaca+1);
 					 insertar_en_polaca_salto_condicion("BI", numeroPolaca,_not);
-					 numeroPolaca += 2;}
-			  ELSE programa ENDIF {printf("\n---------------------->seleccion - if");
-								   desapilar_e_insertar_en_celda(numeroPolaca);}
-			| IF condicion THEN programa ENDIF {printf("\n---------------------->seleccion - if");
-												desapilar_e_insertar_en_celda(numeroPolaca);}
+					 numeroPolaca += 2;
+					 }
+			  ELSE 
+				  {
+				if(_or == 1){
+					vecOr[0] = numeroPolaca;
+					vecOr[1] =  desapilar_e_insertar_en_celda(numeroPolaca);
+					_or = 0;
+					printf("\n---------------------->DEBERIA TENER TODO2 celda:%d valor:%d",vecOr[0]+1,vecOr[1]);
+				}
+				
+			}
+			programa
+			  
+
+			  ENDIF {printf("\n---------------------->seleccion - if");
+								   //desapilar_e_insertar_en_celda(numeroPolaca);
+								   while(cantcomp != 0){
+												vecOr[2] = numeroPolaca;
+												vecOr[3] =  desapilar_e_insertar_en_celda(numeroPolaca);
+												cantcomp--;} 
+												printf("\n---------------------->MIRA ACA- valores a guardar son : (1)%d (2)%d (3)%d (4)%d",vecOr[0],vecOr[1],vecOr[2],vecOr[3]);
+												cantcomp = 1;
+												//correcionLogicaDelOr(vecOr[1]+10,vecOr[0],0,0,0);
+												vecOr[0]= vecOr[1] = vecOr[2] = vecOr[3] = 0;
+								   }
+			| IF condicion THENS {
+				if(_or == 1){
+					vecOr[2] = numeroPolaca;
+					vecOr[3] =  desapilar_e_insertar_en_celda(numeroPolaca);
+					//_or = 0;
+				}
+				
+			}
+			programa ENDIF {
+												//desapilar_e_insertar_en_celda(numeroPolaca);
+												//desapilar_e_insertar_en_celda(celdaCondicionUno);
+												while(cantcomp != 0){
+													vecOr[0] = numeroPolaca;
+													vecOr[1] =  desapilar_e_insertar_en_celda(numeroPolaca);
+													cantcomp--;
+													} 
+													cantcomp = 1;
+												printf("\n---------------------->seleccion - if- valores a guardar son ~: (1)%d (2)%d (3)%d (4)%d",vecOr[1],vecOr[2],vecOr[3],vecOr[0]);
+												if(_or == 1)
+												{correcionLogicaDelOr(vecOr[1],vecOr[2],vecOr[3],vecOr[0],1);
+													_or = 0;
+												}
+												
+												//vecOr[0]= vecOr[1] = vecOr[2] = vecOr[3] = 0;
+												}
 			;
 
-condicion :   PARA condicion AND comparacion PARC {printf("\n---------------------->condicion");}
-			| PARA condicion OR comparacion PARC {printf("\n---------------------->condicion");}
+condicion :   PARA condicion {cantcomp++;}
+			  AND comparacion PARC {printf("\n---------------------->condicion");}
+			| PARA condicion 
+			{
+			if(_or == 1){
+					//vecOr[0] = numeroPolaca;
+					//vecOr[1] =  desapilar_e_insertar_en_celda(numeroPolaca);
+					_or = 0;
+				}
+			}
+			OR {_or = 1;//vecOr2[0] = 1;
+
+			}
+			 comparacion PARC {printf("\n---------------------->condicion");}
 			| PARA NOT {_not = 1;} condicion PARC	{printf("\n---------------------->condicion");}
 			| comparacion 	{	printf("\n---------------------->condicion");								
 			};
 			
-comparacion: expresion comparador expresion {printf("\n---------------------->3 - condicion");
+comparacion: expresion comparador expresion {printf("\n----------------------> condicion a tocar %d \n", numeroPolaca);
 											 insertar_en_polaca_operador("CMP", numeroPolaca); 
 											 numeroPolaca++;
+											 //celdaCondicionUno = numeroPolaca;
 											 insertar_en_polaca_salto_condicion(operadorAux,numeroPolaca,_not);
+											 vecOr[0] = numeroPolaca;
 											 _not = 0;
+											 vecOr2[0] = numeroPolaca;
+											  //ponerEnPila(pila, numeroPolaca);//PARA EL OR CON DOBLE CONDICION Y ELCE
 											 numeroPolaca += 2;
 											 }
 			|PARA expresion comparador expresion PARC{printf("\n---------------------->3 - condicion");
 													  insertar_en_polaca_operador("CMP", numeroPolaca);
 													  numeroPolaca++;
 													  insertar_en_polaca_salto_condicion(operadorAux, numeroPolaca,_not);
+													  vecOr[0] = numeroPolaca;
 													  _not = 0;
 													  numeroPolaca += 2;
 													  }

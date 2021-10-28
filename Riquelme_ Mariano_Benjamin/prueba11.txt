@@ -1,0 +1,7 @@
+IF (ab > 1 OR ab != 1)THEN
+	z:= a+1-2
+ELSE 
+	z:= a*2
+ENDIF
+z:= c
+

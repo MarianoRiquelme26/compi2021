@@ -1,6 +1,6 @@
 WHILE (con <= 9) START
 	a:=  1
-	WHILE (con2 <= 8) START
+	WHILE (con <= 9) START
 		a:=  2
 	END
 END

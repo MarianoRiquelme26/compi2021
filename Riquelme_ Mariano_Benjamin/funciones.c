@@ -38,13 +38,13 @@ void insertar_en_polaca_operador(char * valor, int num);
 //void insertar_en_polaca_salto_condicion(int num);
 void insertar_en_polaca_salto_condicion(char *simbolo, int num, int negado);
 void insertar_en_polaca_etiqueta_apilar(int num);
-void desapilar_e_insertar_en_celda(int num);
+int desapilar_e_insertar_en_celda(int num);
 void insertar_bi_desapilar(int num);
 void guardar_gci(int cantidad);
 //Esta funcion ya no se utiliza mas
 char* ObtenerBranchComparador(char*);
 char * negarComparador(char* comparador);
-
+void correcionLogicaDelOr(int v1, int c1, int v2, int c2,int flagInvertir);
 
 //funciones complementarias
 char* concat(const char *s1, const char *s2);
@@ -355,13 +355,15 @@ void insertar_en_polaca_salto_condicion(char *simbolo, int num, int negado){
 	printf("apile: %d\n", num+1);	
 }
 
-void desapilar_e_insertar_en_celda(int num){
+int desapilar_e_insertar_en_celda(int num){
 	num += 10;
 	char constante_string[32];
 	sprintf(constante_string,"%d",num);
 	int valor_celda = sacarDePila(pila);
 	strcpy(gci[valor_celda].simbolo, constante_string);
 	printf("desapile: %d\n", valor_celda);
+	printf("\n---------------------->!!!!!!!!!!!!aca saco las cosas: (1)%d (2)%d ",num, valor_celda);
+	return valor_celda;
 }
 
 	void insertar_en_polaca_etiqueta_apilar(int num){
@@ -415,3 +417,24 @@ char * negarComparador(char* comparador)
 		return "BEQ";
 	return NULL;
 }
+//se realiza ajuste para el or. parametros: celda , valor, celda , valor
+void correcionLogicaDelOr(int v1, int c1, int v2, int c2,int flagInvertir)
+{
+	
+	c1 += 10;
+	char constante_string[32];
+	sprintf(constante_string,"%d",c1);
+	int valor_celda = v1;
+	strcpy(gci[valor_celda].simbolo, constante_string);
+	printf("\ncorrecion del or, celda %d valor: %d\n",c1, valor_celda);
+	if(flagInvertir) {
+		c2 += 10;
+		char constante_string2[32];
+		sprintf(constante_string2,"%d",c2);
+		valor_celda = v2;
+		strcpy(gci[valor_celda].simbolo, constante_string2);
+		printf("\ncorrecion del or, celda %d valor: %d\n",c2, valor_celda);
+	}
+	
+}
+

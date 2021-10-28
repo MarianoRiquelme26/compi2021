@@ -20,7 +20,7 @@ void quitarComillas();
 %}
 %option noyywrap
 %option yylineno
-
+THENS "THENS"
 DISPLAY	"DISPLAY"
 GET "GET"
 WHILE "WHILE"
@@ -83,6 +83,7 @@ OP_MUL [*]
 {END} {printf("\ntoken END");return END;}
 {IF} {printf("\ntoken IF");return IF;}
 {THEN} {printf("\ntoken THEN");return THEN;}
+{THENS} {printf("\ntoken THEN");return THENS;}
 {ELSE} {printf("\ntoken ELSE");return ELSE;}
 {ENDIF} {printf("\ntoken ENDIF");return ENDIF;}
 {DIM} {printf("\ntoken DIM");return DIM;}
