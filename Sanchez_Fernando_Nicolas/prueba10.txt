@@ -1,0 +1,6 @@
+IF (ab > 1 OR ab != 1)THENS
+	z:= a
+ENDIF
+
+z:= c
+

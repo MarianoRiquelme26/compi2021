@@ -9,6 +9,7 @@
 #define MAX_STRING_LENGTH 30
 #define TABLA_SIMBOLOS "ts.txt"
 #define POLACA "intermedia.txt"
+#define ASSEMBLER "final.asm"
 #define TAM_TABLA 350
 #define TAM_POLACA 350
 #define TAM_PILA 50
@@ -35,14 +36,24 @@ void insertar_en_polaca_cte_int(int cte, int num);
 void insertar_en_polaca_cte_real(float cte_real, int num);
 void insertar_en_polaca_id(char *valor, int num);
 void insertar_en_polaca_operador(char * valor, int num);
-void insertar_en_polaca_salto_condicion(char *simbolo, int num);
+//void insertar_en_polaca_salto_condicion(int num);
+void insertar_en_polaca_salto_condicion(char *simbolo, int num, int negado);
 void insertar_en_polaca_etiqueta_apilar(int num);
-void desapilar_e_insertar_en_celda(int num);
+int desapilar_e_insertar_en_celda(int num);
 void insertar_bi_desapilar(int num);
 void guardar_gci(int cantidad);
 //Esta funcion ya no se utiliza mas
 char* ObtenerBranchComparador(char*);
+char * negarComparador(char* comparador);
+void correcionLogicaDelOr(int v1, int c1, int v2, int c2,int flagInvertir);
 
+//funciones assembler
+void generaAssembler(int cantidad);
+void generarETAssembler();
+void generarDataAssembler();
+void generarCODEAssembler();
+void generarETFinAssembler();
+int esOperador(char *simbolo);
 
 //funciones complementarias
 char* concat(const char *s1, const char *s2);
@@ -67,7 +78,11 @@ typedef struct
     int numeroPolaca[TAM_PILA];
     int tope;
 }tPila;
-
+/*
+typedef struct {
+	char simbolo[TAM_NOMBRE];
+	int tope;
+} tPilaAssembler;*/
 
 // funciones de pila
 void crearPila(tPila *p);
@@ -75,12 +90,16 @@ int pilaLlena(tPila *p);
 int pilaVacia(tPila *p);
 int ponerEnPila(tPila *p, int num);
 int sacarDePila(tPila *p);
+//int ponerEnPila_assembler(tPilaAssembler *p);
+//int sacarDePila_assembler(tPilaAssembler *p);
 
 tPila pila[TAM_PILA];
 polaca gci[TAM_POLACA];
+//tPilaAssembler pila_assembler[TAM_POLACA];
 
 FILE * file;
 FILE * filePolaca;
+FILE * fileAssembler;
 int between_flag = 0;
 int cant_elem_ts = 0;
 int cantidad_cuerpos;
@@ -317,53 +336,58 @@ void insertar_en_polaca_operador(char * valor, int num){
 //Esta funcion ya no se va a utilizar
 char* ObtenerBranchComparador(char* branch){
 	
-	if(strcmp(branch,">=")==0){
-		strcpy(branch,"BLT"); 
-	
-	}
-	if(strcmp(branch,"<=")==0){
-		strcpy(branch,"BGT"); 		
-	}
-	if(strcmp(branch,">")==0){	
-		strcpy(branch,"BLE"); 
-	}
-	if(strcmp(branch,"<")==0){
-		strcpy(branch,"BGE"); 
-	}
-	if(strcmp(branch,"==")==0){
-		strcpy(branch,"BNE"); 
-	}
-	if(strcmp(branch,"!=")==0){
-		strcpy(branch,"BE"); 
-	}
-
+	if(strcmp(branch,">=")==0){	
+		strcpy(branch,"BLT"); 	
+		
+	}	
+	if(strcmp(branch,"<=")==0){	
+		strcpy(branch,"BGT"); 			
+	}	
+	if(strcmp(branch,">")==0){		
+		strcpy(branch,"BLE"); 	
+	}	
+	if(strcmp(branch,"<")==0){	
+		strcpy(branch,"BGE"); 	
+	}	
+	if(strcmp(branch,"==")==0){	
+		strcpy(branch,"BNE"); 	
+	}	
+	if(strcmp(branch,"!=")==0){	
+		strcpy(branch,"BE"); 	
+	}	
 	return branch;
 }
 
 
 
-void insertar_en_polaca_salto_condicion(char *simbolo, int num){
+void insertar_en_polaca_salto_condicion(char *simbolo, int num, int negado){	
 	char * valorAssembler = ObtenerBranchComparador(simbolo);
-	insertar_en_polaca_operador(valorAssembler, num);
-	insertar_en_polaca_operador(" ", num+1);
-	ponerEnPila(pila, num+1);
-	printf("apile: %d\n", num+1);
+	if(negado == 1)
+	{
+		valorAssembler = negarComparador(simbolo);
+	}	
+	insertar_en_polaca_operador(valorAssembler, num);	
+	insertar_en_polaca_operador(" ", num+1);	
+	ponerEnPila(pila, num+1);	
+	//printf("apile: %d\n", num+1);	
 }
 
-void desapilar_e_insertar_en_celda(int num){
+int desapilar_e_insertar_en_celda(int num){
 	num += 10;
 	char constante_string[32];
 	sprintf(constante_string,"%d",num);
 	int valor_celda = sacarDePila(pila);
 	strcpy(gci[valor_celda].simbolo, constante_string);
-	printf("desapile: %d\n", valor_celda);
+	//printf("desapile: %d\n", valor_celda);
+	//printf("\n---------------------->!!!!!!!!!!!!aca saco las cosas: (1)%d (2)%d ",num, valor_celda);
+	return valor_celda;
 }
 
 	void insertar_en_polaca_etiqueta_apilar(int num){
 	insertar_en_polaca_operador("ET", num);
-	printf("inserte ET\n");
+	//printf("inserte ET\n");
 	ponerEnPila(pila, num);
-	printf("apile: %d\n", num);
+	//printf("apile: %d\n", num);
 }
 void insertar_bi_desapilar(int num){
 	insertar_en_polaca_operador("BI", num);
@@ -372,7 +396,7 @@ void insertar_bi_desapilar(int num){
 	int valor_celda = sacarDePila(pila);
 	valor_celda += 10;
 	sprintf(constante_string,"%d", valor_celda);
-	printf("desapile: %s\n", constante_string);
+	//printf("desapile: %s\n", constante_string);
 	strcpy(gci[num+1].simbolo, constante_string);
 }
 
@@ -392,4 +416,102 @@ void guardar_gci(int cantidad){
 	fprintf(filePolaca,"%d\t",gci[i].numero);
   }
   fclose(filePolaca);
+}
+
+char * negarComparador(char* comparador)
+{
+	if(strcmp(comparador,"BGT") == 0)
+		return "BLE";
+	if(strcmp(comparador,"BLT") == 0)
+		return "BGE";
+	if(strcmp(comparador,"BGE") == 0)
+		return "BLT";
+	if(strcmp(comparador,"BLE") == 0)
+		return "BGT";
+	if(strcmp(comparador,"BEQ") == 0)
+		return "BNE";
+	if(strcmp(comparador,"BNE") == 0)
+		return "BEQ";
+	return NULL;
+}
+//se realiza ajuste para el or. parametros: celda , valor, celda , valor
+void correcionLogicaDelOr(int v1, int c1, int v2, int c2,int flagInvertir)
+{
+	
+	c1 += 10;
+	char constante_string[32];
+	sprintf(constante_string,"%d",c1);
+	int valor_celda = v1;
+	strcpy(gci[valor_celda].simbolo, constante_string);
+	//printf("\ncorrecion del or, celda %d valor: %d\n",c1, valor_celda);
+	if(flagInvertir) {
+		c2 += 10;
+		char constante_string2[32];
+		sprintf(constante_string2,"%d",c2);
+		valor_celda = v2;
+		strcpy(gci[valor_celda].simbolo, constante_string2);
+		printf("\ncorrecion del or, celda %d valor: %d\n",c2, valor_celda);
+	}
+	
+}
+
+void generaAssembler(int cantidad){
+	
+	generarETAssembler();
+	generarDataAssembler();
+	generarCODEAssembler(cantidad);
+	generarETFinAssembler();
+}
+
+void generarETAssembler(){
+	
+  fileAssembler = fopen(ASSEMBLER,"w");
+  fprintf(fileAssembler,".MODEL LARGE\t\t\t;Modelo de Memoria\n.386\t\t\t\t\t;Tipo de Procesador\n.STACK 200h\t\t\t\t;Bytes en el Stack\n\n.DATA\n\n");
+  fclose(fileAssembler);
+}
+
+void generarDataAssembler(){
+	
+	int i = 0;
+	const char ch = '_';
+	 fileAssembler = fopen(ASSEMBLER,"a");
+	for(i;i<cant_elem_ts;i++){
+		if(strchr(ts[i].nombre,ch) == NULL)
+		fprintf(fileAssembler,"%-30s\tdd\t\t?\t\t;Variable\n",ts[i].nombre);
+		else
+		fprintf(fileAssembler,"%-30s\tdd\t\t%s\t\t;Constante en formato %s;\n",ts[i].nombre,ts[i].valor,ts[i].tipo_dato);
+	}
+	fprintf(fileAssembler,"\n\n");
+	fclose(fileAssembler);
+
+}
+
+void generarCODEAssembler(int cantidad){
+	
+  fileAssembler = fopen(ASSEMBLER,"a");
+  fprintf(fileAssembler,".CODE\nmov AX,@DATA\nmov DS,AX\nmov es,ax;");
+  fprintf(fileAssembler,"\n\n");
+  /*int i = 0;
+  for(i;i< cantidad;i++){
+	 if(esOperador(gci[i].simbolo)){
+		 printf("simbolo encontrado");
+		crearInstruccion(gci[i].simbolo);
+	 }
+	 else{
+	 ponerEnPila_assembler(pila_assembler, 1); printf("apilo con assembler");}
+  }*/
+  fprintf(fileAssembler,"\n\n");
+  fclose(fileAssembler);
+}
+
+void generarETFinAssembler(){
+	
+  fileAssembler = fopen(ASSEMBLER,"a");
+  fprintf(fileAssembler,"mov ax,4c00h\t\t\t;Indica que debe finalizar la ejecucion\n");
+  fprintf(fileAssembler,"int 21h\n\nEnd");
+  fclose(fileAssembler);
+}
+
+int esOperador(char *simbolo){
+		return strcmp(simbolo, "+");
 }

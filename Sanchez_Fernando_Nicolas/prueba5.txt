@@ -1,4 +1,10 @@
-IF (actual > 1 AND actual < 5)THEN
-         z:= a
+IF (a > 1)THENS
+	z:= a
+	IF (actual > 1)THEN
+		z:= b
+	ELSE
+		z:= b1
+	ENDIF
+	z:= b2
 ENDIF
 z:= c

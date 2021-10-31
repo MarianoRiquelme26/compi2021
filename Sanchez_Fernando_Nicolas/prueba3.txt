@@ -1,4 +1,4 @@
-IF (actual > 1 AND a == 5)THEN
+IF (ab > 1 AND ab < 5)THEN
 	z:= a
 ELSE
 	z:= b
