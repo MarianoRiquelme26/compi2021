@@ -6,13 +6,25 @@
 #include "y.tab.h"
 FILE *yyin;
 char *yyltext;
+
+
+
+char auxS[100];
+
+
+void quitarComillas();
+
+
+
+
 %}
 %option noyywrap
 %option yylineno
-
+THENS "THENS"
 DISPLAY	"DISPLAY"
 GET "GET"
 WHILE "WHILE"
+WHILEE "WHILEE"
 START "START"
 END "END"
 OR "OR"
@@ -34,14 +46,19 @@ CORA "["
 CORC "]"
 COMA ","
 COMILLA			["] 
-COMPARADOR ">="|"<="|">"|"<"|"=="|"!="
+OP_MAYORIGUAL   ">="    
+OP_MENORIGUAL   "<="     
+OP_IGUAL        "=="     
+OP_MENOR        [<] 
+OP_MAYOR   		[>]
+OP_DISTINTO     "!="
 PUNTO			"."
 OP_ASIG  ":="
 DIGITO	[0-9]
 LETRA	[a-zA-Z]
 ID	({DIGITO}|{LETRA})*
-CTE	{DIGITO}+
 CTE_R {DIGITO}+.{PUNTO}.{DIGITO}*|{DIGITO}*.{PUNTO}.{DIGITO}+
+CTE	{DIGITO}+
 CAR_ESP			"@"|"%"|":"|" "|"~"|"¿"|"?"|"="|"@"|"!"|"¡"|"_"|"%"|" "|"."|"|"|","|"{"|"}"|"["|"]"|":"|"\""|"#"|"$"|"*"|"\/"|"\\"|"¬"|"+"|"-"|";"
 CTE_S		{COMILLA}.({CAR_ESP}|{DIGITO}|{LETRA})*.{COMILLA}
 COM_ABRE		"*/"
@@ -55,14 +72,18 @@ PARA "("
 PARC ")"
 OP_MUL [*]
 
+
+
 %%
 {WHILE} {printf("\ntoken WHILE");return WHILE;}
+{WHILEE} {printf("\ntoken WHILEE");return WHILEE;}
 {OR} {printf("\ntoken OR");return OR;}
 {AND} {printf("\ntoken AND");return AND;}
 {START} {printf("\ntoken START");return START;}
 {END} {printf("\ntoken END");return END;}
 {IF} {printf("\ntoken IF");return IF;}
 {THEN} {printf("\ntoken THEN");return THEN;}
+{THENS} {printf("\ntoken THEN");return THENS;}
 {ELSE} {printf("\ntoken ELSE");return ELSE;}
 {ENDIF} {printf("\ntoken ENDIF");return ENDIF;}
 {DIM} {printf("\ntoken DIM");return DIM;}
@@ -76,7 +97,14 @@ OP_MUL [*]
 {ENDWHILE} {printf("\ntoken ENDWHILE");return ENDWHILE;}
 {NOT} {printf("\ntoken NOT");return NOT;}
 {COMEN}		{return COMEN;}
-{COMPARADOR} {return COMPARADOR;}
+
+{OP_MAYORIGUAL} {printf("\nToken OP_MAYORIGUAL");return OP_MAYORIGUAL;}     
+{OP_MENORIGUAL} {printf("\nToken OP_MENORIGUAL");return OP_MENORIGUAL;}     
+{OP_IGUAL}		{printf("\nToken OP_IGUAL");return OP_IGUAL;}
+{OP_MENOR}    	{printf("\nToken OP_MENOR");return OP_MENOR;}
+{OP_DISTINTO}	{printf("\nToken OP_DISTINTO");return OP_DISTINTO;}
+{OP_MAYOR}		{printf("\nToken OP_MAYOR");return OP_MAYOR;}
+
 {OP_ASIG} {printf("\ntoken OP_ASIG");return OP_ASIG;}
 {GET} {printf("\ntoken GET: %s",yytext);return GET;}
 {CTE} {
@@ -110,12 +138,22 @@ OP_MUL [*]
 			printf("\ntoken CTE_S");
 			if(strlen(yytext) < 31)
 			{
+			
+				sprintf(auxS,"%s", yytext);
+				quitarComillas();
+				yylval.stringValue=auxS;    
 				return CTE_S;
 			}
 			else
 			{
 				printf("\nError lexico - Se supero el limite DE caracteres para constantes alfanumericas %s:\n",yytext);
 			}
+										
+			
+                             
+  
+
+										
 			
 	    }
 {ENTER} {return ENTER;}
@@ -131,6 +169,25 @@ OP_MUL [*]
 {PARC} {printf("\ntoken PARC: %s",yytext);return PARC;}
 {COMA} {printf("\ntoken COMA: %s",yytext);return COMA;}
 {OP_MUL} {printf("\ntoken OP_MUL: %s",yytext);return OP_MUL;}
+
+
+
+
+
 "\t"
 . 
 %%
+
+
+
+
+
+void quitarComillas() {
+	int i = 0;
+	while(auxS[i+1] != '\"') {
+		auxS[i] = auxS[i+1];
+		i++;
+	}
+	auxS[i] = '\0';
+}
+

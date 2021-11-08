@@ -4,23 +4,8 @@
 
 .DATA
 
-cont                          	dd		?		;Variable
-promedio                      	dd		?		;Variable
-prueba                        	dd		?		;Variable
 suma                          	dd		?		;Variable
-Prue                          	dd		?		;Variable
-_655                          	dd		655		;Constante en formato CTE_INTEGER;
-_9                            	dd		9		;Constante en formato CTE_INTEGER;
-_1                            	dd		1		;Constante en formato CTE_INTEGER;
-_2                            	dd		2		;Constante en formato CTE_INTEGER;
-suma                          	dd		?		;Variable
-HOLA                          	dd		?		;Variable
-_0                            	dd		0		;Constante en formato CTE_INTEGER;
-mayor                         	dd		?		;Variable
-_10                           	dd		10		;Constante en formato CTE_INTEGER;
-mayor                         	dd		?		;Variable
-menor                         	dd		?		;Variable
-mayor                         	dd		?		;Variable
+_5                            	dd		5		;Constante en formato CTE_INTEGER;
 
 
 .CODE
