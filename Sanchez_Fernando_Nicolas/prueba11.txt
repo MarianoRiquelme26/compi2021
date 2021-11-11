@@ -1,8 +1,6 @@
-DIM [ a,b,z,ab,c ] AS [ integer ]
-IF (ab > 1 OR ab != 1)THEN
+IF (ab <= 1 OR x > 5)THENS
 	z:= b
-ELSE 
-	z:= a+2
+	z:= a*2
 ENDIF
 z:= c
 

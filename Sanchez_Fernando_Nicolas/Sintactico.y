@@ -28,7 +28,7 @@ int cantcomp = 1;
 int _or = 0;
 int vecOr[4];
 int vecOr2[2];
-
+int _polOr = 0;
 %}
 %union 
 { 
@@ -84,8 +84,8 @@ int vecOr2[2];
 %token NOT
 %%
 
-programa : programa sentencia {printf("\n---------------------->programa - Start detectado"); generaAssembler(numeroPolaca);}
-		 |  sentencia  {printf("\n---------------------->programa - sentencia - Start detectado");generaAssembler(numeroPolaca);} ;
+programa : programa sentencia {printf("\n---------------------->programa - Start detectado");}
+		 |  sentencia  {printf("\n---------------------->programa - sentencia - Start detectado");} ;
 		
 		
 sentencia : asignacion {printf("\n---------------------->sentencia - asignacion");}
@@ -169,16 +169,23 @@ seleccion :   IF condicion {vecOr2[1] = numeroPolaca;}THEN programa
 					//vecOr2[1] = numeroPolaca;
 					//vecOr2[1] = sacarDePila(pila);
 					//ponerEnPila(pila,numeroPolaca);
+						if(_or == 1){
+					vecOr[0] = numeroPolaca;
+					vecOr[1] =  desapilar_e_insertar_en_celda(numeroPolaca+2);
+					_or = 0;
+				}
 					 while(cantcomp != 0){
 						 vecOr[0] = numeroPolaca+2;
 												vecOr[1] = desapilar_e_insertar_en_celda(numeroPolaca+2);
-												cantcomp--;} 
+												cantcomp--;
+												} 
+												
 												cantcomp = 1;
 					//ponerEnPila(pila,numeroPolaca+1);
 					 insertar_en_polaca_salto_condicion("BI", numeroPolaca,_not);
 					 numeroPolaca += 2;
 					 }
-			  ELSE 
+			  ELSE /*
 				  {
 				if(_or == 1){
 					vecOr[0] = numeroPolaca;
@@ -186,7 +193,7 @@ seleccion :   IF condicion {vecOr2[1] = numeroPolaca;}THEN programa
 					_or = 0;
 				}
 				
-			}
+			}*/
 			programa
 			  
 
@@ -236,10 +243,10 @@ condicion :   PARA condicion {cantcomp++;}
 					_or = 0;
 				}
 			}
-			OR {_or = 1;//vecOr2[0] = 1;
+			OR {_or = 1; _polOr = numeroPolaca-2;  printf("la condicion OR esta en %d", _polOr);//vecOr2[0] = 1;
 
 			}
-			 comparacion PARC {printf("\n---------------------->condicion");}
+			 comparacion PARC {printf("\n---------------------->condicion"); invertirCondicion(_polOr);}
 			| PARA NOT {_not = 1;} condicion PARC	{printf("\n---------------------->condicion");}
 			| comparacion 	{	printf("\n---------------------->condicion");								
 			};

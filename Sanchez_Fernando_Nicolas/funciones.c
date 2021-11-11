@@ -9,7 +9,6 @@
 #define MAX_STRING_LENGTH 30
 #define TABLA_SIMBOLOS "ts.txt"
 #define POLACA "intermedia.txt"
-#define ASSEMBLER "final.asm"
 #define TAM_TABLA 350
 #define TAM_POLACA 350
 #define TAM_PILA 50
@@ -46,14 +45,7 @@ void guardar_gci(int cantidad);
 char* ObtenerBranchComparador(char*);
 char * negarComparador(char* comparador);
 void correcionLogicaDelOr(int v1, int c1, int v2, int c2,int flagInvertir);
-
-//funciones assembler
-void generaAssembler(int cantidad);
-void generarETAssembler();
-void generarDataAssembler();
-void generarCODEAssembler();
-void generarETFinAssembler();
-int esOperador(char *simbolo);
+void invertirCondicion(int _polOr);
 
 //funciones complementarias
 char* concat(const char *s1, const char *s2);
@@ -78,11 +70,7 @@ typedef struct
     int numeroPolaca[TAM_PILA];
     int tope;
 }tPila;
-/*
-typedef struct {
-	char simbolo[TAM_NOMBRE];
-	int tope;
-} tPilaAssembler;*/
+
 
 // funciones de pila
 void crearPila(tPila *p);
@@ -90,16 +78,12 @@ int pilaLlena(tPila *p);
 int pilaVacia(tPila *p);
 int ponerEnPila(tPila *p, int num);
 int sacarDePila(tPila *p);
-//int ponerEnPila_assembler(tPilaAssembler *p);
-//int sacarDePila_assembler(tPilaAssembler *p);
 
 tPila pila[TAM_PILA];
 polaca gci[TAM_POLACA];
-//tPilaAssembler pila_assembler[TAM_POLACA];
 
 FILE * file;
 FILE * filePolaca;
-FILE * fileAssembler;
 int between_flag = 0;
 int cant_elem_ts = 0;
 int cantidad_cuerpos;
@@ -353,12 +337,16 @@ char* ObtenerBranchComparador(char* branch){
 		strcpy(branch,"BNE"); 	
 	}	
 	if(strcmp(branch,"!=")==0){	
-		strcpy(branch,"BE"); 	
+		strcpy(branch,"BEQ"); 	
 	}	
 	return branch;
 }
 
-
+void invertirCondicion(int _polOr){
+	char *cadena = negarComparador(gci[_polOr].simbolo);
+	printf("valor obtenido: %s", cadena);
+	strcpy(gci[_polOr].simbolo, cadena);
+}
 
 void insertar_en_polaca_salto_condicion(char *simbolo, int num, int negado){	
 	char * valorAssembler = ObtenerBranchComparador(simbolo);
@@ -432,7 +420,7 @@ char * negarComparador(char* comparador)
 		return "BNE";
 	if(strcmp(comparador,"BNE") == 0)
 		return "BEQ";
-	return NULL;
+	return comparador;
 }
 //se realiza ajuste para el or. parametros: celda , valor, celda , valor
 void correcionLogicaDelOr(int v1, int c1, int v2, int c2,int flagInvertir)
@@ -455,63 +443,3 @@ void correcionLogicaDelOr(int v1, int c1, int v2, int c2,int flagInvertir)
 	
 }
 
-void generaAssembler(int cantidad){
-	
-	generarETAssembler();
-	generarDataAssembler();
-	generarCODEAssembler(cantidad);
-	generarETFinAssembler();
-}
-
-void generarETAssembler(){
-	
-  fileAssembler = fopen(ASSEMBLER,"w");
-  fprintf(fileAssembler,".MODEL LARGE\t\t\t;Modelo de Memoria\n.386\t\t\t\t\t;Tipo de Procesador\n.STACK 200h\t\t\t\t;Bytes en el Stack\n\n.DATA\n\n");
-  fclose(fileAssembler);
-}
-
-void generarDataAssembler(){
-	
-	int i = 0;
-	const char ch = '_';
-	 fileAssembler = fopen(ASSEMBLER,"a");
-	for(i;i<cant_elem_ts;i++){
-		if(strchr(ts[i].nombre,ch) == NULL)
-		fprintf(fileAssembler,"%-30s\tdd\t\t?\t\t;Variable\n",ts[i].nombre);
-		else
-		fprintf(fileAssembler,"%-30s\tdd\t\t%s\t\t;Constante en formato %s;\n",ts[i].nombre,ts[i].valor,ts[i].tipo_dato);
-	}
-	fprintf(fileAssembler,"\n\n");
-	fclose(fileAssembler);
-
-}
-
-void generarCODEAssembler(int cantidad){
-	
-  fileAssembler = fopen(ASSEMBLER,"a");
-  fprintf(fileAssembler,".CODE\nmov AX,@DATA\nmov DS,AX\nmov es,ax;");
-  fprintf(fileAssembler,"\n\n");
-  /*int i = 0;
-  for(i;i< cantidad;i++){
-	 if(esOperador(gci[i].simbolo)){
-		 printf("simbolo encontrado");
-		crearInstruccion(gci[i].simbolo);
-	 }
-	 else{
-	 ponerEnPila_assembler(pila_assembler, 1); printf("apilo con assembler");}
-  }*/
-  fprintf(fileAssembler,"\n\n");
-  fclose(fileAssembler);
-}
-
-void generarETFinAssembler(){
-	
-  fileAssembler = fopen(ASSEMBLER,"a");
-  fprintf(fileAssembler,"mov ax,4c00h\t\t\t;Indica que debe finalizar la ejecucion\n");
-  fprintf(fileAssembler,"int 21h\n\nEnd");
-  fclose(fileAssembler);
-}
-
-int esOperador(char *simbolo){
-		return strcmp(simbolo, "+");
-}
