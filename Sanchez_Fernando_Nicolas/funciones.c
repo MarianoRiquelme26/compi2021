@@ -46,6 +46,7 @@ char* ObtenerBranchComparador(char*);
 char * negarComparador(char* comparador);
 void correcionLogicaDelOr(int v1, int c1, int v2, int c2,int flagInvertir);
 void invertirCondicion(int _polOr);
+void intercambiarOr(int vecOr, int _swapCel);
 
 //funciones complementarias
 char* concat(const char *s1, const char *s2);
@@ -422,6 +423,22 @@ char * negarComparador(char* comparador)
 		return "BEQ";
 	return comparador;
 }
+
+void intercambiarOr(int vecOr, int _swapCel){
+	char cadenaAux[3];
+	char cadenaSwap[3];
+	
+	strcpy(cadenaAux, gci[vecOr].simbolo);
+	printf("1 OK");
+	strcpy(cadenaSwap, gci[_swapCel].simbolo);
+	printf("2 OK");
+	strcpy(gci[vecOr].simbolo, cadenaSwap);
+	printf("3 OK");
+	strcpy(gci[_swapCel].simbolo, cadenaAux);
+	printf("4 OK");
+}
+
+
 //se realiza ajuste para el or. parametros: celda , valor, celda , valor
 void correcionLogicaDelOr(int v1, int c1, int v2, int c2,int flagInvertir)
 {

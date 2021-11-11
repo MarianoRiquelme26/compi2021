@@ -29,6 +29,8 @@ int _or = 0;
 int vecOr[4];
 int vecOr2[2];
 int _polOr = 0;
+int _swapOr = 0;
+int _swapCel = 0;
 %}
 %union 
 { 
@@ -164,19 +166,22 @@ iteracion: WHILE {insertar_en_polaca_etiqueta_apilar(numeroPolaca); numeroPolaca
 		        insertar_bi_desapilar(numeroPolaca);numeroPolaca += 2;
 				};
 
-seleccion :   IF condicion {vecOr2[1] = numeroPolaca;}THEN programa 					    	
+seleccion :   IF condicion {vecOr2[1] = numeroPolaca;if(_or == 1){
+					vecOr[0] = numeroPolaca;
+					vecOr[1] =  desapilar_e_insertar_en_celda(numeroPolaca);
+					_or = 0;
+					_swapOr = 1;
+					_swapCel = vecOr[1];}
+				}THEN programa 					    	
 					{//desapilar_e_insertar_en_celda(numeroPolaca+2);
 					//vecOr2[1] = numeroPolaca;
 					//vecOr2[1] = sacarDePila(pila);
 					//ponerEnPila(pila,numeroPolaca);
-						if(_or == 1){
-					vecOr[0] = numeroPolaca;
-					vecOr[1] =  desapilar_e_insertar_en_celda(numeroPolaca+2);
-					_or = 0;
-				}
+						
 					 while(cantcomp != 0){
 						 vecOr[0] = numeroPolaca+2;
 												vecOr[1] = desapilar_e_insertar_en_celda(numeroPolaca+2);
+												if(_swapOr == 1){intercambiarOr(vecOr[1],_swapCel); _swapOr = 0;}
 												cantcomp--;
 												} 
 												
@@ -260,10 +265,12 @@ comparacion: expresion comparador expresion {
 											 _not = 0;
 											 vecOr2[0] = numeroPolaca;
 											 numeroPolaca += 2;
+											 
 											 }
 			|PARA expresion comparador expresion PARC{printf("\n---------------------->3 - condicion");
 													  insertar_en_polaca_operador("CMP", numeroPolaca);
 													  numeroPolaca++;
+													  
 													  insertar_en_polaca_salto_condicion(operadorAux, numeroPolaca,_not);
 													  vecOr[0] = numeroPolaca;
 													  _not = 0;
