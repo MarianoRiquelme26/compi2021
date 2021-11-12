@@ -32,6 +32,7 @@ int _polOr = 0;
 int _swapOr = 0;
 int _swapCel = 0;
 int valorIn = 0;
+int _cantElem = 0;
 %}
 %union 
 { 
@@ -446,7 +447,10 @@ ciclo_especial : WHILEE {insertar_en_polaca_etiqueta_apilar(numeroPolaca); numer
 								insertar_en_polaca_operador("CMP", numeroPolaca);
 								numeroPolaca++;
 								strcpy(operadorAux,"==");
-								desapilar_e_insertar_en_celda(numeroPolaca+2);desapilar_e_insertar_en_celda(numeroPolaca+2);
+								int i;
+								for(i = 0; i< _cantElem; i++){
+								desapilar_e_insertar_en_celda(numeroPolaca+2);}
+								_cantElem = 0;
 								insertar_en_polaca_salto_condicion(operadorAux, numeroPolaca, 0);
 								numeroPolaca += 2;
 								}
@@ -476,7 +480,7 @@ lista_expre : lista_expre COMA{
 								strcpy(operadorAux,"!=");
 								insertar_en_polaca_salto_condicion(operadorAux, numeroPolaca, 0);
 								numeroPolaca += 2;
-								
+								_cantElem++;
 							}	
 			expresion {printf("\n---------------------->lista de expresiones ");}
 			| expresion {printf("\n---------------------->expresion - inicio lista"); }

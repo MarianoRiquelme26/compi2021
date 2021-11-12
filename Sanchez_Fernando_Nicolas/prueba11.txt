@@ -1,6 +1,7 @@
-IF (ab <= 1 OR x > 5)THENS
-	z:= b
-	z:= a*2
-ENDIF
-z:= c
+
+WHILEE i IN [ z+3, t*8, x+1, y/x*5, z+8, x/5, q/6*7+3] DO
+
+z := x + 8
+
+ENDWHILE
 

@@ -1,5 +1,7 @@
-IF (ab > 1 OR ab != 1)THENS
+IF (NOT ab > 1)THEN
 	z:= a
+ELSE
+	x:= b
 ENDIF
 
 z:= c
