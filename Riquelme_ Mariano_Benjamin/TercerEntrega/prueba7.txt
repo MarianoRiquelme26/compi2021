@@ -1,0 +1,2 @@
+DIM [ along,b,c,e] AS [ integer,integer, integer,integer]
+along := long (3,b,c,e,1)

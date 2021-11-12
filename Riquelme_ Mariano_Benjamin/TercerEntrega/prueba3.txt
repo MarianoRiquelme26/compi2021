@@ -1,0 +1,10 @@
+DIM [ ac,z,a,z1,a1,b1,b,c,g] AS [ integer,integer, integer,integer,integer,integer,integer,integer, integer]
+IF (ac > 1)THEN
+	z:= a
+ELSE
+	IF ( ac < 10)THENS
+		z1:= a1 / b1
+	ENDIF
+	z:= b / g
+ENDIF
+z1:= c
