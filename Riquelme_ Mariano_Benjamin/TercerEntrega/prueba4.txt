@@ -1,0 +1,7 @@
+DIM [ a,b,c,d,e,f] AS [ integer,integer, integer,integer,integer,integer]
+IF (a != b AND c != d)THEN
+	e:= 1
+ELSE
+	f:= 2
+ENDIF
+f:= 3

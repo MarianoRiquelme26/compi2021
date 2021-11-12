@@ -1,0 +1,9 @@
+DIM [ a,b,c,d,e,f] AS [ integer,integer, integer,integer,integer,integer]
+WHILE (a <= 9) START
+	b := c+ 1
+	WHILE ( a > 9) START
+		d:= (e/0.342)
+	END
+	f:= a + 1
+END
+a:=  3
