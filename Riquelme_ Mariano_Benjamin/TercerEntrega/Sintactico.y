@@ -29,6 +29,10 @@ int _or = 0;
 int vecOr[4];
 int vecOr2[2];
 //int contVarAux = -1;
+int _polOr = 0;	
+int _swapOr = 0;	
+int _swapCel = 0;	
+int valorIn = 0;
 
 
 %}
@@ -138,13 +142,49 @@ sentencia : asignacion {printf("\n---------------------->sentencia - asignacion"
 		  | ciclo_especial {printf("\n---------------------->sentencia - tema especial - cilco especial");}
 		  | ENTER {printf("\n");};
 
-asignacion : ID OP_ASIG expresion {	printf("\n---------------------->asignacion");									
+asignacion : ID OP_ASIG expresion {	printf("\n---------------------->asignacion donde rompe");									
 									insertar_en_polaca_id($<stringValue>1, numeroPolaca);
 									numeroPolaca++;
 									insertar_en_polaca_operador(":=", numeroPolaca);
 									numeroPolaca++;
+									/*SE JUNTA CON EL DESARROLLO DE EMI PARA LAS VALICACIONES
+									switch(verificar_asignacion($<stringValue>1)){	
+									  case 1:     printf("\nNO SE DECLARO LA VARIABLE - %s - EN LA SECCION DE DEFINICIONES-asignacion\n",$<stringValue>1);	
+												  yyerror("\nERROR DE ASIGNACION\n");	
+												  break;	
+									  case 2:     insertar_en_polaca_id($<stringValue>1, numeroPolaca);	
+												  numeroPolaca++;	
+												  insertar_en_polaca_operador(":=", numeroPolaca);	
+												  numeroPolaca++;	
+												  break;	
+									  case 3:     printf("\nERROR DE SINTAXIS, ASIGNACION ERRONEA, TIPOS DE DATOS INCORRECTOS.\n"); 	
+												  printf("\nUSTED ESTA INTENTANDO ASIGNAR UNA CONSTANTE %s A UNA VARIABLE %s \n", ultima_expresion, simbolo_busqueda.tipo_dato);	
+												  yyerror("\nERROR DE ASIGNACION\n");	
+												  break;	
+									}*/	
 			
-			};
+			}/*
+			|ID OP_ASIG CTE_S {	printf("\n---------------------->asignacion constante string donde no rompe");	
+								guardar_cte_string($<stringValue>3);	
+								ultima_expresion = "string";	
+								switch(verificar_asignacion($<stringValue>1)){	
+									  case 1:     printf("\nNO SE DECLARO LA VARIABLE - %s - EN LA SECCION DE DEFINICIONES\n",$<stringValue>3);	
+												  yyerror("\nERROR DE ASIGNACION");	
+												  break;	
+									  case 2:     insertar_en_polaca_id($<stringValue>3, numeroPolaca);	
+												  numeroPolaca++;	
+												  insertar_en_polaca_id($<stringValue>1, numeroPolaca);	
+												  numeroPolaca++;	
+												  insertar_en_polaca_operador(":=", numeroPolaca);	
+												  numeroPolaca++;	
+												  break;	
+									  case 3:     printf("\nERROR DE SINTAXIS, ASIGNACION ERRONEA, TIPOS DE DATOS INCORRECTOS.\n"); 	
+												  printf("\nUSTED ESTA INTENTANDO ASIGNAR UNA CONSTANTE %s A UNA VARIABLE %s \n", ultima_expresion, simbolo_busqueda.tipo_dato);	
+												  yyerror("\nERROR DE ASIGNACION");	
+												  break;	
+									}	
+				}	*/
+			;
 		
 salida :    DISPLAY factor {printf("\n---------------------->salida - display");
 					insertar_en_polaca_id($<stringValue>2, numeroPolaca);
@@ -197,7 +237,15 @@ iteracion: WHILE {insertar_en_polaca_etiqueta_apilar(numeroPolaca); numeroPolaca
 		        insertar_bi_desapilar(numeroPolaca);numeroPolaca += 2;
 				};
 
-seleccion :   IF condicion {vecOr2[1] = numeroPolaca;}THEN programa 					    	
+seleccion :   IF condicion {vecOr2[1] = numeroPolaca;
+					if(_or == 1){	
+						vecOr[0] = numeroPolaca;	
+						vecOr[1] =  desapilar_e_insertar_en_celda(numeroPolaca);	
+						_or = 0;	
+						_swapOr = 1;	
+						_swapCel = vecOr[1];
+					}	
+				}THEN programa 					    	
 					{//desapilar_e_insertar_en_celda(numeroPolaca+2);
 					//vecOr2[1] = numeroPolaca;
 					//vecOr2[1] = sacarDePila(pila);
@@ -205,13 +253,16 @@ seleccion :   IF condicion {vecOr2[1] = numeroPolaca;}THEN programa
 					 while(cantcomp != 0){
 						 vecOr[0] = numeroPolaca+2;
 												vecOr[1] = desapilar_e_insertar_en_celda(numeroPolaca+2);
-												cantcomp--;} 
+												if(_swapOr == 1){intercambiarOr(vecOr[1],_swapCel); _swapOr = 0;}
+												cantcomp--;
+												} 
+												
 												cantcomp = 1;
 					//ponerEnPila(pila,numeroPolaca+1);
 					 insertar_en_polaca_salto_condicion("BI", numeroPolaca,_not);
 					 numeroPolaca += 2;
 					 }
-			  ELSE 
+			  ELSE /*
 				  {
 				if(_or == 1){
 					vecOr[0] = numeroPolaca;
@@ -219,7 +270,7 @@ seleccion :   IF condicion {vecOr2[1] = numeroPolaca;}THEN programa
 					_or = 0;
 				}
 				
-			}
+			}*/
 			programa
 			  
 
@@ -269,10 +320,10 @@ condicion :   PARA condicion {cantcomp++;}
 					_or = 0;
 				}
 			}
-			OR {_or = 1;//vecOr2[0] = 1;
+			OR {_or = 1; _polOr = numeroPolaca-2;  printf("la condicion OR esta en %d", _polOr);//vecOr2[0] = 1;
 
 			}
-			 comparacion PARC {printf("\n---------------------->condicion");}
+			 comparacion PARC {printf("\n---------------------->condicion"); invertirCondicion(_polOr);}
 			| PARA NOT {_not = 1;} condicion PARC	{printf("\n---------------------->condicion");}
 			| comparacion 	{	printf("\n---------------------->condicion");								
 			};
@@ -377,11 +428,16 @@ termino   : termino OP_MUL factor {//CON LA BANDERA _aux INDICO QUE NO ESTOY LEV
 		  }
 		  | factor {printf("\n---------------------->termino - factor");};
 
-factor :    ID {printf("\n---------------------->factor - id");
+factor :    ID {//printf("\n---------------------->factor - id");
 				if( _aux == -2 )
 				{//printf("\n!!!!!!lectura nomarl de variables");
 					insertar_en_polaca_id($<stringValue>1, numeroPolaca);
-					numeroPolaca++;
+					numeroPolaca++;/*
+					if(!existe_simbolo($<stringValue>1)){	
+                  printf("\nNO SE DECLARO LA VARIABLE - %s - EN LA SECCION DE DEFINICIONES-factor\n",$<stringValue>1);	
+                  yyerror("\nERROR DE ASIGNACION\n");	
+				}	
+				ultima_expresion = simbolo_busqueda.tipo_dato;	*/
 				}
 				if( _aux == -1 )
 				{
@@ -403,6 +459,7 @@ factor :    ID {printf("\n---------------------->factor - id");
 				if( _aux < 0 )
 				{printf("\n---------------------->factor - cte");
 				 char* nombre_cte_int = guardar_cte_int(atoi($<stringValue>1));
+				 ultima_expresion = "integer";
 				 insertar_en_polaca_cte_int(atoi($<stringValue>1), numeroPolaca);
 				 numeroPolaca++;
 				}
@@ -413,6 +470,7 @@ factor :    ID {printf("\n---------------------->factor - id");
 		 |CTE_R {
 					printf("\n---------------------->factor cte real");
 					float valor = atof($<stringValue>1);
+					ultima_expresion = "real"; 
 					char* nombre_cte_float = guardar_cte_float(valor);
 					insertar_en_polaca_cte_real(atof($<stringValue>1), numeroPolaca);
 					numeroPolaca++;

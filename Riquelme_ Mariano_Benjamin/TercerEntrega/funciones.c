@@ -30,6 +30,7 @@ int existe_simbolo(char * comp);
 int verificar_asignacion(char * valor);
 int existe_between = 0;
 int etiquetas[50];
+char * ultima_expresion;
 
 //funciones polaca inversa
 void crearPolaca();
@@ -55,7 +56,8 @@ void generarDataAssembler();
 void generarCODEAssembler();
 void generarETFinAssembler();
 int esOperador(char *simbolo);
-
+void intercambiarOr(int vecOr, int _swapCel);
+void invertirCondicion(int _polOr);
 //funciones complementarias
 char* concat(const char *s1, const char *s2);
 char* conversorComparadorAssem(char* comparador);
@@ -146,6 +148,25 @@ void guardar_variables_ts(){
       }
     }
   }
+}
+
+void intercambiarOr(int vecOr, int _swapCel){
+	char cadenaAux[3];
+	char cadenaSwap[3];
+	
+	strcpy(cadenaAux, gci[vecOr].simbolo);
+	printf("1 OK");
+	strcpy(cadenaSwap, gci[_swapCel].simbolo);
+	printf("2 OK");
+	strcpy(gci[vecOr].simbolo, cadenaSwap);
+	printf("3 OK");
+	strcpy(gci[_swapCel].simbolo, cadenaAux);
+	printf("4 OK");
+}
+void invertirCondicion(int _polOr){
+	char *cadena = negarComparador(gci[_polOr].simbolo);
+	printf("valor obtenido: %s", cadena);
+	strcpy(gci[_polOr].simbolo, cadena);
 }
 
 void crearTabla(){
