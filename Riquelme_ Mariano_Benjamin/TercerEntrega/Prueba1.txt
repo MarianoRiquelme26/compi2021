@@ -1,2 +1,2 @@
-DIM [ a,b,c,d,e,f,z,z1] AS [ integer,integer, integer,integer,integer,integer,integer]
+DIM [ a,b,c,d,e,f,z] AS [ integer,integer, integer,integer,integer,integer,integer]
 z:= a + b * c - d / (e * f) + 20

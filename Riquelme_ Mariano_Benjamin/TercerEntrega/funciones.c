@@ -29,6 +29,7 @@ void guardar_ts();
 int existe_simbolo(char * comp);
 int verificar_asignacion(char * valor);
 int existe_between = 0;
+int falgCicloEspecial = 0;
 int etiquetas[50];
 char * ultima_expresion;
 
@@ -517,6 +518,8 @@ void generarDataAssembler(){
 		fprintf(fileAssembler,"%-30s\tdd\t\t%s\t\t;Constante en formato %s;\n",ts[i].nombre,ts[i].valor,ts[i].tipo_dato);
 	}
 	i = 0;
+	if(falgCicloEspecial == 1)
+		fprintf(fileAssembler,"@auxCE\t \t \t \t\tdd\t\t?\t\t;Variable auxiliar para ciclo especial\n");
 	if(contVarAux> -1)
 		for(i;i<=contVarAux;i++)
 			fprintf(fileAssembler,"@aux%-30d\tdd\t\t?\t\t;Variable auxiliar\n",i);

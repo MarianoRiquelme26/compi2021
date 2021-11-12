@@ -33,6 +33,7 @@ int _polOr = 0;
 int _swapOr = 0;	
 int _swapCel = 0;	
 int valorIn = 0;
+int _cantElem = 0;
 
 
 %}
@@ -531,45 +532,34 @@ listat : listat COMA TIPO
 lista : lista COMA factor {printf("\n---------------------->lista");_contLong++;}
 		| factor {printf("\n---------------------->lista - factor");};
 		
-ciclo_especial : WHILEE {insertar_en_polaca_operador("0", numeroPolaca);numeroPolaca++; 
-						 insertar_en_polaca_operador("ice", numeroPolaca);numeroPolaca++;
-						 insertar_en_polaca_operador(":=", numeroPolaca);numeroPolaca++;
-						 insertar_en_polaca_operador("ET", numeroPolaca);
-						 //insertar_en_polaca_etiqueta_apilar(numeroPolaca);numeroPolaca++;
-						 ponerEnPila(pila, numeroPolaca);numeroPolaca++;
-						 insertar_en_polaca_operador("ice", numeroPolaca);numeroPolaca++;
-						 iterador = 0;
-
-						 _aux++;
-						 }
-				 ID {
+ciclo_especial : WHILEE {insertar_en_polaca_etiqueta_apilar(numeroPolaca); numeroPolaca++;}
+				 ID {if(valorIn == 0){strcpy(_auxID,yylval.stringValue); valorIn = 1;}}/*
 				     
 					 strcpy(_auxID,yylval.stringValue);
+					 insertar_en_polaca_id(_auxID, numeroPolaca);
+					 numeroPolaca++;
 					 //insertar_en_polaca_id(_auxID, numeroPolaca);
 					 printf("\nvariable a buscar: %s",_auxID);
 					//numeroPolaca++;
-					 _aux++;}
-				 IN CORA lista_expre
-				 CORC {//desapilar_e_insertar_en_celda(numeroPolaca+2);
-						
-						 
-						char str[30];
-						itoa(_auxContador,str,10);
-					insertar_en_polaca_operador(str, numeroPolaca);numeroPolaca++;
-					 _aux = -2;_auxContador = 0;
-					 insertar_en_polaca_operador("CMP", numeroPolaca);numeroPolaca++;
-					 insertar_en_polaca_operador("BGT", numeroPolaca);numeroPolaca++;
-					 //desapilar_e_insertar_en_celda(numeroPolaca);
-					 //desapilar_e_insertar_en_celda(numeroPolaca+2);
-					 //insertar_en_polaca_salto_condicion(numeroPolaca);
-					 //numeroPolaca += 2;
-					 ponerEnPila(pila, numeroPolaca);numeroPolaca++;
-					 }
-			     DO programa {insertar_en_polaca_operador("1", numeroPolaca);numeroPolaca++; 
-						 insertar_en_polaca_operador("ice", numeroPolaca);numeroPolaca++;
-						 insertar_en_polaca_operador("+", numeroPolaca);numeroPolaca++;
-						 insertar_en_polaca_operador("ice", numeroPolaca);numeroPolaca++;
-						 insertar_en_polaca_operador(":=", numeroPolaca);numeroPolaca++;}
+					 _aux++;}*/
+				 IN CORA lista_expre {insertar_en_polaca_id("@aux",numeroPolaca);
+								numeroPolaca++;
+								insertar_en_polaca_operador(":=", numeroPolaca);
+								numeroPolaca++;
+								insertar_en_polaca_operador(_auxID, numeroPolaca);
+								numeroPolaca++;
+								insertar_en_polaca_operador("CMP", numeroPolaca);
+								numeroPolaca++;
+								strcpy(operadorAux,"==");
+								int i;
+								for(i = 0; i< _cantElem; i++){
+								desapilar_e_insertar_en_celda(numeroPolaca+2);}
+								_cantElem = 0;
+								insertar_en_polaca_salto_condicion(operadorAux, numeroPolaca, 0);
+								numeroPolaca += 2;
+								}
+				 CORC 
+			     DO programa 
 				 ENDWHILE {printf("\n---------------------->ciclo especial");
 				 desapilar_e_insertar_en_celda(numeroPolaca+2);
 				 insertar_bi_desapilar(numeroPolaca);numeroPolaca += 2;
@@ -583,11 +573,22 @@ lista_expre : lista_expre COMA{
 									_auxContador++;
 									_aux = 0;
 								}
-									
-		
+								falgCicloEspecial = 1;
+								insertar_en_polaca_id("@auxCE",numeroPolaca);
+								numeroPolaca++;
+								insertar_en_polaca_operador(":=", numeroPolaca);
+								numeroPolaca++;
+								insertar_en_polaca_operador(_auxID, numeroPolaca);
+								numeroPolaca++;
+								insertar_en_polaca_operador("CMP", numeroPolaca);
+								numeroPolaca++;
+								strcpy(operadorAux,"!=");
+								insertar_en_polaca_salto_condicion(operadorAux, numeroPolaca, 0);
+								numeroPolaca += 2;
+								_cantElem++;
 							}	
 			expresion {printf("\n---------------------->lista de expresiones ");}
-			| expresion {printf("\n---------------------->expresion - inicio lista");}
+			| expresion {printf("\n---------------------->expresion - inicio lista"); }
 			;
 
 %%
