@@ -551,14 +551,14 @@ void generarCODEAssembler(int cantidad){
   for(i;i< cantidad;i++){
 	 if(strcmp(gci[i].simbolo,"CMP") == 0){
 		//fprintf(fileAssembler," \n;INICIO DE COMPARACION indice: %d\n",i+10);
-		fprintf(fileAssembler,"\n ;COMPARACION\n");
+		//fprintf(fileAssembler,"\n ;COMPARACION\n");
 		sacar_de_pila(&pVariables,&aux2);
 		sacar_de_pila(&pVariables,&aux1);
-		fprintf(fileAssembler, " fld %s\n",aux1);
-        fprintf(fileAssembler, " fld %s\n",aux2);
-        fprintf(fileAssembler, " fcomp\n");
-        fprintf(fileAssembler, " fstsw ax\n");
-        fprintf(fileAssembler, " sahf\n");
+		fprintf(fileAssembler, "\n fld %s",aux1);
+        fprintf(fileAssembler, "\n fld %s",aux2);
+        fprintf(fileAssembler, "\n fcomp");
+        fprintf(fileAssembler, "\n fstsw ax");
+        fprintf(fileAssembler, "\n sahf");
 		i++;
 		/*char puntSim[10];
 		char* puntSim2;
@@ -708,8 +708,12 @@ void generarCODEAssembler(int cantidad){
 		fprintf(fileAssembler,"\n fild %s",aux1);
 		fprintf(fileAssembler,"\n fstp %s",gci[i].simbolo);
 		//fprintf(fileAssembler,"\n ffree");
-		tope_pila(&pVariables,&aux1);
-		printf("despues de asingar: tope de pila:%s\n",aux1);
+		//tope_pila(&pVariables,&aux1);
+		//printf("despues de asingar: tope de pila:%s\n",aux1);
+		if(strcmp(gci[i].simbolo,"@auxCE") == 0)
+		{printf("guardando el aux para ciclo especial par ala comparacion:%s\n",gci[i].simbolo);
+			poner_en_pila(&pVariables,gci[i].simbolo);
+		}
 		i ++;
 		printf("lo siguiente que viene en la polaca es: %s\n",gci[i].simbolo);
 		}

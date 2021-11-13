@@ -45,13 +45,11 @@ mov es,ax;
 
  fild @aux0
  fstp @auxCE
- ;COMPARACION
- fld ET
+ fld @auxCE
  fld i
  fcomp
  fstsw ax
- sahf
- JE ETIQUETA_80
+ sahf JE ETIQUETA_80
 
  fild t
  fild _8 
@@ -60,13 +58,11 @@ mov es,ax;
 
  fild @aux1
  fstp @auxCE
- ;COMPARACION
- fld 80
+ fld @auxCE
  fld i
  fcomp
  fstsw ax
- sahf
- JE ETIQUETA_80
+ sahf JE ETIQUETA_80
 
  fild x
  fild _1
@@ -75,13 +71,11 @@ mov es,ax;
 
  fild @aux2
  fstp @auxCE
- ;COMPARACION
- fld 80
+ fld @auxCE
  fld i
  fcomp
  fstsw ax
- sahf
- JE ETIQUETA_80
+ sahf JE ETIQUETA_80
 
  fild y
  fild x
@@ -95,13 +89,11 @@ mov es,ax;
 
  fild @aux4
  fstp @auxCE
- ;COMPARACION
- fld 80
+ fld @auxCE
  fld i
  fcomp
  fstsw ax
- sahf
- JE ETIQUETA_80
+ sahf JE ETIQUETA_80
 
  fild z
  fild _8
@@ -110,13 +102,11 @@ mov es,ax;
 
  fild @aux5
  fstp @auxCE
- ;COMPARACION
- fld 80
+ fld @auxCE
  fld i
  fcomp
  fstsw ax
- sahf
- JE ETIQUETA_80
+ sahf JE ETIQUETA_80
 
  fild x
  fild _5
@@ -125,13 +115,11 @@ mov es,ax;
 
  fild @aux6
  fstp @auxCE
- ;COMPARACION
- fld 80
+ fld @auxCE
  fld i
  fcomp
  fstsw ax
- sahf
- JE ETIQUETA_80
+ sahf JE ETIQUETA_80
 
  fild q
  fild _6
@@ -150,13 +138,11 @@ mov es,ax;
 
  fild @aux9
  fstp @aux
- ;COMPARACION
  fld 80
  fld i
  fcomp
  fstsw ax
- sahf
- JNE ETIQUETA_87
+ sahf JNE ETIQUETA_87
 
 
  ETIQUETA_80 :
