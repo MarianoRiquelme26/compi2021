@@ -60,7 +60,7 @@ ID	({DIGITO}|{LETRA})*
 CTE	{DIGITO}+
 CTE_R {DIGITO}+{PUNTO}{DIGITO}*|{DIGITO}*{PUNTO}{DIGITO}+
 CAR_ESP			"@"|"%"|":"|" "|"~"|"¿"|"?"|"="|"@"|"!"|"¡"|"_"|"%"|" "|"."|"|"|","|"{"|"}"|"["|"]"|":"|"\""|"#"|"$"|"*"|"\/"|"\\"|"¬"|"+"|"-"|";"
-CTE_S		{COMILLA}.({CAR_ESP}|{DIGITO}|{LETRA})*.{COMILLA}
+CTE_S		{COMILLA}({CAR_ESP}|{DIGITO}|{LETRA})*{COMILLA}
 COM_ABRE		"*/"
 COM_CIER      	"/*"
 COMEN		{COM_ABRE}.({CAR_ESP}*|{DIGITO}*|{LETRA}*)*.{COM_CIER}
