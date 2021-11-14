@@ -1,0 +1,5 @@
+DIM [ ac,z,a,b,z1] AS [ integer,integer, integer,integer,integer]
+IF ( ac > 1)THENS
+	z:= a + b
+ENDIF
+z1:= 1

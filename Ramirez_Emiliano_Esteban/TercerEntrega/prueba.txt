@@ -1,0 +1,4 @@
+DIM [ a,b,c,d,f] AS [ integer,real,integer,integer ,integer]
+
+b:= 1
+

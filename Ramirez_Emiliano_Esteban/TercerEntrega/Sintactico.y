@@ -99,7 +99,7 @@ startSimbol : /*{/*
 			crearPolaca();
 
 			}*/
-			programa {printf("\n---------------------->****************** START DETECTADO");
+			programa {/*printf("\n---------------------->****************** START DETECTADO");*/
 			//guardar_ts();
 			//guardar_gci(numeroPolaca);
 			//freeArray(&array_tipos_variables);
@@ -113,19 +113,19 @@ startSimbol : /*{/*
 			
 			generaAssembler(numeroPolaca);};
 
-programa : programa sentencia {printf("\n----------------------"); /*generaAssembler(numeroPolaca);*/}
-		 |  sentencia  {printf("\n----------------------");/*generaAssembler(numeroPolaca);*/};
+programa : programa sentencia {/*printf("\n----------------------");*/ /*generaAssembler(numeroPolaca);*/}
+		 |  sentencia  {/*printf("\n----------------------");*//*generaAssembler(numeroPolaca);*/};
 		
 		
-sentencia : asignacion {printf("\n---------------------->sentencia - asignacion");}
-		  | salida {printf("\n---------------------->sentencia - salida");}
-		  | entrada {printf("\n---------------------->sentencia - entrada");}
-		  | iteracion {printf("\n---------------------->sentencia - iteracion");}
-		  | seleccion {printf("\n---------------------->sentencia - seleccion");}
-		  |	declaracion {printf("\n---------------------->sentencia - declaracion");}
-		  | COMEN {printf("\n");}
+sentencia : asignacion {/*printf("\n---------------------->sentencia - asignacion");*/}
+		  | salida {/*printf("\n---------------------->sentencia - salida");*/}
+		  | entrada {/*printf("\n---------------------->sentencia - entrada");*/}
+		  | iteracion {/*printf("\n---------------------->sentencia - iteracion");*/}
+		  | seleccion {/*printf("\n---------------------->sentencia - seleccion");*/}
+		  |	declaracion {/*printf("\n---------------------->sentencia - declaracion");*/}
+		  | COMEN {/*printf("\n");*/}
 		  | ID OP_ASIG LONG{_contLong = 0;_aux = 0;}
-		  PARA lista PARC { printf("\n---------------------->sentencia - tema especial - long");
+		  PARA lista PARC { /*printf("\n---------------------->sentencia - tema especial - long");*/
 							char str[30];
 							itoa(_contLong+1,str,10);
 							char str2[40] = "_";
@@ -140,10 +140,10 @@ sentencia : asignacion {printf("\n---------------------->sentencia - asignacion"
 							ivecLong++;
 							vecLong[ivecLong] = _contLong+1;
 							}
-		  | ciclo_especial {printf("\n---------------------->sentencia - tema especial - cilco especial");}
-		  | ENTER {printf("\n");};
+		  | ciclo_especial {/*printf("\n---------------------->sentencia - tema especial - cilco especial");*/}
+		  | ENTER {/*printf("\n");*/};
 
-asignacion : ID OP_ASIG expresion {	printf("\n---------------------->asignacion donde rompe");									
+asignacion : ID OP_ASIG expresion {	//printf("\n---------------------->asignacion donde rompe");									
 									insertar_en_polaca_id($<stringValue>1, numeroPolaca);
 									numeroPolaca++;
 									insertar_en_polaca_operador(":=", numeroPolaca);
@@ -165,7 +165,7 @@ asignacion : ID OP_ASIG expresion {	printf("\n---------------------->asignacion 
 									} 
 			
 			}/*
-			|ID OP_ASIG CTE_S {	printf("\n---------------------->asignacion constante string donde no rompe");	
+			|ID OP_ASIG CTE_S {	//printf("\n---------------------->asignacion constante string donde no rompe");	
 								guardar_cte_string($<stringValue>3);	
 								ultima_expresion = "string";	
 								switch(verificar_asignacion($<stringValue>1)){	
@@ -187,14 +187,14 @@ asignacion : ID OP_ASIG expresion {	printf("\n---------------------->asignacion 
 				}	*/
 			;
 		
-salida :    DISPLAY factor {printf("\n---------------------->salida - display");
+salida :    DISPLAY factor {//printf("\n---------------------->salida - display");
 					insertar_en_polaca_id($<stringValue>2, numeroPolaca);
 					numeroPolaca++;
 					insertar_en_polaca_operador("DISPLAY", numeroPolaca);
 					numeroPolaca++;
 					}
-		  | DISPLAY CTE_S {printf("\n---------------------->salida - display");
-					printf("\n---------------------->factor cte STRING");
+		  | DISPLAY CTE_S {//printf("\n---------------------->salida - display");
+					//printf("\n---------------------->factor cte STRING");
 					strcpy(idAux,yylval.stringValue);
 					char mensaje[50] = "_";
 					strcat(mensaje,idAux);
@@ -206,7 +206,7 @@ salida :    DISPLAY factor {printf("\n---------------------->salida - display");
 					numeroPolaca++;
 					};
 		  
-entrada:    GET ID {printf("\n---------------------->entrada");
+entrada:    GET ID {//printf("\n---------------------->entrada");
 					insertar_en_polaca_id($<stringValue>2, numeroPolaca);
 					numeroPolaca++;
 					insertar_en_polaca_operador("GET", numeroPolaca);
@@ -214,7 +214,7 @@ entrada:    GET ID {printf("\n---------------------->entrada");
 
 expresion : expresion OP_SUM termino {	if(_aux == -2)
 										{
-										printf("\n---------------------->expresion - SUM: agrego @aux%d",contVarAux+1);
+										//printf("\n---------------------->expresion - SUM: agrego @aux%d",contVarAux+1);
 										insertar_en_polaca_operador("+", numeroPolaca);
 										numeroPolaca++;
 										contVarAux+=1;
@@ -224,17 +224,17 @@ expresion : expresion OP_SUM termino {	if(_aux == -2)
 		  | expresion OP_RES termino {
 										if( _aux == -2 )
 										{			  
-											printf("\n---------------------->expresion - RES: agrego @aux%d",contVarAux+1);
+											//printf("\n---------------------->expresion - RES: agrego @aux%d",contVarAux+1);
 											insertar_en_polaca_operador("-", numeroPolaca);
 											numeroPolaca++;
 											contVarAux+=1;
 										}
 		   }
-		  | termino {printf("\n---------------------->expresion - termino");};
+		  | termino {/*printf("\n---------------------->expresion - termino");*/};
 		  
 iteracion: WHILE {insertar_en_polaca_etiqueta_apilar(numeroPolaca); numeroPolaca++;}
 		   condicion START programa {desapilar_e_insertar_en_celda(numeroPolaca+2);}
-		   END {printf("\n---------------------->iteracion - while");
+		   END {//printf("\n---------------------->iteracion - while");
 		        insertar_bi_desapilar(numeroPolaca);numeroPolaca += 2;
 				};
 
@@ -275,7 +275,7 @@ seleccion :   IF condicion {vecOr2[1] = numeroPolaca;
 			programa
 			  
 
-			  ENDIF {printf("\n---------------------->seleccion - if");
+			  ENDIF {//printf("\n---------------------->seleccion - if");
 								   //desapilar_e_insertar_en_celda(numeroPolaca);
 								   while(cantcomp != 0){
 												vecOr[2] = numeroPolaca;
@@ -312,7 +312,7 @@ seleccion :   IF condicion {vecOr2[1] = numeroPolaca;
 			;
 
 condicion :   PARA condicion {cantcomp++;}
-			  AND comparacion PARC {printf("\n---------------------->condicion");}
+			  AND comparacion PARC {/*printf("\n---------------------->condicion");*/}
 			| PARA condicion 
 			{
 			if(_or == 1){
@@ -324,9 +324,9 @@ condicion :   PARA condicion {cantcomp++;}
 			OR {_or = 1; _polOr = numeroPolaca-2;  printf("la condicion OR esta en %d", _polOr);//vecOr2[0] = 1;
 
 			}
-			 comparacion PARC {printf("\n---------------------->condicion"); invertirCondicion(_polOr);}
-			| PARA NOT {_not = 1;} condicion PARC	{printf("\n---------------------->condicion");}
-			| comparacion 	{	printf("\n---------------------->condicion");								
+			 comparacion PARC {/*printf("\n---------------------->condicion");*/ invertirCondicion(_polOr);}
+			| PARA NOT {_not = 1;} condicion PARC	{/*printf("\n---------------------->condicion");*/}
+			| comparacion 	{	//printf("\n---------------------->condicion");								
 			};
 			
 comparacion: expresion comparador expresion {
@@ -339,7 +339,7 @@ comparacion: expresion comparador expresion {
 											 vecOr2[0] = numeroPolaca;
 											 numeroPolaca += 2;
 											 }
-			|PARA expresion comparador expresion PARC{printf("\n---------------------->3 - condicion");
+			|PARA expresion comparador expresion PARC{//printf("\n---------------------->3 - condicion");
 													  insertar_en_polaca_operador("CMP", numeroPolaca);
 													  numeroPolaca++;
 													  insertar_en_polaca_salto_condicion(operadorAux, numeroPolaca,_not);
@@ -348,33 +348,33 @@ comparacion: expresion comparador expresion {
 													  numeroPolaca += 2;
 													  }
 
-comparador: OP_MAYORIGUAL       {printf("\n---------------------->OP_MAYORIGUAL");
+comparador: OP_MAYORIGUAL       {//printf("\n---------------------->OP_MAYORIGUAL");
 												
 									strcpy(operadorAux,">=");
 
 								}
-    | OP_MENORIGUAL         {printf("\n---------------------->OP_MENORIGUAL");
+    | OP_MENORIGUAL         {//printf("\n---------------------->OP_MENORIGUAL");
 
 									strcpy(operadorAux,"<=");
 
 								}
-    | OP_IGUAL              {printf("\n---------------------->OP_IGUAL");
+    | OP_IGUAL              {//printf("\n---------------------->OP_IGUAL");
 
 									strcpy(operadorAux,"==");
 
 		
 								}
-    | OP_MAYOR             {printf("\n---------------------->OP_MAYOR");
+    | OP_MAYOR             {//printf("\n---------------------->OP_MAYOR");
 
 									strcpy(operadorAux,">");
 
 								}
-    | OP_MENOR              {printf("\n---------------------->OP_MENOR");
+    | OP_MENOR              {//printf("\n---------------------->OP_MENOR");
 
 									strcpy(operadorAux,"<");
 
 								}
-    | OP_DISTINTO            {printf("\n---------------------->OP_DISTINTO");
+    | OP_DISTINTO            {//printf("\n---------------------->OP_DISTINTO");
 	
 									strcpy(operadorAux,"!=");
 
@@ -387,7 +387,7 @@ termino   : termino OP_MUL factor {//CON LA BANDERA _aux INDICO QUE NO ESTOY LEV
 								   //DEL CICLO ESPECIAL Y TENGO QUE TENERLOS EN CUENTA
 									if( _aux == -2 )
 									{
-										printf("\n---------------------->MULTIPLICACION: agrego @aux%d",contVarAux+1);
+										//printf("\n---------------------->MULTIPLICACION: agrego @aux%d",contVarAux+1);
 										insertar_en_polaca_operador("*", numeroPolaca);
 										numeroPolaca++;
 										/*GENERO LAS VARAIBLES AUXILIARES A USAR
@@ -396,7 +396,7 @@ termino   : termino OP_MUL factor {//CON LA BANDERA _aux INDICO QUE NO ESTOY LEV
 										itoa(contVarAux,str,10);
 										//strcat(str,'\0');
 										strcat(varAuxi,str);
-										printf("\t %s\n",varAuxi);
+										/*printf("\t %s\n",varAuxi);
 										insertArray(&array_nombres_variables,varAuxi);
 										//conadorDeclaracionesV += 1;
 										insertArray(&array_tipos_variables,"real");
@@ -409,7 +409,7 @@ termino   : termino OP_MUL factor {//CON LA BANDERA _aux INDICO QUE NO ESTOY LEV
 		  | termino OP_DIV factor {
 									if( _aux == -2 )
 									{
-										printf("\n---------------------->DIVISION: agrego @aux%d",contVarAux+1);
+										//printf("\n---------------------->DIVISION: agrego @aux%d",contVarAux+1);
 										insertar_en_polaca_operador("/", numeroPolaca);
 										numeroPolaca++;
 										/*GENERO LAS VARAIBLES AUXILIARES A USAR
@@ -417,7 +417,7 @@ termino   : termino OP_MUL factor {//CON LA BANDERA _aux INDICO QUE NO ESTOY LEV
 										char str[30];
 										itoa(contVarAux,str,10);
 										strcat(varAuxi,str);
-										printf("**********quiero insertar en la tabla de simbolos:%s",varAuxi);
+										/*printf("**********quiero insertar en la tabla de simbolos:%s",varAuxi);
 										insertArray(&array_nombres_variables,varAuxi);
 										conadorDeclaracionesV += 1;
 										insertArray(&array_tipos_variables,"real");
@@ -427,7 +427,7 @@ termino   : termino OP_MUL factor {//CON LA BANDERA _aux INDICO QUE NO ESTOY LEV
 									}
 		  
 		  }
-		  | factor {printf("\n---------------------->termino - factor");};
+		  | factor {/*printf("\n---------------------->termino - factor");*/};
 
 factor :    ID {//printf("\n---------------------->factor - id");
 				if( _aux == -2 )
@@ -458,7 +458,7 @@ factor :    ID {//printf("\n---------------------->factor - id");
 		
 		  | CTE {
 				if( _aux < 0 )
-				{printf("\n---------------------->factor - cte");
+				{//printf("\n---------------------->factor - cte");
 				 char* nombre_cte_int = guardar_cte_int(atoi($<stringValue>1));
 				 ultima_expresion = "integer";
 				 insertar_en_polaca_cte_int(atoi($<stringValue>1), numeroPolaca);
@@ -469,7 +469,7 @@ factor :    ID {//printf("\n---------------------->factor - id");
 				
 		}
 		 |CTE_R {
-					printf("\n---------------------->factor cte real");
+					//printf("\n---------------------->factor cte real");
 					float valor = atof($<stringValue>1);
 					ultima_expresion = "real"; 
 					char* nombre_cte_float = guardar_cte_float(valor);
@@ -478,7 +478,7 @@ factor :    ID {//printf("\n---------------------->factor - id");
 		 }
 		 	 
 		 
-		 | PARA expresion PARC {printf("\n---------------------->factor - expresion");};
+		 | PARA expresion PARC {/*printf("\n---------------------->factor - expresion");*/};
 		 
 declaracion : DIM CORA listav CORC AS CORA listat CORC 
 			{ /*ESTO SE MIGRA ANTES DE CREAR EL ASSEMBLER
@@ -489,7 +489,7 @@ declaracion : DIM CORA listav CORC AS CORA listat CORC
 				
 				initArray(&array_nombres_variables);
 				initArray(&array_tipos_variables);
-				printf("\n---------------------->TERMINE GUARDANDO LA TABLA DE SIMBOLOS");
+				//printf("\n---------------------->TERMINE GUARDANDO LA TABLA DE SIMBOLOS");
 				int controlDeclaracion = conadorDeclaracionesV - conadorDeclaracionesT;
 				conadorDeclaracionesV = 0;
 				conadorDeclaracionesT = 0;
@@ -503,34 +503,34 @@ declaracion : DIM CORA listav CORC AS CORA listat CORC
 
 listav : listav COMA ID 
 		{
-			printf("\n---------------------->lista de variables");
+			//printf("\n---------------------->lista de variables");
 			insertArray(&array_nombres_variables,$<stringValue>3);
 			conadorDeclaracionesV += 1;
 		}
 		| ID 
 		{	
-			printf("\n---------------------->lista de variables - id");
+			//printf("\n---------------------->lista de variables - id");
 			insertArray(&array_nombres_variables,$<stringValue>1);
 			conadorDeclaracionesV += 1;
 		}
 		;
 listat : listat COMA TIPO 
 		{
-			printf("\n---------------------->lista tipos");
-			printf("********* tipo %s *********",$<stringValue>3);
+			//printf("\n---------------------->lista tipos");
+			//printf("********* tipo %s *********",$<stringValue>3);
 			insertArray(&array_tipos_variables,$<stringValue>3);
 			conadorDeclaracionesT += 1;
 		}
 		| TIPO 
 		{
-			printf("\n---------------------->lista TIPOS - corte");
-			printf("********* tipo %s *********",$<stringValue>1);
+			//printf("\n---------------------->lista TIPOS - corte");
+			//printf("********* tipo %s *********",$<stringValue>1);
 			insertArray(&array_tipos_variables,$<stringValue>1);
 			conadorDeclaracionesT += 1;
 		};
 		
-lista : lista COMA factor {printf("\n---------------------->lista");_contLong++;}
-		| factor {printf("\n---------------------->lista - factor");};
+lista : lista COMA factor {/*printf("\n---------------------->lista");*/_contLong++;}
+		| factor {/*printf("\n---------------------->lista - factor");*/};
 		
 ciclo_especial : WHILEE {insertar_en_polaca_etiqueta_apilar(numeroPolaca); numeroPolaca++;}
 				 ID {if(valorIn == 0){strcpy(_auxID,yylval.stringValue); valorIn = 1;}}/*
@@ -539,7 +539,7 @@ ciclo_especial : WHILEE {insertar_en_polaca_etiqueta_apilar(numeroPolaca); numer
 					 insertar_en_polaca_id(_auxID, numeroPolaca);
 					 numeroPolaca++;
 					 //insertar_en_polaca_id(_auxID, numeroPolaca);
-					 printf("\nvariable a buscar: %s",_auxID);
+					 //printf("\nvariable a buscar: %s",_auxID);
 					//numeroPolaca++;
 					 _aux++;}*/
 				 IN CORA lista_expre {insertar_en_polaca_id("@aux",numeroPolaca);
@@ -560,7 +560,7 @@ ciclo_especial : WHILEE {insertar_en_polaca_etiqueta_apilar(numeroPolaca); numer
 								}
 				 CORC 
 			     DO programa 
-				 ENDWHILE {printf("\n---------------------->ciclo especial");
+				 ENDWHILE {//printf("\n---------------------->ciclo especial");
 				 desapilar_e_insertar_en_celda(numeroPolaca+2);
 				 insertar_bi_desapilar(numeroPolaca);numeroPolaca += 2;
 				 // desapilar_e_insertar_en_celda(numeroPolaca);
@@ -587,8 +587,8 @@ lista_expre : lista_expre COMA{
 								numeroPolaca += 2;
 								_cantElem++;
 							}	
-			expresion {printf("\n---------------------->lista de expresiones ");}
-			| expresion {printf("\n---------------------->expresion - inicio lista"); }
+			expresion {/*printf("\n---------------------->lista de expresiones ");*/}
+			| expresion {/*printf("\n---------------------->expresion - inicio lista");*/ }
 			;
 
 %%

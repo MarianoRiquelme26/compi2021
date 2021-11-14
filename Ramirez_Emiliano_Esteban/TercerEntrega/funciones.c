@@ -128,17 +128,17 @@ int ivecLong = -1;;
 
 void guardar_variables_ts(){
   int i = 0;
-   printf("\nGUARDANDO TABLA DE SIMBOLOS..............CANT ELE: %d.....\n",array_nombres_variables.used);
+   //printf("\nGUARDANDO TABLA DE SIMBOLOS..............CANT ELE: %d.....\n",array_nombres_variables.used);
   for(i; i<array_nombres_variables.used; i++){
     if(cant_elem_ts<=TAM_TABLA && !existe_simbolo(array_nombres_variables.array[i])){
-	   printf("valor en la tabla: %s, indice: %d\n",array_nombres_variables.array[i],i);
+	   //printf("valor en la tabla: %s, indice: %d\n",array_nombres_variables.array[i],i);
       strcpy(ts[cant_elem_ts].nombre,array_nombres_variables.array[i]);
       ts[cant_elem_ts].longitud = 0;
       strcpy(ts[cant_elem_ts].tipo_dato,array_tipos_variables.array[i]);
       strcpy(ts[cant_elem_ts].valor,"-");
       cant_elem_ts++;
     }
-    else{  printf("Entro al else valor en la tabla: %s, indice: %d\n",array_nombres_variables.array[i],i);
+    else{ // printf("Entro al else valor en la tabla: %s, indice: %d\n",array_nombres_variables.array[i],i);
       if(cant_elem_ts>TAM_TABLA){
         printf("TABLA DE SIMBOLOS LLENA.\n");
         exit(1);
@@ -156,17 +156,17 @@ void intercambiarOr(int vecOr, int _swapCel){
 	char cadenaSwap[3];
 	
 	strcpy(cadenaAux, gci[vecOr].simbolo);
-	printf("1 OK");
+	//printf("1 OK");
 	strcpy(cadenaSwap, gci[_swapCel].simbolo);
-	printf("2 OK");
+	//printf("2 OK");
 	strcpy(gci[vecOr].simbolo, cadenaSwap);
-	printf("3 OK");
+	//printf("3 OK");
 	strcpy(gci[_swapCel].simbolo, cadenaAux);
-	printf("4 OK");
+	//printf("4 OK");
 }
 void invertirCondicion(int _polOr){
 	char *cadena = negarComparador(gci[_polOr].simbolo);
-	printf("valor obtenido: %s", cadena);
+	//printf("valor obtenido: %s", cadena);
 	strcpy(gci[_polOr].simbolo, cadena);
 }
 
@@ -545,9 +545,9 @@ void generarCODEAssembler(int cantidad){
   int i = 0;
   //LO QUE TENGO QUE HACER ACA, ES IR RECORRIENDO LA POLACA DESDE EL PRINCIPIO E IR ACUMULANDO EN LOS REGISTROS LOS OPERANDOS, Y CUANDO ENCUENTRO UNA OPERACION DESAPILO..
   //*VOY A ARRANCAR ASI, PRIMERO CON LA SUMA, LUEGO CON LAS CONFICIONES Y POR ULTIMO CON LOS WHILE../*
-   printf("\n::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n");
-   printf("\n GENERANDO EL CODIGO DE ASSEMBLER\n");
-   printf("\n::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n");
+   //printf("\n::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n");
+   //printf("\n GENERANDO EL CODIGO DE ASSEMBLER\n");
+   //printf("\n::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n");
   for(i;i< cantidad;i++){
 	 if(strcmp(gci[i].simbolo,"CMP") == 0){
 		//fprintf(fileAssembler," \n;INICIO DE COMPARACION indice: %d\n",i+10);
@@ -576,8 +576,8 @@ void generarCODEAssembler(int cantidad){
 		}
 		
 		fprintf(fileAssembler, " %s\n",auxEqueta);
-		printf("ACA ESTOY DEJANDO LA ETIQUETA Y ME ENCUENTRO EN EL INDICE %d donde tengo: %s\n",i,gci[i].simbolo);
-		printf("GUARDE EN LA PILA DE ETIQUETAS LS SIGUIENTE: %d\n",etiquetas[cantEtiq]);
+		//printf("ACA ESTOY DEJANDO LA ETIQUETA Y ME ENCUENTRO EN EL INDICE %d donde tengo: %s\n",i,gci[i].simbolo);
+		//printf("GUARDE EN LA PILA DE ETIQUETAS LS SIGUIENTE: %d\n",etiquetas[cantEtiq]);
 		  
 	  }
 	   if(strcmp(gci[i].simbolo,"BI") == 0){
@@ -589,8 +589,8 @@ void generarCODEAssembler(int cantidad){
 			cantEtiq++;
 			etiquetas[cantEtiq] = atoi(gci[i].simbolo);
 		}
-		printf("ACA ESTOY DEJANDO LA ETIQUETA Y ME ENCUENTRO EN EL INDICE %d donde tengo: %s\n",i,gci[i].simbolo);
-		printf("GUARDE EN LA PILA DE ETIQUETAS LS SIGUIENTE: %d\n",etiquetas[cantEtiq]);
+		//printf("ACA ESTOY DEJANDO LA ETIQUETA Y ME ENCUENTRO EN EL INDICE %d donde tengo: %s\n",i,gci[i].simbolo);
+		//printf("GUARDE EN LA PILA DE ETIQUETAS LS SIGUIENTE: %d\n",etiquetas[cantEtiq]);
 		  
 	  }
 	  if(strcmp(gci[i].simbolo,"ET") == 0){
@@ -693,7 +693,7 @@ void generarCODEAssembler(int cantidad){
 	 //ponerEnPila_assembler(pila_assembler, 1); printf("apilo con assembler");}
 	    //fprintf(fileAssembler," ;ASGINACION\n");
 		tope_pila(&pVariables,&aux1);
-		printf("antes de asingar: tope de pila:%s\n",aux1);		
+		//printf("antes de asingar: tope de pila:%s\n",aux1);		
 		sacar_de_pila(&pVariables,&aux1);
 		fprintf(fileAssembler,"\n fild %s",aux1);
 		fprintf(fileAssembler,"\n fstp %s",gci[i].simbolo);
@@ -705,11 +705,11 @@ void generarCODEAssembler(int cantidad){
 			poner_en_pila(&pVariables,gci[i].simbolo);
 		}
 		i ++;
-		printf("lo siguiente que viene en la polaca es: %s\n",gci[i].simbolo);
+		//printf("lo siguiente que viene en la polaca es: %s\n",gci[i].simbolo);
 		}
 		
 		if(cantEtiq > -1){
-			printf("\n***************************************\n\tVALIDANDO SI HAY ETIQUETAS: %d\n***************************************\n",i+10);
+			//printf("\n***************************************\n\tVALIDANDO SI HAY ETIQUETAS: %d\n***************************************\n",i+10);
 			int comp = i+10;
 			int j = 0;
 			for(j; j<=cantEtiq; j++){
@@ -721,7 +721,7 @@ void generarCODEAssembler(int cantidad){
 	}
   fprintf(fileAssembler,"\n\n");
   fclose(fileAssembler);
-    printf("\n::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n");
+    printf("\nCODIGO TRADUCIDO A ASSEMBLER EXITOSAMENTE\n");
 }
 
 void generarETFinAssembler(){
