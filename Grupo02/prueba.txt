@@ -1,5 +1,6 @@
-DIM [ cont,promedio,prueba] AS [ integer,real, string]
+DIM [ cont,promedio,prueba,actual,a] AS [ integer,real, string,real,integer]
 DIM [ suma ] AS [ real ]
+DIM [b,c,e] AS [integer,integer,integer]
 */ DIM [ contador,promedio,prueba] AS [ integer,real] /* */ Error para control de declaracion /*
 DISPLAY "Prue"
 */ DISPLAY "Esto es una prueba para que supere la cantidad de 30 caracteres" /* */ Error para control de caracteres/*
@@ -10,7 +11,7 @@ WHILE (cont <= 9) START
 	cont:= cont + 1
 	actual:= (cont/2) 
 	suma:= suma + actual
-	WHILE (cont <= 9) START
+	WHILE (e <= 9) START
 		suma:= suma + actual
 	END
 END
@@ -21,18 +22,18 @@ DISPLAY suma
 DISPLAY "HOLA"
 
 IF (actual > 1 AND actual != 0)THENS
-	DISPLAY "mayo0"
+	DISPLAY "mayor"
 ENDIF
 */ COMENTARIO /*
 IF  (NOT actual < 10 )THEN
-	DISPLAY "mayo1" */ COMENTARIO /* */ COMENTARIO2 /*
+	DISPLAY "mayor" */ COMENTARIO /* */ COMENTARIO2 /*
 	IF  (NOT actual < 10 )THENS
-		DISPLAY "meno2" */ COMENTARIO /* */ COMENTARIO2 /*
+		DISPLAY "menor" */ COMENTARIO /* */ COMENTARIO2 /*
 		GET actual
 	ENDIF
 
 ELSE
-	DISPLAY "mayo3" */ COMENTARIO /* */ COMENTARIO2 /*
+	DISPLAY "mayor" */ COMENTARIO /* */ COMENTARIO2 /*
 	a := long (a,b,c,e)
 
 	WHILEE a IN [ 1+3 , 2+b ] DO
