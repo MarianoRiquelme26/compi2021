@@ -125,7 +125,8 @@ char * ultimo_operador;
 int contadorCteString = 0;
 int contVarAux = -1;
 int vecLong[30];
-int ivecLong = -1;;
+int ivecLong = -1;
+char const_string_sin_espacio[100];
 
 void guardar_variables_ts(){
   int i = 0;
@@ -206,7 +207,16 @@ void guardar_cte_string(char * valor) {
         cant_elem_ts++;
         contadorCteString++;
       }*/
-	  strcpy(ts[cant_elem_ts].nombre,valor);
+	  //AJUSTE PARA SACAR LOS ESPACIOS POR GUION BAJO
+	  strcpy(nombre_constante, valor);
+	  char *sust = nombre_constante;
+	  int i;
+      for(i = 0; i <= strlen(valor)-1; i++) {
+	  if(*sust == ' ')
+		*sust = '_';
+		*sust++;
+	  }
+	  strcpy(ts[cant_elem_ts].nombre,nombre_constante);
       //ts[cant_elem_ts].longitud = strlen(valor);
 	  ts[cant_elem_ts].longitud = strlen(valor)-1;
       strcpy(ts[cant_elem_ts].tipo_dato,"CTE_STRING");
@@ -214,7 +224,8 @@ void guardar_cte_string(char * valor) {
 	  strncpy(ts[cant_elem_ts].valor, valor+1, strlen(valor)-1);
       cant_elem_ts++;
       contadorCteString++;
-	  
+	  strcpy(const_string_sin_espacio,nombre_constante);
+	  //return nombre_constante;
 
 }
 
@@ -561,8 +572,8 @@ void generarCODEAssembler(int cantidad){
 	
   //int etiquetas[50];
   int cantEtiq = -1;
-  char aux1[50];
-  char aux2[50];
+  char aux1[100];
+  char aux2[100];
   fileAssembler = fopen(ASSEMBLER,"a");
   fprintf(fileAssembler,".CODE\nSTART:\nmov AX,@DATA\nmov DS,AX\nmov es,ax;") ;
   fprintf(fileAssembler,"\n\n");
@@ -639,7 +650,7 @@ void generarCODEAssembler(int cantidad){
 		//fprintf(fileAssembler,"\n int 21h");
 		//SE REEMPLAZA POR LA FUNCION DEL PROFE, tengo que ver que tipo es
 		char * paux = aux1;
-		//printf("--------------------------------------------------valor constante %c\n",*paux);
+		printf("--------------------------------------------------valor constante %s\n",aux1);
 		if(*paux == '_'){
 			fprintf(fileAssembler,"\n newLine 1");
 			fprintf(fileAssembler,"\n DisplayString %s,2\n",aux1);

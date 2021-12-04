@@ -203,7 +203,7 @@ salida :    DISPLAY factor {printf("\n---------------------->salida - display");
 					strcat(mensaje,idAux);
 					guardar_cte_string(mensaje);
 					//insertar_en_polaca_id($<stringValue>2, numeroPolaca); veo si me inserta bien 
-					insertar_en_polaca_id(mensaje, numeroPolaca);
+					insertar_en_polaca_id(const_string_sin_espacio, numeroPolaca);
 					numeroPolaca++;
 					insertar_en_polaca_operador("DISPLAY", numeroPolaca);
 					numeroPolaca++;

@@ -3,6 +3,7 @@
 #define PILA_LLENA -1
 #define PILA_VACIA 0
 #define TODO_OK 1
+#define TAM_BYTES 30
 
 typedef struct s_nodo
 {
@@ -46,8 +47,8 @@ int poner_en_pila(t_pila *pp, const void *dato)
     t_nodo *nue = (t_nodo *)malloc(sizeof(t_nodo));
     if (!nue)
         return PILA_LLENA;
-    nue->dato = malloc(10);
-    memcpy(nue->dato, dato, 10);
+    nue->dato = malloc(TAM_BYTES);
+    memcpy(nue->dato, dato, TAM_BYTES);
     nue->psig = *pp;
     *pp = nue;
 
@@ -59,7 +60,7 @@ int sacar_de_pila(t_pila *pp, void *dato)
     t_nodo *aux = *pp;
     if (!*pp)
         return PILA_VACIA;
-    memcpy(dato, aux->dato, 10);
+    memcpy(dato, aux->dato, TAM_BYTES);
     *pp = aux->psig;
     free(aux->dato);
     free(aux);
@@ -70,7 +71,7 @@ int tope_pila(const t_pila *pp, void *dato)
 {
     if (!*pp)
         return PILA_VACIA;
-    memcpy(dato, (*pp)->dato, 10);
+    memcpy(dato, (*pp)->dato, TAM_BYTES);
     return TODO_OK;
 }
 
