@@ -6,10 +6,7 @@ a:= 1
 z:= long (a,b)
 b:= 2
 a:= long (a,b,a,a,a)
-DISPLAY "prueba 1 me gusta"
-WHILEE a IN [ 2+3 , 2+b ] DO
-		z:= a + b
-ENDWHILE
+DISPLAY "prueba 1"
 DISPLAY "prueba 2"
 WHILE (a <= 2) START
 	b := b + 1

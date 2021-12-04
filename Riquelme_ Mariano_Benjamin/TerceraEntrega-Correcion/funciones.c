@@ -584,7 +584,7 @@ void generarCODEAssembler(int cantidad){
    //printf("\n::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n");
    //printf("\n GENERANDO EL CODIGO DE ASSEMBLER\n");
    //printf("\n::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n");
-  for(i;i< cantidad;i++){
+  for(i;i< cantidad;i++){//printf("........................ indice actual:%d\n",i+10);
 	  if(strcmp(gci[i].simbolo,"CMP") == 0){
 		//fprintf(fileAssembler," \n;INICIO DE COMPARACION indice: %d\n",i+10);
 		//fprintf(fileAssembler,"\n ;COMPARACION\n");
@@ -621,7 +621,7 @@ void generarCODEAssembler(int cantidad){
 	   if(strcmp(gci[i].simbolo,"BI") == 0){
 		  
 		//fprintf(fileAssembler," ;SALTO INCONDICIONAL\n");
-		i++;
+		//i++;
 		fprintf(fileAssembler, "\n jmp ETIQUETA_%s\n",gci[i].simbolo);
    		if (noExistEtiqueta(cantEtiq,gci[i].simbolo)== 1 ){
 			cantEtiq++;
@@ -781,7 +781,7 @@ void generarCODEAssembler(int cantidad){
 			}
 		}
 	}
-	//printf("valor del ultimo indice %d",i);
+	//printf("........................ indice actual:%d",i+10);
 	char str[30];
 	itoa(i+10,str,10);
 	if (noExistEtiqueta(cantEtiq,str)== 0 ){
