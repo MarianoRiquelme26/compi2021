@@ -621,7 +621,18 @@ void generarCODEAssembler(int cantidad){
 	   if(strcmp(gci[i].simbolo,"BI") == 0){
 		  
 		//fprintf(fileAssembler," ;SALTO INCONDICIONAL\n");
-		//i++;
+		//VALIDO SI HAY ETIQUETAS ANTES DE INSERTAR BI, PORQ BI PUEDE SER UNA ETIQUETA
+		if(cantEtiq > -1){
+			//printf("\n***************************************\n\tVALIDANDO SI HAY ETIQUETAS: %d\n***************************************\n",i+10);
+			int comp = i+10;
+			int j = 0;
+			for(j; j<=cantEtiq; j++){
+				//printf("comp: %d",comp);
+				if(etiquetas[j] == comp )// || etiquetas[j] == comp) por ahi necesito validar el siguiente
+					fprintf(fileAssembler,"\n\n ETIQUETA_%d :",etiquetas[j]);
+			}
+		}
+		i++;
 		fprintf(fileAssembler, "\n jmp ETIQUETA_%s\n",gci[i].simbolo);
    		if (noExistEtiqueta(cantEtiq,gci[i].simbolo)== 1 ){
 			cantEtiq++;

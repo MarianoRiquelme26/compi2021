@@ -103,12 +103,12 @@ mov es,ax;
  fstp a;ASIGNACION
 
 
- jmp ETIQUETA_BI
-
- jmp ETIQUETA_BI
+ jmp ETIQUETA_40
 
 
  ETIQUETA_53 :
+ jmp ETIQUETA_29
+
 
  ETIQUETA_55 :
  fld a
@@ -177,7 +177,7 @@ mov es,ax;
  newLine 1
  DisplayInteger z,2
 
- jmp ETIQUETA_BI
+ jmp ETIQUETA_111
 
 
  ETIQUETA_94 :
@@ -214,6 +214,8 @@ mov es,ax;
  newLine 1
  DisplayString _1,2
 
+
+ ETIQUETA_111 :
  fld a
  fld _1
  fxch
