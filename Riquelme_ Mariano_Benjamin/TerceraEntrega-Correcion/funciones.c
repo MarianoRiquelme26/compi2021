@@ -533,7 +533,7 @@ void generarDataAssembler(){
 			//fprintf(fileAssembler,"%-30s\tdd\t\t%s\t\t;Constante en formato %s;\n",ts[i].nombre,ts[i].valor,ts[i].tipo_dato);
 			
 			if(strcmp(ts[i].tipo_dato,"CTE_STRING") == 0)
-				fprintf(fileAssembler,"%-30s\tdb\t\t%s,'$',%d dup(?)\t\t;Constante en formato %s;\n",ts[i].nombre,ts[i].valor, (50 - ts[i].longitud) , ts[i].tipo_dato);
+				fprintf(fileAssembler,"%-30s\tdb\t\t\"%s\" ,'$',%d dup(?)\t\t;Constante en formato %s;\n",ts[i].nombre,ts[i].valor, (50 - ts[i].longitud) , ts[i].tipo_dato);
 			else
 				fprintf(fileAssembler,"%-30s\tdd\t\t%s\t\t;Constante en formato %s;\n",ts[i].nombre,ts[i].valor,ts[i].tipo_dato);
 			}
@@ -639,10 +639,16 @@ void generarCODEAssembler(int cantidad){
 		//SE REEMPLAZA POR LA FUNCION DEL PROFE, tengo que ver que tipo es
 		char * paux = aux1;
 		//printf("--------------------------------------------------valor constante %c\n",*paux);
-		if(*paux == '_')
+		if(*paux == '_'){
+			fprintf(fileAssembler,"\nnewLine 1");
 			fprintf(fileAssembler,"\nDisplayString %s,2\n",aux1);
-		else
+		}
+			
+		else{
+			fprintf(fileAssembler,"\nnewLine 1");
 			fprintf(fileAssembler,"\nDisplayInteger %s,2\n",aux1);
+		}
+			
 			
 
 	  }

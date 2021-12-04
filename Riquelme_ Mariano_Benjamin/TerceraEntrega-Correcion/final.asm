@@ -11,7 +11,7 @@ _1_10                         	dd		1.10		;Constante en formato CTE_FLOAT;
 _1                            	dd		1		;Constante en formato CTE_INTEGER;
 _1_20                         	dd		1.20		;Constante en formato CTE_FLOAT;
 _2                            	dd		2		;Constante en formato CTE_INTEGER;
-_prueba1                      	db		prueba1,'$',43 dup(?)		;Constante en formato CTE_STRING;
+_prueba1                      	db		"prueba1" ,'$',43 dup(?)		;Constante en formato CTE_STRING;
 a                             	dd		?		;Variable
 b                             	dd		?		;Variable
 z                             	dd		?		;Variable
@@ -54,8 +54,10 @@ mov es,ax;
  fstp a;ASIGNACION
 
 
+newLine 1
 DisplayString _prueba1,2
 
+newLine 1
 DisplayInteger m,2
 
 
