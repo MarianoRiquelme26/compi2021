@@ -8,7 +8,9 @@ INCLUDE number.asm
 
 _1                            	dd		1		;Constante en formato CTE_INTEGER;
 _2                            	dd		2		;Constante en formato CTE_INTEGER;
+_algo                         	dd		-		;Constante en formato CTE_STRING;
 _3                            	dd		3		;Constante en formato CTE_INTEGER;
+_algo2                        	dd		-		;Constante en formato CTE_STRING;
 _6                            	dd		6		;Constante en formato CTE_INTEGER;
 _10                           	dd		10		;Constante en formato CTE_INTEGER;
 _100                          	dd		100		;Constante en formato CTE_INTEGER;
@@ -53,8 +55,10 @@ mov es,ax;
  fstp a;ASIGNACION
 
 
+DisplayString _algo,2
 
- ETIQUETA_22 :
+
+ ETIQUETA_24 :
  fld _2
  fld _3
  fadd	;SUMA
@@ -71,7 +75,7 @@ mov es,ax;
  fcom
  fstsw ax
  sahf
- JE ETIQUETA_41
+ JE ETIQUETA_43
 
  fld _2
  fld b
@@ -89,10 +93,10 @@ mov es,ax;
  fcom
  fstsw ax
  sahf
- JNE ETIQUETA_48
+ JNE ETIQUETA_50
 
 
- ETIQUETA_41 :
+ ETIQUETA_43 :
  fld a
  fld b
  fadd	;SUMA
@@ -103,21 +107,21 @@ mov es,ax;
  fstp z;ASIGNACION
 
 
- jmp ETIQUETA_22
-
-
- ETIQUETA_48 :
-DisplayInteger a,2
+ jmp ETIQUETA_24
 
 
  ETIQUETA_50 :
+DisplayString _algo2,2
+
+
+ ETIQUETA_52 :
  fld a
  fld _2
  fxch
  fcom
  fstsw ax
  sahf
- JA ETIQUETA_76
+ JA ETIQUETA_78
 
  fld b
  fld _1
@@ -130,14 +134,14 @@ DisplayInteger a,2
 
 
 
- ETIQUETA_61 :
+ ETIQUETA_63 :
  fld a
  fld _6
  fxch
  fcom
  fstsw ax
  sahf
- JB ETIQUETA_74
+ JB ETIQUETA_76
 
  fld a
  fld _2
@@ -149,12 +153,12 @@ DisplayInteger a,2
  fstp a;ASIGNACION
 
 
- jmp ETIQUETA_61
+ jmp ETIQUETA_63
 
- jmp ETIQUETA_50
+ jmp ETIQUETA_52
 
 
- ETIQUETA_76 :
+ ETIQUETA_78 :
  fld a
  fld b
  fadd	;SUMA
@@ -179,7 +183,7 @@ DisplayInteger z,2
  fcom
  fstsw ax
  sahf
- JNA ETIQUETA_103
+ JNA ETIQUETA_105
 
  fld a
  fld b
@@ -200,14 +204,14 @@ DisplayInteger z,2
 DisplayInteger a,2
 
 
- ETIQUETA_103 :
+ ETIQUETA_105 :
  fld a
  fld _1
  fxch
  fcom
  fstsw ax
  sahf
- JNA ETIQUETA_115
+ JNA ETIQUETA_117
 
  fld _100
  fstp z;ASIGNACION
@@ -215,17 +219,17 @@ DisplayInteger a,2
 
 DisplayInteger z,2
 
- jmp ETIQUETA_132
+ jmp ETIQUETA_134
 
 
- ETIQUETA_115 :
+ ETIQUETA_117 :
  fld z
  fld _10
  fxch
  fcom
  fstsw ax
  sahf
- JAE ETIQUETA_125
+ JAE ETIQUETA_127
 
  fld _2
  fld _1
@@ -238,7 +242,7 @@ DisplayInteger z,2
 
 
 
- ETIQUETA_125 :
+ ETIQUETA_127 :
  fld _2
  fld _2
  fdiv	;DIVISION
@@ -249,17 +253,17 @@ DisplayInteger z,2
  fstp z;ASIGNACION
 
 
-DisplayInteger _1,2
+DisplayString _1,2
 
 
- ETIQUETA_132 :
+ ETIQUETA_134 :
  fld a
  fld _1
  fxch
  fcom
  fstsw ax
  sahf
- JE ETIQUETA_145
+ JE ETIQUETA_147
 
  fld b
  fld _2
@@ -267,14 +271,14 @@ DisplayInteger _1,2
  fcom
  fstsw ax
  sahf
- JE ETIQUETA_145
+ JE ETIQUETA_147
 
  fld _100
  fstp z;ASIGNACION
 
 
 
- ETIQUETA_145 :
+ ETIQUETA_147 :
 
 mov ax,4c00h			;Indica que debe finalizar la ejecucion
 int 21h

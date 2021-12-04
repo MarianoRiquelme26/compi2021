@@ -613,8 +613,14 @@ void generarCODEAssembler(int cantidad){
 		//fprintf(fileAssembler,"\n mov ah, 09h");
 		//fprintf(fileAssembler,"\n lea dx, %s",aux1);
 		//fprintf(fileAssembler,"\n int 21h");
-		//SE REEMPLAZA POR LA FUNCION DEL PROFE
-		fprintf(fileAssembler,"\nDisplayInteger %s,2\n",&aux1);
+		//SE REEMPLAZA POR LA FUNCION DEL PROFE, tengo que ver que tipo es
+		char * paux = aux1;
+		//printf("--------------------------------------------------valor constante %c\n",*paux);
+		if(*paux == '_')
+			fprintf(fileAssembler,"\nDisplayString %s,2\n",aux1);
+		else
+			fprintf(fileAssembler,"\nDisplayInteger %s,2\n",aux1);
+			
 
 	  }
 	   if(strcmp(gci[i].simbolo,"GET") == 0){
@@ -788,3 +794,5 @@ int noExistEtiqueta(int cantEtiq,char* simbolo)
 			noExiste = 0;
 	return noExiste;
 }
+
+//funcion para obtener el tipo del dato que se levanto
