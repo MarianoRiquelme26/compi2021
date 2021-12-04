@@ -206,9 +206,11 @@ void guardar_cte_string(char * valor) {
         contadorCteString++;
       }*/
 	  strcpy(ts[cant_elem_ts].nombre,valor);
-      ts[cant_elem_ts].longitud = strlen(valor);
+      //ts[cant_elem_ts].longitud = strlen(valor);
+	  ts[cant_elem_ts].longitud = strlen(valor)-1;
       strcpy(ts[cant_elem_ts].tipo_dato,"CTE_STRING");
-      strcpy(ts[cant_elem_ts].valor,"-");
+      //strcpy(ts[cant_elem_ts].valor,"-");
+	  strncpy(ts[cant_elem_ts].valor, valor+1, strlen(valor)-1);
       cant_elem_ts++;
       contadorCteString++;
 	  
@@ -220,16 +222,29 @@ char* guardar_cte_float(float valor) {
       float constante = valor;
       char  prefijo[] = "_";
       char constante_string[100];
-      sprintf(constante_string,"%f",constante);
+      sprintf(constante_string,"%.2f",constante);
+	 
+	  
       char* nombre_constante = concat(prefijo, constante_string);
-      if(existe_simbolo(nombre_constante) == FALSE && cant_elem_ts <= TAM_TABLA){
-        strcpy(ts[cant_elem_ts].nombre,nombre_constante);
+	  /*
+	  CODIGO PARA LIMPIAR EL PUNTO QUE TRAE PROBLEMAS EN EL TURBOASSEMBLER
+	  */
+	  
+	  char nombre_constanteFinal[100];
+	  strcpy(nombre_constanteFinal,nombre_constante);
+	  nombre_constanteFinal[strlen(nombre_constanteFinal)-3] = '_';
+	  char* nombre_constanteF = nombre_constanteFinal;
+	  
+      if(existe_simbolo(nombre_constanteFinal) == FALSE && cant_elem_ts <= TAM_TABLA){
+        strcpy(ts[cant_elem_ts].nombre,nombre_constanteFinal);
         ts[cant_elem_ts].longitud = 0;
         strcpy(ts[cant_elem_ts].tipo_dato,"CTE_FLOAT");
         strcpy(ts[cant_elem_ts].valor,constante_string);
         cant_elem_ts++; 
       }
-      return nombre_constante;
+	  
+	  
+      return nombre_constanteF;
 }
 
 void guardar_ts(){
@@ -502,7 +517,7 @@ void generaAssembler(int cantidad){
 void generarETAssembler(){
 	
   fileAssembler = fopen(ASSEMBLER,"w");
-  fprintf(fileAssembler,"INCLUDE macros2.asm\nINCLUDE number.asm\n.MODEL LARGE\t\t\t;Modelo de Memoria\n.386\t\t\t\t\t;Tipo de Procesador\n.STACK 200h\t\t\t\t;Bytes en el Stack\n\n.DATA\n\n");
+  fprintf(fileAssembler,"INCLUDE macros2.asm\nINCLUDE number.asm\n.MODEL LARGE\t\t\t;Modelo de Memoria\n.386\t\t\t\t\t;Tipo de Procesador\n.STACK 200h\t\t\t\t;Bytes en el Stack\n\nMAXTEXTSIZE equ 50\n.DATA\n\n");
   fclose(fileAssembler);
 }
 
@@ -514,9 +529,17 @@ void generarDataAssembler(){
 	for(i;i<cant_elem_ts;i++){
 		if(strchr(ts[i].nombre,ch) == NULL)
 		fprintf(fileAssembler,"%-30s\tdd\t\t?\t\t;Variable\n",ts[i].nombre);
-		else
-		fprintf(fileAssembler,"%-30s\tdd\t\t%s\t\t;Constante en formato %s;\n",ts[i].nombre,ts[i].valor,ts[i].tipo_dato);
-	}
+		else{//correccion para completar la tabla de simbolos con los valores necesarios para poder printear
+			//fprintf(fileAssembler,"%-30s\tdd\t\t%s\t\t;Constante en formato %s;\n",ts[i].nombre,ts[i].valor,ts[i].tipo_dato);
+			
+			if(strcmp(ts[i].tipo_dato,"CTE_STRING") == 0)
+				fprintf(fileAssembler,"%-30s\tdb\t\t%s,'$',%d dup(?)\t\t;Constante en formato %s;\n",ts[i].nombre,ts[i].valor, (50 - ts[i].longitud) , ts[i].tipo_dato);
+			else
+				fprintf(fileAssembler,"%-30s\tdd\t\t%s\t\t;Constante en formato %s;\n",ts[i].nombre,ts[i].valor,ts[i].tipo_dato);
+			}
+			
+		}
+		
 	i = 0;
 	if(falgCicloEspecial == 1)
 		fprintf(fileAssembler,"@auxCE\t \t \t \t\tdd\t\t0.0\t\t;Variable auxiliar para ciclo especial\n");

@@ -126,6 +126,10 @@ sentencia : asignacion {printf("\n---------------------->sentencia - asignacion"
 		  | COMEN {printf("\n");}
 		  | ID OP_ASIG LONG{_contLong = 0;_aux = 0;}
 		  PARA lista PARC { printf("\n---------------------->sentencia - tema especial - long");
+							if(!existe_simbolo($<stringValue>1)){
+								printf("VARIABLE %s NO DEFINIDA",$<stringValue>1);
+								yyerror("");
+							}
 							char str[30];
 							itoa(_contLong+1,str,10);
 							//char str2[40] = "_";
@@ -149,7 +153,7 @@ asignacion : ID OP_ASIG expresion {	printf("\n---------------------->asignacion 
 									numeroPolaca++;
 									insertar_en_polaca_operador(":=", numeroPolaca);
 									numeroPolaca++;
-									/*SE JUNTA CON EL DESARROLLO DE EMI PARA LAS VALICACIONES
+									/*SE JUNTA CON EL DESARROLLO DE EMI PARA LAS VALICACIONES*/
 									switch(verificar_asignacion($<stringValue>1)){	
 									  case 1:     printf("\nNO SE DECLARO LA VARIABLE - %s - EN LA SECCION DE DEFINICIONES-asignacion\n",$<stringValue>1);	
 												  yyerror("\nERROR DE ASIGNACION\n");	
@@ -163,11 +167,11 @@ asignacion : ID OP_ASIG expresion {	printf("\n---------------------->asignacion 
 												  printf("\nUSTED ESTA INTENTANDO ASIGNAR UNA CONSTANTE %s A UNA VARIABLE %s \n", ultima_expresion, simbolo_busqueda.tipo_dato);	
 												  yyerror("\nERROR DE ASIGNACION\n");	
 												  break;	
-									}*/	
+									}
 			
-			}//ESTO ANTES ESTABA DESOCMENTADO, LO DESCOMENTO
-			|ID OP_ASIG CTE_S {	printf("\n---------------------->asignacion constante string donde no rompe: %s\n",$<stringValue>3);	
-								guardar_cte_string($<stringValue>3);	/*
+			}
+			|ID OP_ASIG CTE_S {	printf("\n---------------------->asignacion constante string donde no rompe");	
+								guardar_cte_string($<stringValue>3);	
 								ultima_expresion = "string";	
 								switch(verificar_asignacion($<stringValue>1)){	
 									  case 1:     printf("\nNO SE DECLARO LA VARIABLE - %s - EN LA SECCION DE DEFINICIONES\n",$<stringValue>3);	
@@ -184,7 +188,7 @@ asignacion : ID OP_ASIG expresion {	printf("\n---------------------->asignacion 
 												  printf("\nUSTED ESTA INTENTANDO ASIGNAR UNA CONSTANTE %s A UNA VARIABLE %s \n", ultima_expresion, simbolo_busqueda.tipo_dato);	
 												  yyerror("\nERROR DE ASIGNACION");	
 												  break;	
-									}	*/
+									}	
 				}	
 			;
 		
@@ -210,6 +214,10 @@ salida :    DISPLAY factor {printf("\n---------------------->salida - display");
 					};
 		  
 entrada:    GET ID {printf("\n---------------------->entrada");
+					if(!existe_simbolo($<stringValue>2)){
+							printf("VARIABLE %s NO DEFINIDA",$<stringValue>2);
+							yyerror("");
+					  }
 					insertar_en_polaca_id($<stringValue>2, numeroPolaca);
 					numeroPolaca++;
 					insertar_en_polaca_operador("GET", numeroPolaca);
@@ -433,14 +441,14 @@ termino   : termino OP_MUL factor {//CON LA BANDERA _aux INDICO QUE NO ESTOY LEV
 		  | factor {printf("\n---------------------->termino - factor");};
 
 factor :    ID {//printf("\n---------------------->factor - id");
+				if(!existe_simbolo($<stringValue>1)){	
+                  printf("\nNO SE DECLARO LA VARIABLE - %s - EN LA SECCION DE DEFINICIONES-factor\n",$<stringValue>1);	
+                  yyerror("\nERROR DE ASIGNACION\n");	
+				}
 				if( _aux == -2 )
 				{//printf("\n!!!!!!lectura nomarl de variables");
 					insertar_en_polaca_id($<stringValue>1, numeroPolaca);
 					numeroPolaca++;/*
-					if(!existe_simbolo($<stringValue>1)){	
-                  printf("\nNO SE DECLARO LA VARIABLE - %s - EN LA SECCION DE DEFINICIONES-factor\n",$<stringValue>1);	
-                  yyerror("\nERROR DE ASIGNACION\n");	
-				}	
 				ultima_expresion = simbolo_busqueda.tipo_dato;	*/
 				}
 				if( _aux == -1 )
@@ -476,10 +484,7 @@ factor :    ID {//printf("\n---------------------->factor - id");
 					float valor = atof($<stringValue>1);
 					ultima_expresion = "real"; 
 					char* nombre_cte_float = guardar_cte_float(valor);
-					//VOY INSETAR LA CONSTANTE REAL CON EL NOMBRE DE LA VARIABLE PARA FICILITAR EL ASSEMBLER
-					//insertar_en_polaca_cte_real(atof($<stringValue>1), numeroPolaca);
-					insertar_en_polaca_id(nombre_cte_float, numeroPolaca);
-					
+					insertar_en_polaca_cte_real(atof($<stringValue>1), numeroPolaca);
 					numeroPolaca++;
 		 }
 		 	 
@@ -539,7 +544,11 @@ lista : lista COMA factor {printf("\n---------------------->lista");_contLong++;
 		| factor {printf("\n---------------------->lista - factor");};
 		
 ciclo_especial : WHILEE {insertar_en_polaca_etiqueta_apilar(numeroPolaca); numeroPolaca++;}
-				 ID {if(valorIn == 0){strcpy(_auxID,yylval.stringValue); valorIn = 1;}}/*
+				 ID {if(!existe_simbolo(yylval.stringValue)){
+							printf("VARIABLE %s NO DEFINIDA EN WHILEE",yylval.stringValue);
+							yyerror("");
+					  }
+					 if(valorIn == 0){strcpy(_auxID,yylval.stringValue); valorIn = 1;}}/*
 				     
 					 strcpy(_auxID,yylval.stringValue);
 					 insertar_en_polaca_id(_auxID, numeroPolaca);
