@@ -1,10 +1,11 @@
 DIM [ a,b,z,m] AS [ real,integer,integer,real]
 
 
-m:= 1.1
-a:= 1+1.2
+m:= 10.1
+a:= 1+1.21
 z:= long (a,b)
 b:= 2
 a:= long (a,b,a,a,a)
 DISPLAY "prueba1"
 DISPLAY m
+DISPLAY b

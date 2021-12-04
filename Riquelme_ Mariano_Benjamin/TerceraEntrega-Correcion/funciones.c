@@ -73,6 +73,7 @@ typedef struct {
 
 simbolo ts[TAM_TABLA];
 simbolo simbolo_busqueda;
+//simbolo ts_var[TAM_TABLA];//tabla temporal utilizada para poder realizar los display de forma correcto
 
 typedef struct {
 	char simbolo[TAM_NOMBRE];
@@ -528,7 +529,7 @@ void generarDataAssembler(){
 	 fileAssembler = fopen(ASSEMBLER,"a");
 	for(i;i<cant_elem_ts;i++){
 		if(strchr(ts[i].nombre,ch) == NULL)
-		fprintf(fileAssembler,"%-30s\tdd\t\t?\t\t;Variable\n",ts[i].nombre);
+		fprintf(fileAssembler,"%-30s\tdd\t\t?\t\t;Variable de tipo %s\n",ts[i].nombre, ts[i].tipo_dato);
 		else{//correccion para completar la tabla de simbolos con los valores necesarios para poder printear
 			//fprintf(fileAssembler,"%-30s\tdd\t\t%s\t\t;Constante en formato %s;\n",ts[i].nombre,ts[i].valor,ts[i].tipo_dato);
 			
@@ -640,13 +641,22 @@ void generarCODEAssembler(int cantidad){
 		char * paux = aux1;
 		//printf("--------------------------------------------------valor constante %c\n",*paux);
 		if(*paux == '_'){
-			fprintf(fileAssembler,"\nnewLine 1");
-			fprintf(fileAssembler,"\nDisplayString %s,2\n",aux1);
+			fprintf(fileAssembler,"\n newLine 1");
+			fprintf(fileAssembler,"\n DisplayString %s,2\n",aux1);
 		}
 			
 		else{
-			fprintf(fileAssembler,"\nnewLine 1");
-			fprintf(fileAssembler,"\nDisplayInteger %s,2\n",aux1);
+			existe_simbolo(aux1);
+			if (strcmp(simbolo_busqueda.tipo_dato, "integer")==0){			
+				fprintf(fileAssembler,"\n newLine 1");
+				fprintf(fileAssembler,"\n DisplayInteger %s,2\n",aux1);
+			}
+			else{
+				fprintf(fileAssembler,"\n newLine 1");
+				fprintf(fileAssembler,"\n DisplayFloat %s,2\n",aux1);
+				
+			}
+			
 		}
 			
 			
