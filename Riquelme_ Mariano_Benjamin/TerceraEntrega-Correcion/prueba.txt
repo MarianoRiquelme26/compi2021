@@ -1,0 +1,45 @@
+DIM [ a,b,z] AS [ integer,integer,integer]
+
+
+
+a:= 1
+
+z:= long (a,b)
+b:= 2
+a:= long (a,b,a,a,a)
+
+WHILEE a IN [ 2+3 , 2+b ] DO
+		z:= a + b
+ENDWHILE
+DISPLAY a
+WHILE (a <= 2) START
+	b := b + 1
+	WHILE (a >= 6) START
+		a := a + 2
+	END
+END
+
+z:= a + b
+DISPLAY z
+DISPLAY z
+DISPLAY z
+DISPLAY z
+IF ( z > 1)THENS
+	a:= a + b + 10
+	DISPLAY a
+ENDIF
+
+IF (a > 1)THEN
+	z:= 100
+	DISPLAY z
+ELSE
+	IF ( z < 10)THENS
+		z:= 2 / 1
+	ENDIF
+	z:= 2 / 2
+	DISPLAY 1
+ENDIF
+
+IF (a != 1 AND b != 2)THENS
+	z:= 100
+ENDIF
