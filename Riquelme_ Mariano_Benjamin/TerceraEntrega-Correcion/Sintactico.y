@@ -167,7 +167,18 @@ asignacion : ID OP_ASIG expresion {	printf("\n---------------------->asignacion 
 			
 			}//ESTO ANTES ESTABA DESOCMENTADO, LO DESCOMENTO
 			|ID OP_ASIG CTE_S {	printf("\n---------------------->asignacion constante string donde no rompe: %s\n",$<stringValue>3);	
-								guardar_cte_string($<stringValue>3);	/*
+								//guardar_cte_string($<stringValue>3);
+								strcpy(idAux,yylval.stringValue);
+								char mensaje[50] = "_";
+								strcat(mensaje,idAux);
+								guardar_cte_string(mensaje);
+								insertar_en_polaca_id(const_string_sin_espacio, numeroPolaca);
+								numeroPolaca++;
+								insertar_en_polaca_id($<stringValue>1, numeroPolaca);
+								numeroPolaca++;
+								insertar_en_polaca_operador(":=", numeroPolaca);
+								numeroPolaca++;
+								/*
 								ultima_expresion = "string";	
 								switch(verificar_asignacion($<stringValue>1)){	
 									  case 1:     printf("\nNO SE DECLARO LA VARIABLE - %s - EN LA SECCION DE DEFINICIONES\n",$<stringValue>3);	

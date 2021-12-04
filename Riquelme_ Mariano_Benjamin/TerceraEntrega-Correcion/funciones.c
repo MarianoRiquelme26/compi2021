@@ -538,6 +538,7 @@ void generarDataAssembler(){
 	int i = 0;
 	const char ch = '_';
 	 fileAssembler = fopen(ASSEMBLER,"a");
+	 fprintf(fileAssembler,"@msj\tdb\t\t\"Ingrese valor de la variable: \" ,'$',20 dup(?)\t\t\n");
 	for(i;i<cant_elem_ts;i++){
 		if(strchr(ts[i].nombre,ch) == NULL)
 		fprintf(fileAssembler,"%-30s\tdd\t\t?\t\t;Variable de tipo %s\n",ts[i].nombre, ts[i].tipo_dato);
@@ -674,8 +675,13 @@ void generarCODEAssembler(int cantidad){
 				fprintf(fileAssembler,"\n DisplayInteger %s,2\n",aux1);
 			}
 			else{
+					if (strcmp(simbolo_busqueda.tipo_dato, "real")==0){			
+						fprintf(fileAssembler,"\n newLine 1");
+						fprintf(fileAssembler,"\n DisplayInteger %s,2\n",aux1);
+					}
+				
 				fprintf(fileAssembler,"\n newLine 1");
-				fprintf(fileAssembler,"\n DisplayFloat %s,2\n",aux1);
+				fprintf(fileAssembler,"\n DisplayString %s,2\n",aux1);
 				
 			}
 			
@@ -684,13 +690,35 @@ void generarCODEAssembler(int cantidad){
 			
 
 	  }
-	   if(strcmp(gci[i].simbolo,"GET") == 0){
+	   if(strcmp(gci[i].simbolo,"GET") == 0){/*
+	   SE REEMPLAZA CODIGO PARA USAR LAS MACROS
 		sacar_de_pila(&pVariables,&aux1);
 		fprintf(fileAssembler,"\n mov ah, 3fh");
 		fprintf(fileAssembler,"\n mov bx, 00",aux1);
 		fprintf(fileAssembler,"\n mov cx, 100");
 		fprintf(fileAssembler,"\n mov dx, offset[%s]",aux1);
-		fprintf(fileAssembler,"\n mov 21h");
+		fprintf(fileAssembler,"\n mov 21h");*/
+		sacar_de_pila(&pVariables,&aux1);
+		char * paux = aux1;
+		printf("--------------------------------------------------valor constante %s\n",aux1);
+		if(*paux == '_'){
+		fprintf(fileAssembler,"\n newLine 1");
+		fprintf(fileAssembler,"\n DisplayString %s,2\n",aux1);
+		}
+
+		else{
+		existe_simbolo(aux1);
+		if (strcmp(simbolo_busqueda.tipo_dato, "integer")==0){
+		fprintf(fileAssembler,"\n newLine 1");
+		fprintf(fileAssembler,"\n DisplayString @msj,2\n",aux1);
+		fprintf(fileAssembler,"\n GetInteger %s\n",aux1);
+		}
+		else{
+		fprintf(fileAssembler,"\n newLine 1");
+		fprintf(fileAssembler,"\n DisplayString @msj,2\n",aux1);
+		fprintf(fileAssembler,"\n GetFloat %s\n",aux1);
+
+		}		
 	  }
 	  
 	 if(esOperador(gci[i].simbolo) && strcmp(gci[i].simbolo,":=") != 0){
