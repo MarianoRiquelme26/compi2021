@@ -7,7 +7,7 @@ WHILE (edad < 18) START
 	DISPLAY "Diga su edad de nuevo "
 	GET edad
 END
-
+*/ Ejemplos de victorias: edad: 22 y 69, edad: 39 y numero: 100 /*
 DISPLAY "Bienvenido al juego"
 DISPLAY "Diga un numero real "
 GET numero
