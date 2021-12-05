@@ -16,12 +16,9 @@ WHILE (cont <= 9) START
 	END
 END
 DISPLAY "suma"
-DISPLAY suma
-
-
 DISPLAY "HOLA"
 
-IF (actual > 1 AND actual != 0)THENS
+IF (actual > 1 AND actual != 7)THENS
 	DISPLAY "mayor"
 ENDIF
 */ COMENTARIO /*
@@ -36,7 +33,7 @@ ELSE
 	DISPLAY "mayor" */ COMENTARIO /* */ COMENTARIO2 /*
 	a := long (a,b,c,e)
 
-	WHILEE a IN [ 1+3 , 2+b ] DO
+	WHILEE a IN [ 1+4 , 2+b ] DO
 		suma:= suma + actual
 		suma:= suma + actual
 		suma:= suma + actual
