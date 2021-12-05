@@ -73,6 +73,7 @@ typedef struct {
 
 simbolo ts[TAM_TABLA];
 simbolo simbolo_busqueda;
+//simbolo ts_var[TAM_TABLA];//tabla temporal utilizada para poder realizar los display de forma correcto
 
 typedef struct {
 	char simbolo[TAM_NOMBRE];
@@ -124,7 +125,8 @@ char * ultimo_operador;
 int contadorCteString = 0;
 int contVarAux = -1;
 int vecLong[30];
-int ivecLong = -1;;
+int ivecLong = -1;
+char const_string_sin_espacio[100];
 
 void guardar_variables_ts(){
   int i = 0;
@@ -205,13 +207,25 @@ void guardar_cte_string(char * valor) {
         cant_elem_ts++;
         contadorCteString++;
       }*/
-	  strcpy(ts[cant_elem_ts].nombre,valor);
-      ts[cant_elem_ts].longitud = strlen(valor);
+	  //AJUSTE PARA SACAR LOS ESPACIOS POR GUION BAJO
+	  strcpy(nombre_constante, valor);
+	  char *sust = nombre_constante;
+	  int i;
+      for(i = 0; i <= strlen(valor)-1; i++) {
+	  if(*sust == ' ')
+		*sust = '_';
+		*sust++;
+	  }
+	  strcpy(ts[cant_elem_ts].nombre,nombre_constante);
+      //ts[cant_elem_ts].longitud = strlen(valor);
+	  ts[cant_elem_ts].longitud = strlen(valor)-1;
       strcpy(ts[cant_elem_ts].tipo_dato,"CTE_STRING");
-      strcpy(ts[cant_elem_ts].valor,"-");
+      //strcpy(ts[cant_elem_ts].valor,"-");
+	  strncpy(ts[cant_elem_ts].valor, valor+1, strlen(valor)-1);
       cant_elem_ts++;
       contadorCteString++;
-	  
+	  strcpy(const_string_sin_espacio,nombre_constante);
+	  //return nombre_constante;
 
 }
 
@@ -220,16 +234,29 @@ char* guardar_cte_float(float valor) {
       float constante = valor;
       char  prefijo[] = "_";
       char constante_string[100];
-      sprintf(constante_string,"%f",constante);
+      sprintf(constante_string,"%.2f",constante);
+	 
+	  
       char* nombre_constante = concat(prefijo, constante_string);
-      if(existe_simbolo(nombre_constante) == FALSE && cant_elem_ts <= TAM_TABLA){
-        strcpy(ts[cant_elem_ts].nombre,nombre_constante);
+	  /*
+	  CODIGO PARA LIMPIAR EL PUNTO QUE TRAE PROBLEMAS EN EL TURBOASSEMBLER
+	  */
+	  
+	  char nombre_constanteFinal[100];
+	  strcpy(nombre_constanteFinal,nombre_constante);
+	  nombre_constanteFinal[strlen(nombre_constanteFinal)-3] = '_';
+	  char* nombre_constanteF = nombre_constanteFinal;
+	  
+      if(existe_simbolo(nombre_constanteFinal) == FALSE && cant_elem_ts <= TAM_TABLA){
+        strcpy(ts[cant_elem_ts].nombre,nombre_constanteFinal);
         ts[cant_elem_ts].longitud = 0;
         strcpy(ts[cant_elem_ts].tipo_dato,"CTE_FLOAT");
         strcpy(ts[cant_elem_ts].valor,constante_string);
         cant_elem_ts++; 
       }
-      return nombre_constante;
+	  
+	  
+      return nombre_constanteF;
 }
 
 void guardar_ts(){
@@ -502,7 +529,7 @@ void generaAssembler(int cantidad){
 void generarETAssembler(){
 	
   fileAssembler = fopen(ASSEMBLER,"w");
-  fprintf(fileAssembler,".MODEL LARGE\t\t\t;Modelo de Memoria\n.386\t\t\t\t\t;Tipo de Procesador\n.STACK 200h\t\t\t\t;Bytes en el Stack\n\n.DATA\n\n");
+  fprintf(fileAssembler,"INCLUDE macros.asm\nINCLUDE macros2.asm\nINCLUDE number.asm\n.MODEL LARGE\t\t\t;Modelo de Memoria\n.386\t\t\t\t\t;Tipo de Procesador\n.STACK 200h\t\t\t\t;Bytes en el Stack\n\nMAXTEXTSIZE equ 50\n.DATA\n\n");
   fclose(fileAssembler);
 }
 
@@ -511,22 +538,33 @@ void generarDataAssembler(){
 	int i = 0;
 	const char ch = '_';
 	 fileAssembler = fopen(ASSEMBLER,"a");
+	 fprintf(fileAssembler,"@msj\tdb\t\t\"Ingrese valor de la variable: \" ,'$',20 dup(?)\t\t\n");
+	 fprintf(fileAssembler,"@auxstr\tdd\t\t?\n");//variable para la carga por teclados
 	for(i;i<cant_elem_ts;i++){
 		if(strchr(ts[i].nombre,ch) == NULL)
-		fprintf(fileAssembler,"%-30s\tdd\t\t?\t\t;Variable\n",ts[i].nombre);
-		else
-		fprintf(fileAssembler,"%-30s\tdd\t\t%s\t\t;Constante en formato %s;\n",ts[i].nombre,ts[i].valor,ts[i].tipo_dato);
-	}
+		fprintf(fileAssembler,"%-30s\tdd\t\t?\t\t;Variable de tipo %s\n",ts[i].nombre, ts[i].tipo_dato);
+		else{//correccion para completar la tabla de simbolos con los valores necesarios para poder printear
+			//fprintf(fileAssembler,"%-30s\tdd\t\t%s\t\t;Constante en formato %s;\n",ts[i].nombre,ts[i].valor,ts[i].tipo_dato);
+			
+			if(strcmp(ts[i].tipo_dato,"CTE_STRING") == 0)
+				fprintf(fileAssembler,"%-30s\tdb\t\t\"%s\" ,'$',%d dup(?)\t\t;Constante en formato %s;\n",ts[i].nombre,ts[i].valor, (50 - ts[i].longitud) , ts[i].tipo_dato);
+			else
+				fprintf(fileAssembler,"%-30s\tdd\t\t%s\t\t;Constante en formato %s;\n",ts[i].nombre,ts[i].valor,ts[i].tipo_dato);
+			}
+			
+		}
+		
 	i = 0;
 	if(falgCicloEspecial == 1)
-		fprintf(fileAssembler,"@auxCE\t \t \t \t\tdd\t\t?\t\t;Variable auxiliar para ciclo especial\n");
+		fprintf(fileAssembler,"@auxCE\t \t \t \t\tdd\t\t0.0\t\t;Variable auxiliar para ciclo especial\n");
 	if(contVarAux> -1)
 		for(i;i<=contVarAux;i++)
-			fprintf(fileAssembler,"@aux%-30d\tdd\t\t?\t\t;Variable auxiliar\n",i);
+			fprintf(fileAssembler,"@aux%-30d\tdd\t\t0.0\t\t;Variable auxiliar\n",i);
 	i = 0;
 	if(ivecLong > -1)
 		for(i;i<=ivecLong;i++)
-			fprintf(fileAssembler,"_%-30d\tdd\t\t%d\t\t;constante para uso de long\n",vecLong[ivecLong],vecLong[ivecLong]);
+			fprintf(fileAssembler,"@cte%-30d\tdd\t\t%d\t\t;constante para uso de long\n",vecLong[i],vecLong[i]);
+			//fprintf(fileAssembler,"@cte%-30d\tdd\t\t%d\t\t;constante para uso de long\n",vecLong[ivecLong],vecLong[ivecLong]);
 	fprintf(fileAssembler,"\n\n");
 	fclose(fileAssembler);
 
@@ -536,10 +574,10 @@ void generarCODEAssembler(int cantidad){
 	
   //int etiquetas[50];
   int cantEtiq = -1;
-  char aux1[50];
-  char aux2[50];
+  char aux1[100];
+  char aux2[100];
   fileAssembler = fopen(ASSEMBLER,"a");
-  fprintf(fileAssembler,".CODE\nmov AX,@DATA\nmov DS,AX\nmov es,ax;") ;
+  fprintf(fileAssembler,".CODE\nSTART:\nmov AX,@DATA\nmov DS,AX\nmov es,ax;") ;
   fprintf(fileAssembler,"\n\n");
   int in = 0;
   int i = 0;
@@ -548,7 +586,7 @@ void generarCODEAssembler(int cantidad){
    //printf("\n::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n");
    //printf("\n GENERANDO EL CODIGO DE ASSEMBLER\n");
    //printf("\n::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n");
-  for(i;i< cantidad;i++){
+  for(i;i< cantidad;i++){//printf("........................ indice actual:%d\n",i+10);
 	  if(strcmp(gci[i].simbolo,"CMP") == 0){
 		//fprintf(fileAssembler," \n;INICIO DE COMPARACION indice: %d\n",i+10);
 		//fprintf(fileAssembler,"\n ;COMPARACION\n");
@@ -585,6 +623,17 @@ void generarCODEAssembler(int cantidad){
 	   if(strcmp(gci[i].simbolo,"BI") == 0){
 		  
 		//fprintf(fileAssembler," ;SALTO INCONDICIONAL\n");
+		//VALIDO SI HAY ETIQUETAS ANTES DE INSERTAR BI, PORQ BI PUEDE SER UNA ETIQUETA
+		if(cantEtiq > -1){
+			//printf("\n***************************************\n\tVALIDANDO SI HAY ETIQUETAS: %d\n***************************************\n",i+10);
+			int comp = i+10;
+			int j = 0;
+			for(j; j<=cantEtiq; j++){
+				//printf("comp: %d",comp);
+				if(etiquetas[j] == comp )// || etiquetas[j] == comp) por ahi necesito validar el siguiente
+					fprintf(fileAssembler,"\n\n ETIQUETA_%d :",etiquetas[j]);
+			}
+		}
 		i++;
 		fprintf(fileAssembler, "\n jmp ETIQUETA_%s\n",gci[i].simbolo);
    		if (noExistEtiqueta(cantEtiq,gci[i].simbolo)== 1 ){
@@ -609,18 +658,72 @@ void generarCODEAssembler(int cantidad){
 	  }
 	   if(strcmp(gci[i].simbolo,"DISPLAY") == 0){
 		sacar_de_pila(&pVariables,&aux1);
-		fprintf(fileAssembler,"\n mov ah, 09h");
-		fprintf(fileAssembler,"\n lea dx, %s",aux1);
-		fprintf(fileAssembler,"\n int 21h");
+		//fprintf(fileAssembler,"\n mov ah, 09h");
+		//fprintf(fileAssembler,"\n lea dx, %s",aux1);
+		//fprintf(fileAssembler,"\n int 21h");
+		//SE REEMPLAZA POR LA FUNCION DEL PROFE, tengo que ver que tipo es
+		char * paux = aux1;
+		printf("--------------------------------------------------valor constante %s\n",aux1);
+		if(*paux == '_'){
+			fprintf(fileAssembler,"\n newLine 1");
+			fprintf(fileAssembler,"\n DisplayString %s,2\n",aux1);
+		}
+			
+		else{
+			existe_simbolo(aux1);
+			if (strcmp(simbolo_busqueda.tipo_dato, "integer")==0){			
+				fprintf(fileAssembler,"\n newLine 1");
+				fprintf(fileAssembler,"\n DisplayInteger %s,2\n",aux1);
+			}
+			else{
+					if (strcmp(simbolo_busqueda.tipo_dato, "real")==0){			
+						fprintf(fileAssembler,"\n newLine 1");
+						fprintf(fileAssembler,"\n DisplayInteger %s,2\n",aux1);
+					}
+				
+				fprintf(fileAssembler,"\n newLine 1");
+				fprintf(fileAssembler,"\n DisplayString %s,2\n",aux1);
+				
+			}
+			
+		}
+			
+			
+
 	  }
-	   if(strcmp(gci[i].simbolo,"GET") == 0){
-		sacar_de_pila(&pVariables,&aux1);
-		fprintf(fileAssembler,"\n mov ah, 3fh");
-		fprintf(fileAssembler,"\n mov bx, 00",aux1);
-		fprintf(fileAssembler,"\n mov cx, 100");
-		fprintf(fileAssembler,"\n mov dx, offset[%s]",aux1);
-		fprintf(fileAssembler,"\n mov 21h");
-	  }
+		if(strcmp(gci[i].simbolo,"GET") == 0){
+			sacar_de_pila(&pVariables,&aux1);
+			//fprintf(fileAssembler,"\n mov ah, 09h");
+			//fprintf(fileAssembler,"\n lea dx, %s",aux1);
+			//fprintf(fileAssembler,"\n int 21h");
+			//SE REEMPLAZA POR LA FUNCION DEL PROFE, tengo que ver que tipo es
+			char * paux = aux1;
+			existe_simbolo(aux1);
+			printf("--------------------------------------------------valor constante %s\n",aux1);
+			if(strcmp(simbolo_busqueda.tipo_dato, "string")==0){
+				fprintf(fileAssembler,"\n newLine 1");
+				fprintf(fileAssembler,"\n DisplayString @msj,2\n",aux1);
+				fprintf(fileAssembler,"\n GetString @auxstr\n");
+				fprintf(fileAssembler,"lea si, @auxstr\nlea di, %s\nSTRCPY\n", aux1);
+
+			}
+			else{
+				existe_simbolo(aux1);
+				if (strcmp(simbolo_busqueda.tipo_dato, "integer")==0){
+					fprintf(fileAssembler,"\n newLine 1");
+					fprintf(fileAssembler,"\n DisplayString @msj,2\n",aux1);
+					fprintf(fileAssembler,"\n GetInteger %s\n",aux1);
+				}
+				else{
+					fprintf(fileAssembler,"\n newLine 1");
+					fprintf(fileAssembler,"\n DisplayString @msj,2\n",aux1);
+					fprintf(fileAssembler,"\n GetFloat %s\n",aux1);
+				}
+
+
+
+			}
+		}
 	  
 	 if(esOperador(gci[i].simbolo) && strcmp(gci[i].simbolo,":=") != 0){
 		 //printf("\nsimbolo encontrado: %s",gci[i].simbolo);
@@ -628,15 +731,15 @@ void generarCODEAssembler(int cantidad){
 		//DESAPILO OPERANDOS PARA OPERAR
 		sacar_de_pila(&pVariables,&aux2);
 		sacar_de_pila(&pVariables,&aux1);
-		fprintf(fileAssembler,"\n fild %s",aux1);
-		fprintf(fileAssembler,"\n fild %s",aux2);
+		fprintf(fileAssembler,"\n fld %s",aux1);
+		fprintf(fileAssembler,"\n fld %s",aux2);
 		if (strcmp(gci[i].simbolo, "+") == 0)
 		{//fprintf(fileAssembler,"\n es mas");
 			//fprintf(fileAssembler,"\t;\nSUMA\n");
 			fprintf(fileAssembler,"\n fadd\t;SUMA\n");
 			char auxStr[50] = "";
 			sprintf(auxStr, "@aux%d",in);
-			fprintf(fileAssembler, " fstp %s\n",auxStr);
+			fprintf(fileAssembler, " fstp %s ;ASIGNACION\n\n",auxStr);
 			//insertarTokenEnTS("",auxStr);
 			poner_en_pila(&pVariables,&auxStr);
 			in++;
@@ -648,7 +751,7 @@ void generarCODEAssembler(int cantidad){
 			fprintf(fileAssembler,"\n fsub\t;RESTA\n");
 			char auxStr[50] = "";
 			sprintf(auxStr, "@aux%d",in);
-			fprintf(fileAssembler, " fstp %s\n",auxStr);
+			fprintf(fileAssembler, " fstp %s;ASIGNACION\n\n",auxStr);
 			//insertarTokenEnTS("",auxStr);
 			poner_en_pila(&pVariables,&auxStr);
 			in++;
@@ -660,7 +763,7 @@ void generarCODEAssembler(int cantidad){
 			fprintf(fileAssembler," \n fmul\t;MULTIPLICACION\n");
 			char auxStr[50] = "";
 			sprintf(auxStr, "@aux%d",in);
-			fprintf(fileAssembler, " fstp %s\n",auxStr);
+			fprintf(fileAssembler, " fstp %s;ASIGNACION\n\n",auxStr);
 			//insertarTokenEnTS("",auxStr);
 			poner_en_pila(&pVariables,&auxStr);
 			in++;
@@ -672,7 +775,7 @@ void generarCODEAssembler(int cantidad){
 			fprintf(fileAssembler,"\n fdiv\t;DIVISION\n");
 			char auxStr[50] = "";
 			sprintf(auxStr, "@aux%d",in);
-			fprintf(fileAssembler, " fstp %s\n",auxStr);
+			fprintf(fileAssembler, " fstp %s;ASIGNACION\n\n",auxStr);
 			//insertarTokenEnTS("",auxStr);
 			poner_en_pila(&pVariables,&auxStr);
 			in++;
@@ -695,10 +798,23 @@ void generarCODEAssembler(int cantidad){
 	 //ponerEnPila_assembler(pila_assembler, 1); printf("apilo con assembler");}
 	    //fprintf(fileAssembler," ;ASGINACION\n");
 		tope_pila(&pVariables,&aux1);
-		//printf("antes de asingar: tope de pila:%s\n",aux1);		
-		sacar_de_pila(&pVariables,&aux1);
-		fprintf(fileAssembler,"\n fild %s",aux1);
-		fprintf(fileAssembler,"\n fstp %s",gci[i].simbolo);
+		//printf("antes de asingar: tope de pila:%s\n",aux1);	
+// NO SSTOY SEGURO SI ES NECESARIO SCAR ESTO DE LA PILA, VI QUE NO PASA NADA SI LO SACO, PERO NO SE		
+		//sacar_de_pila(&pVariables,&aux2);
+		//sacar_de_pila(&pVariables,&aux1);
+		printf("------------------------------------------------id: %d----------------ACA: %s  - %s\n",i+10,gci[i].simbolo,gci[i-1].simbolo);
+		existe_simbolo(gci[i].simbolo);
+		if (strcmp(simbolo_busqueda.tipo_dato, "string")==0){
+			//sacar_de_pila(&pVariables,&aux2);
+			fprintf(fileAssembler,"\n lea si, %s",gci[i-1].simbolo);
+			fprintf(fileAssembler,"\n lea di, %s",gci[i].simbolo);
+			fprintf(fileAssembler,"\n STRCPY;ASIGNACION\n\n");
+		}
+		else{
+			fprintf(fileAssembler,"\n fld %s",aux1);
+			fprintf(fileAssembler,"\n fstp %s;ASIGNACION\n\n",gci[i].simbolo);
+		}
+		
 		//fprintf(fileAssembler,"\n ffree");
 		//tope_pila(&pVariables,&aux1);
 		//printf("despues de asingar: tope de pila:%s\n",aux1);
@@ -721,6 +837,12 @@ void generarCODEAssembler(int cantidad){
 			}
 		}
 	}
+	//printf("........................ indice actual:%d",i+10);
+	char str[30];
+	itoa(i+10,str,10);
+	if (noExistEtiqueta(cantEtiq,str)== 0 ){
+			fprintf(fileAssembler,"\n\n ETIQUETA_%d :",i+10);
+		}
   fprintf(fileAssembler,"\n\n");
   fclose(fileAssembler);
     printf("\nCODIGO TRADUCIDO A ASSEMBLER EXITOSAMENTE\n");
@@ -730,7 +852,7 @@ void generarETFinAssembler(){
 	
   fileAssembler = fopen(ASSEMBLER,"a");
   fprintf(fileAssembler,"mov ax,4c00h\t\t\t;Indica que debe finalizar la ejecucion\n");
-  fprintf(fileAssembler,"int 21h\n\nEnd");
+  fprintf(fileAssembler,"int 21h\n\nEND START");
   fclose(fileAssembler);
 }
 
@@ -778,3 +900,5 @@ int noExistEtiqueta(int cantEtiq,char* simbolo)
 			noExiste = 0;
 	return noExiste;
 }
+
+//funcion para obtener el tipo del dato que se levanto

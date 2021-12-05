@@ -1,0 +1,12 @@
+Leeme para compilar y ejecutar
+
+0.- Instalar GUI Turbo Assembler.
+1.- Copiar los archivos macros.asm, macros2.asm, number.asm y numbers.asm al directorio del proyecto.
+2.- El archivo numbers debe compilarse aparte con el fin de ensamblarlo con el archivo final de trabajo.
+    Para compilarlo abrir Turbo Assembler con el fichero numbers.asm ir a tools y Assemble & Build.
+3.- Una vez compilado debe ubicarse en la carpeta BIN del GUI Turbo Assembler (C:\Program Files (x86)\GUI Turbo Assembler\BIN por defecto).
+4.- Se debe linkear el archivo obj de trabajo con la rutina numbers. 
+    Para esto configurar en el GUI Turbo Assembler (Option – View Preference- Assembler & Linker – Customize Arguments)
+    Dentro de esto donde dice Turbo linker escribir "/3 Final.obj numbers.obj" y dar Save.
+5.- Una vez con todo esto ejecutar el grupo02.bat que genera el archivo Final.asm.
+6.- Abrir Final.asm con GUI Turbo Assembler, ir a tools y clic en "Assemble & Build & Run".
