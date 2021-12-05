@@ -690,36 +690,35 @@ void generarCODEAssembler(int cantidad){
 			
 
 	  }
-	   if(strcmp(gci[i].simbolo,"GET") == 0){/*
-	   SE REEMPLAZA CODIGO PARA USAR LAS MACROS
-		sacar_de_pila(&pVariables,&aux1);
-		fprintf(fileAssembler,"\n mov ah, 3fh");
-		fprintf(fileAssembler,"\n mov bx, 00",aux1);
-		fprintf(fileAssembler,"\n mov cx, 100");
-		fprintf(fileAssembler,"\n mov dx, offset[%s]",aux1);
-		fprintf(fileAssembler,"\n mov 21h");*/
-		sacar_de_pila(&pVariables,&aux1);
-		char * paux = aux1;
-		printf("--------------------------------------------------valor constante %s\n",aux1);
-		if(*paux == '_'){
-		fprintf(fileAssembler,"\n newLine 1");
-		fprintf(fileAssembler,"\n DisplayString %s,2\n",aux1);
-		}
+	   if(strcmp(gci[i].simbolo,"GET") == 0){
+			sacar_de_pila(&pVariables,&aux1);
+			//fprintf(fileAssembler,"\n mov ah, 09h");
+			//fprintf(fileAssembler,"\n lea dx, %s",aux1);
+			//fprintf(fileAssembler,"\n int 21h");
+			//SE REEMPLAZA POR LA FUNCION DEL PROFE, tengo que ver que tipo es
+			char * paux = aux1;
+			printf("--------------------------------------------------valor constante %s\n",aux1);
+			if(*paux == '_'){
+			fprintf(fileAssembler,"\n newLine 1");
+			fprintf(fileAssembler,"\n DisplayString %s,2\n",aux1);
+			}
 
-		else{
-		existe_simbolo(aux1);
-		if (strcmp(simbolo_busqueda.tipo_dato, "integer")==0){
-		fprintf(fileAssembler,"\n newLine 1");
-		fprintf(fileAssembler,"\n DisplayString @msj,2\n",aux1);
-		fprintf(fileAssembler,"\n GetInteger %s\n",aux1);
-		}
-		else{
-		fprintf(fileAssembler,"\n newLine 1");
-		fprintf(fileAssembler,"\n DisplayString @msj,2\n",aux1);
-		fprintf(fileAssembler,"\n GetFloat %s\n",aux1);
+			else{
+			existe_simbolo(aux1);
+				if (strcmp(simbolo_busqueda.tipo_dato, "integer")==0){
+				fprintf(fileAssembler,"\n newLine 1");
+				fprintf(fileAssembler,"\n DisplayString @msj,2\n",aux1);
+				fprintf(fileAssembler,"\n GetInteger %s\n",aux1);
+				}
+				else{
+				fprintf(fileAssembler,"\n newLine 1");
+				fprintf(fileAssembler,"\n DisplayString @msj,2\n",aux1);
+				fprintf(fileAssembler,"\n GetFloat %s\n",aux1);
 
-		}		
-	  }
+				}
+
+			}
+	   }
 	  
 	 if(esOperador(gci[i].simbolo) && strcmp(gci[i].simbolo,":=") != 0){
 		 //printf("\nsimbolo encontrado: %s",gci[i].simbolo);
