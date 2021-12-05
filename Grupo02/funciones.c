@@ -663,7 +663,7 @@ void generarCODEAssembler(int cantidad){
 		//fprintf(fileAssembler,"\n int 21h");
 		//SE REEMPLAZA POR LA FUNCION DEL PROFE, tengo que ver que tipo es
 		char * paux = aux1;
-		printf("--------------------------------------------------valor constante %s\n",aux1);
+		//printf("--------------------------------------------------valor constante %s\n",aux1);
 		if(*paux == '_'){
 			fprintf(fileAssembler,"\n newLine 1");
 			fprintf(fileAssembler,"\n DisplayString %s,2\n",aux1);
@@ -699,7 +699,7 @@ void generarCODEAssembler(int cantidad){
 			//SE REEMPLAZA POR LA FUNCION DEL PROFE, tengo que ver que tipo es
 			char * paux = aux1;
 			existe_simbolo(aux1);
-			printf("--------------------------------------------------valor constante %s\n",aux1);
+			//printf("--------------------------------------------------valor constante %s\n",aux1);
 			if(strcmp(simbolo_busqueda.tipo_dato, "string")==0){
 				fprintf(fileAssembler,"\n newLine 1");
 				fprintf(fileAssembler,"\n DisplayString @msj,2\n",aux1);
