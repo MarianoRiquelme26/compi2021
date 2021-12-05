@@ -6,10 +6,3 @@ del lex.yy.c
 del y.tab.c
 del y.output
 del y.tab.h
-pause
-TASM Final.asm
-TASM number.asm
-tlink /3 Final.obj number.obj /v /s /m
-pause
-final.exe
-pause

@@ -517,7 +517,7 @@ factor :    ID {//printf("\n---------------------->factor - id");
 declaracion : DIM CORA listav CORC AS CORA listat CORC 
 			{ /*ESTO SE MIGRA ANTES DE CREAR EL ASSEMBLER
 			printf("\n---------------------->ESTOY GUARDANDO LA TABLA DE SIMBOLOS");*/
-				guardar_variables_ts();
+				//guardar_variables_ts();
 				/*freeArray(&array_nombres_variables);
 				freeArray(&array_tipos_variables);
 				
@@ -531,7 +531,7 @@ declaracion : DIM CORA listav CORC AS CORA listat CORC
 					yyerror("NO COINCIDEN LA CANTIDAD DE PARAMETROS CON LA CANTIDAD DE TIPOS");
 					exit(1);
 				}
-					
+				guardar_variables_ts();	
 				
 			};
 

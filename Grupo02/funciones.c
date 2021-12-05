@@ -9,7 +9,7 @@
 #define MAX_STRING_LENGTH 30
 #define TABLA_SIMBOLOS "ts.txt"
 #define POLACA "intermedia.txt"
-#define ASSEMBLER "final.asm"
+#define ASSEMBLER "Final.asm"
 #define TAM_TABLA 350
 #define TAM_POLACA 350
 #define TAM_PILA 50

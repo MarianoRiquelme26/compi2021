@@ -1,0 +1,41 @@
+DIM [edad,numero,numwin,pivote, bandera, alterar] AS [ integer,real, real, real, integer, integer]
+*/ DIM [ a1,a2] AS [ integer] /* */ Error para control de declaracion /*
+*/ DISPLAY "Esto es una prueba para que supere la cantidad de 30 caracteres" /* */ Error para control de caracteres/*
+*/ edad := 65536 /* */ Error para control de enteros de 16 bits /*
+DISPLAY "Ingrese su edad "
+GET edad
+
+WHILE (edad < 18) START
+	DISPLAY "Eres menor no puedes jugar"
+	DISPLAY "Diga su edad de nuevo "
+	GET edad
+END
+*/ Ejemplos de victorias: edad: 22 y 69, edad: 39 y numero: 100 /*
+DISPLAY "Bienvenido al juego"
+DISPLAY "Diga un numero real "
+GET numero
+numwin := numero / 1.25
+pivote := 3.14
+bandera := 0
+alterar := long(edad,numero,pivote,bandera)
+edad := edad - alterar
+WHILEE edad IN [ 14 + 4 , 6 * 8 , 33 ] DO
+	numwin := pivote*pivote
+	DISPLAY "Ganaste por WHILEESP"
+	edad := edad - alterar
+	bandera := 1 
+ENDWHILE
+
+IF(edad == 65 OR numwin > 499.50) THENS
+ DISPLAY "Ganaste por IF con OR"
+ bandera := 1
+ENDIF
+
+IF(edad < 40 AND numwin > 59.99) THEN
+ DISPLAY "Ganaste por IF con AND"
+ bandera := 1
+ELSE
+  IF(bandera == 0)THENS
+   DISPLAY "Perdiste no pudo ser"
+  ENDIF
+ENDIF
