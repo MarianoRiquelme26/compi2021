@@ -212,7 +212,10 @@ salida :    DISPLAY factor {printf("\n---------------------->salida - display");
 					strcpy(idAux,yylval.stringValue);
 					char mensaje[50] = "_";
 					strcat(mensaje,idAux);
-					guardar_cte_string(mensaje);
+					//VALIDO QUE NO EXISTA LA CONSTANTE PARA NO METERLA EN LA TABLA DOS VECES
+					if (existe_simbolo(mensaje) == FALSE)
+						guardar_cte_string(mensaje);
+					
 					//insertar_en_polaca_id($<stringValue>2, numeroPolaca); veo si me inserta bien 
 					insertar_en_polaca_id(const_string_sin_espacio, numeroPolaca);
 					numeroPolaca++;

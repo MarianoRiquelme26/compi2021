@@ -1,4 +1,4 @@
-NCLUDE macros.asm
+INCLUDE macros.asm
 INCLUDE macros2.asm
 INCLUDE number.asm
 .MODEL LARGE			;Modelo de Memoria
@@ -9,6 +9,7 @@ MAXTEXTSIZE equ 50
 .DATA
 
 @msj	db		"Ingrese valor de la variable: " ,'$',20 dup(?)		
+@auxstr	dd		?
 _algo                         	db		"algo" ,'$',46 dup(?)		;Constante en formato CTE_STRING;
 _str                          	db		"str" ,'$',47 dup(?)		;Constante en formato CTE_STRING;
 _1_10                         	dd		1.10		;Constante en formato CTE_FLOAT;
@@ -16,17 +17,18 @@ _1                            	dd		1		;Constante en formato CTE_INTEGER;
 _2                            	dd		2		;Constante en formato CTE_INTEGER;
 _prueba_1                     	db		"prueba 1" ,'$',42 dup(?)		;Constante en formato CTE_STRING;
 _3                            	dd		3		;Constante en formato CTE_INTEGER;
+_9                            	dd		9		;Constante en formato CTE_INTEGER;
 _prueba_2                     	db		"prueba 2" ,'$',42 dup(?)		;Constante en formato CTE_STRING;
-_6                            	dd		6		;Constante en formato CTE_INTEGER;
+_20                           	dd		20		;Constante en formato CTE_INTEGER;
 _10                           	dd		10		;Constante en formato CTE_INTEGER;
 _100                          	dd		100		;Constante en formato CTE_INTEGER;
 _algo2                        	db		"algo2" ,'$',45 dup(?)		;Constante en formato CTE_STRING;
-_str                          	db		"str" ,'$',47 dup(?)		;Constante en formato CTE_STRING;
 a                             	dd		?		;Variable de tipo integer
 b                             	dd		?		;Variable de tipo integer
 z                             	dd		?		;Variable de tipo integer
 m                             	dd		?		;Variable de tipo real
 z1                            	dd		?		;Variable de tipo string
+z3                            	dd		?		;Variable de tipo string
 @auxCE	 	 	 		dd		0.0		;Variable auxiliar para ciclo especial
 @aux0                             	dd		0.0		;Variable auxiliar
 @aux1                             	dd		0.0		;Variable auxiliar
@@ -60,6 +62,14 @@ mov es,ax;
  newLine 1
  DisplayString z1,2
 
+ newLine 1
+ DisplayString @msj,2
+
+ GetString @auxstr
+lea si, @auxstr
+lea di, z3
+STRCPY
+
  fld _1_10
  fstp m;ASIGNACION
 
@@ -84,7 +94,7 @@ mov es,ax;
  DisplayString _prueba_1,2
 
 
- ETIQUETA_34 :
+ ETIQUETA_36 :
  fld _2
  fld _3
  fadd	;SUMA
@@ -101,7 +111,7 @@ mov es,ax;
  fcom
  fstsw ax
  sahf
- JE ETIQUETA_53
+ JE ETIQUETA_55
 
  fld _2
  fld b
@@ -119,10 +129,10 @@ mov es,ax;
  fcom
  fstsw ax
  sahf
- JNE ETIQUETA_60
+ JNE ETIQUETA_65
 
 
- ETIQUETA_53 :
+ ETIQUETA_55 :
  fld a
  fld b
  fadd	;SUMA
@@ -133,22 +143,26 @@ mov es,ax;
  fstp z;ASIGNACION
 
 
- jmp ETIQUETA_34
+ fld _9
+ fstp a;ASIGNACION
 
 
- ETIQUETA_60 :
+ jmp ETIQUETA_36
+
+
+ ETIQUETA_65 :
  newLine 1
  DisplayString _prueba_2,2
 
 
- ETIQUETA_62 :
+ ETIQUETA_67 :
  fld a
  fld _2
  fxch
  fcom
  fstsw ax
  sahf
- JA ETIQUETA_88
+ JA ETIQUETA_93
 
  fld b
  fld _1
@@ -161,14 +175,14 @@ mov es,ax;
 
 
 
- ETIQUETA_73 :
+ ETIQUETA_78 :
  fld a
- fld _6
+ fld _20
  fxch
  fcom
  fstsw ax
  sahf
- JB ETIQUETA_86
+ JB ETIQUETA_91
 
  fld a
  fld _2
@@ -180,14 +194,14 @@ mov es,ax;
  fstp a;ASIGNACION
 
 
- jmp ETIQUETA_73
+ jmp ETIQUETA_78
 
 
- ETIQUETA_86 :
- jmp ETIQUETA_62
+ ETIQUETA_91 :
+ jmp ETIQUETA_67
 
 
- ETIQUETA_88 :
+ ETIQUETA_93 :
  fld a
  fld b
  fadd	;SUMA
@@ -216,7 +230,7 @@ mov es,ax;
  fcom
  fstsw ax
  sahf
- JNA ETIQUETA_115
+ JNA ETIQUETA_120
 
  fld a
  fld b
@@ -238,14 +252,14 @@ mov es,ax;
  DisplayInteger a,2
 
 
- ETIQUETA_115 :
+ ETIQUETA_120 :
  fld a
  fld _1
  fxch
  fcom
  fstsw ax
  sahf
- JNA ETIQUETA_127
+ JNA ETIQUETA_132
 
  fld _100
  fstp z;ASIGNACION
@@ -254,17 +268,17 @@ mov es,ax;
  newLine 1
  DisplayInteger z,2
 
- jmp ETIQUETA_144
+ jmp ETIQUETA_149
 
 
- ETIQUETA_127 :
+ ETIQUETA_132 :
  fld z
  fld _10
  fxch
  fcom
  fstsw ax
  sahf
- JAE ETIQUETA_137
+ JAE ETIQUETA_142
 
  fld _2
  fld _1
@@ -277,7 +291,7 @@ mov es,ax;
 
 
 
- ETIQUETA_137 :
+ ETIQUETA_142 :
  fld _2
  fld _2
  fdiv	;DIVISION
@@ -292,14 +306,14 @@ mov es,ax;
  DisplayString _1,2
 
 
- ETIQUETA_144 :
+ ETIQUETA_149 :
  fld a
  fld _1
  fxch
  fcom
  fstsw ax
  sahf
- JE ETIQUETA_157
+ JE ETIQUETA_162
 
  fld b
  fld _2
@@ -307,24 +321,27 @@ mov es,ax;
  fcom
  fstsw ax
  sahf
- JE ETIQUETA_157
+ JE ETIQUETA_162
 
  fld _100
  fstp z;ASIGNACION
 
 
 
- ETIQUETA_157 :
+ ETIQUETA_162 :
  lea si, _algo2
  lea di, z1
  STRCPY;ASIGNACION
 
 
  newLine 1
- DisplayString _str,2
+ DisplayString _algo2,2
 
  newLine 1
  DisplayString z1,2
+
+ newLine 1
+ DisplayString z3,2
 
 
 mov ax,4c00h			;Indica que debe finalizar la ejecucion

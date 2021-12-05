@@ -1,45 +1,54 @@
-DIM [ a,b,z,m,z1] AS [ integer,integer,integer,real,string]
-
+DIM [ a,b,z,m,z1,z3] AS [ integer,integer,integer,real,string,string]
 z1:= "algo"
 DISPLAY "str"
 DISPLAY z1
-
+GET z3
 m:= 1.1
 a:= 1
 z:= long (a,b)
 b:= 2
 a:= long (a,b,a,a,a)
 DISPLAY "prueba 1"
+
 WHILEE a IN [ 2+3 , 2+b ] DO
-		z:= a + b
+	z:= a + b
+	a := 9
 ENDWHILE
+
 DISPLAY "prueba 2"
+
 WHILE (a <= 2) START
 	b := b + 1
-	WHILE (a >= 6) START
+	WHILE (a >= 20) START
 		a := a + 2
 	END
 END
+
+
 
 z:= a + b
 DISPLAY z
 DISPLAY z
 DISPLAY z
 DISPLAY z
+
 IF ( z > 1)THENS
 	a:= a + b + 10
 	DISPLAY a
 ENDIF
 
+
+
 IF (a > 1)THEN
 	z:= 100
 	DISPLAY z
 ELSE
-	IF ( z < 10)THENS
-		z:= 2 / 1
-	ENDIF
-	z:= 2 / 2
-	DISPLAY 1
+IF ( z < 10)THENS
+	z:= 2 / 1
+ENDIF
+
+z:= 2 / 2
+DISPLAY 1
 ENDIF
 
 IF (a != 1 AND b != 2)THENS
@@ -48,3 +57,9 @@ ENDIF
 z1:= "algo2"
 DISPLAY "str"
 DISPLAY z1
+DISPLAY z3
+}
+
+
+
+

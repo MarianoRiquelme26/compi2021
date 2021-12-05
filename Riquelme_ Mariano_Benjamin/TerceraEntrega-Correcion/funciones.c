@@ -529,7 +529,7 @@ void generaAssembler(int cantidad){
 void generarETAssembler(){
 	
   fileAssembler = fopen(ASSEMBLER,"w");
-  fprintf(fileAssembler,"NCLUDE macros.asm\nINCLUDE macros2.asm\nINCLUDE number.asm\n.MODEL LARGE\t\t\t;Modelo de Memoria\n.386\t\t\t\t\t;Tipo de Procesador\n.STACK 200h\t\t\t\t;Bytes en el Stack\n\nMAXTEXTSIZE equ 50\n.DATA\n\n");
+  fprintf(fileAssembler,"INCLUDE macros.asm\nINCLUDE macros2.asm\nINCLUDE number.asm\n.MODEL LARGE\t\t\t;Modelo de Memoria\n.386\t\t\t\t\t;Tipo de Procesador\n.STACK 200h\t\t\t\t;Bytes en el Stack\n\nMAXTEXTSIZE equ 50\n.DATA\n\n");
   fclose(fileAssembler);
 }
 
@@ -539,6 +539,7 @@ void generarDataAssembler(){
 	const char ch = '_';
 	 fileAssembler = fopen(ASSEMBLER,"a");
 	 fprintf(fileAssembler,"@msj\tdb\t\t\"Ingrese valor de la variable: \" ,'$',20 dup(?)\t\t\n");
+	 fprintf(fileAssembler,"@auxstr\tdd\t\t?\n");//variable para la carga por teclados
 	for(i;i<cant_elem_ts;i++){
 		if(strchr(ts[i].nombre,ch) == NULL)
 		fprintf(fileAssembler,"%-30s\tdd\t\t?\t\t;Variable de tipo %s\n",ts[i].nombre, ts[i].tipo_dato);
@@ -690,35 +691,39 @@ void generarCODEAssembler(int cantidad){
 			
 
 	  }
-	   if(strcmp(gci[i].simbolo,"GET") == 0){
+		if(strcmp(gci[i].simbolo,"GET") == 0){
 			sacar_de_pila(&pVariables,&aux1);
 			//fprintf(fileAssembler,"\n mov ah, 09h");
 			//fprintf(fileAssembler,"\n lea dx, %s",aux1);
 			//fprintf(fileAssembler,"\n int 21h");
 			//SE REEMPLAZA POR LA FUNCION DEL PROFE, tengo que ver que tipo es
 			char * paux = aux1;
-			printf("--------------------------------------------------valor constante %s\n",aux1);
-			if(*paux == '_'){
-			fprintf(fileAssembler,"\n newLine 1");
-			fprintf(fileAssembler,"\n DisplayString %s,2\n",aux1);
-			}
-
-			else{
 			existe_simbolo(aux1);
-				if (strcmp(simbolo_busqueda.tipo_dato, "integer")==0){
+			printf("--------------------------------------------------valor constante %s\n",aux1);
+			if(strcmp(simbolo_busqueda.tipo_dato, "string")==0){
 				fprintf(fileAssembler,"\n newLine 1");
 				fprintf(fileAssembler,"\n DisplayString @msj,2\n",aux1);
-				fprintf(fileAssembler,"\n GetInteger %s\n",aux1);
+				fprintf(fileAssembler,"\n GetString @auxstr\n");
+				fprintf(fileAssembler,"lea si, @auxstr\nlea di, %s\nSTRCPY\n", aux1);
+
+			}
+			else{
+				existe_simbolo(aux1);
+				if (strcmp(simbolo_busqueda.tipo_dato, "integer")==0){
+					fprintf(fileAssembler,"\n newLine 1");
+					fprintf(fileAssembler,"\n DisplayString @msj,2\n",aux1);
+					fprintf(fileAssembler,"\n GetInteger %s\n",aux1);
 				}
 				else{
-				fprintf(fileAssembler,"\n newLine 1");
-				fprintf(fileAssembler,"\n DisplayString @msj,2\n",aux1);
-				fprintf(fileAssembler,"\n GetFloat %s\n",aux1);
-
+					fprintf(fileAssembler,"\n newLine 1");
+					fprintf(fileAssembler,"\n DisplayString @msj,2\n",aux1);
+					fprintf(fileAssembler,"\n GetFloat %s\n",aux1);
 				}
 
+
+
 			}
-	   }
+		}
 	  
 	 if(esOperador(gci[i].simbolo) && strcmp(gci[i].simbolo,":=") != 0){
 		 //printf("\nsimbolo encontrado: %s",gci[i].simbolo);
