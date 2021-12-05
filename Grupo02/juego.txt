@@ -26,11 +26,11 @@ WHILE (edad < 18) START
 	DISPLAY "Diga su edad de nuevo "
 	GET edad
 END
-
+*/ Ejemplos de victorias: edad: 22 y 69, edad: 39 y numero: 100 /*
 DISPLAY "Bienvenido al juego"
 DISPLAY "Diga un numero real "
 GET numero
-numwin := numero / 6.25
+numwin := numero / 1.25
 pivote := 3.14
 
 */ Error para asignar una operacion de tipos real a una variable integer /*
@@ -39,19 +39,20 @@ pivote := 3.14
 bandera := 0
 alterar := long(edad,numero,pivote,bandera)
 edad := edad - alterar
-WHILEE numwin IN [ 14.5 + 25.5 , 6.75 * pivote, 1 ] DO
+WHILEE edad IN [ 14 + 4 , 6 * 8 , 33 ] DO
 	numwin := pivote*pivote
-	DISPLAY "Ganaste"
+	DISPLAY "Ganaste por WHILEESP"
+	edad := edad - alterar
 	bandera := 1 
 ENDWHILE
 
 IF(edad == 65 OR numwin > 499.50) THENS
- DISPLAY "Ganaste"
+ DISPLAY "Ganaste por IF con OR"
  bandera := 1
 ENDIF
 
-IF(edad < 40 AND numwin > 29.99) THEN
- DISPLAY "Ganaste"
+IF(edad < 40 AND numwin > 59.99) THEN
+ DISPLAY "Ganaste por IF con AND"
  bandera := 1
 ELSE
   IF(bandera == 0)THENS

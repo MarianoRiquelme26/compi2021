@@ -212,7 +212,7 @@ void guardar_cte_string(char * valor) {
 	  char *sust = nombre_constante;
 	  int i;
       for(i = 0; i <= strlen(valor)-1; i++) {
-	  if(*sust == ' ')
+	  if(*sust == ' ' || *sust == '.')
 		*sust = '_';
 		*sust++;
 	  }
@@ -663,7 +663,7 @@ void generarCODEAssembler(int cantidad){
 		//fprintf(fileAssembler,"\n int 21h");
 		//SE REEMPLAZA POR LA FUNCION DEL PROFE, tengo que ver que tipo es
 		char * paux = aux1;
-		printf("--------------------------------------------------valor constante %s\n",aux1);
+		//printf("--------------------------------------------------valor constante %s\n",aux1);
 		if(*paux == '_'){
 			fprintf(fileAssembler,"\n newLine 1");
 			fprintf(fileAssembler,"\n DisplayString %s,2\n",aux1);
@@ -699,7 +699,7 @@ void generarCODEAssembler(int cantidad){
 			//SE REEMPLAZA POR LA FUNCION DEL PROFE, tengo que ver que tipo es
 			char * paux = aux1;
 			existe_simbolo(aux1);
-			printf("--------------------------------------------------valor constante %s\n",aux1);
+			//printf("--------------------------------------------------valor constante %s\n",aux1);
 			if(strcmp(simbolo_busqueda.tipo_dato, "string")==0){
 				fprintf(fileAssembler,"\n newLine 1");
 				fprintf(fileAssembler,"\n DisplayString @msj,2\n",aux1);
@@ -802,7 +802,7 @@ void generarCODEAssembler(int cantidad){
 // NO SSTOY SEGURO SI ES NECESARIO SCAR ESTO DE LA PILA, VI QUE NO PASA NADA SI LO SACO, PERO NO SE		
 		//sacar_de_pila(&pVariables,&aux2);
 		//sacar_de_pila(&pVariables,&aux1);
-		printf("------------------------------------------------id: %d----------------ACA: %s  - %s\n",i+10,gci[i].simbolo,gci[i-1].simbolo);
+		//printf("------------------------------------------------id: %d----------------ACA: %s  - %s\n",i+10,gci[i].simbolo,gci[i-1].simbolo);
 		existe_simbolo(gci[i].simbolo);
 		if (strcmp(simbolo_busqueda.tipo_dato, "string")==0){
 			//sacar_de_pila(&pVariables,&aux2);
@@ -900,5 +900,3 @@ int noExistEtiqueta(int cantEtiq,char* simbolo)
 			noExiste = 0;
 	return noExiste;
 }
-
-//funcion para obtener el tipo del dato que se levanto
