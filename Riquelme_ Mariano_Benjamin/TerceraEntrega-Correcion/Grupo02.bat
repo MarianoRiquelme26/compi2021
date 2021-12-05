@@ -8,4 +8,3 @@ del y.output
 del y.tab.h
 del Segunda.exe
 pause
-del final.asm
