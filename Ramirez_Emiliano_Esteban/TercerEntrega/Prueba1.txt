@@ -1,2 +1,9 @@
-DIM [ a,b,c,d,e,f,z] AS [ integer,integer, integer,integer,integer,integer,integer]
-z:= a + b * c - d / (e * f) + 20
+DIM [ a,b,c] AS [ integer,integer,integer]
+
+b:=3
+
+c:=2
+
+a:=b+c
+
+DISPLAY a
