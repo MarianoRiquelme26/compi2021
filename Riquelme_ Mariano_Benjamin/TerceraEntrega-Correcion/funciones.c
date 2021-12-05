@@ -529,7 +529,7 @@ void generaAssembler(int cantidad){
 void generarETAssembler(){
 	
   fileAssembler = fopen(ASSEMBLER,"w");
-  fprintf(fileAssembler,"INCLUDE macros2.asm\nINCLUDE number.asm\n.MODEL LARGE\t\t\t;Modelo de Memoria\n.386\t\t\t\t\t;Tipo de Procesador\n.STACK 200h\t\t\t\t;Bytes en el Stack\n\nMAXTEXTSIZE equ 50\n.DATA\n\n");
+  fprintf(fileAssembler,"NCLUDE macros.asm\nINCLUDE macros2.asm\nINCLUDE number.asm\n.MODEL LARGE\t\t\t;Modelo de Memoria\n.386\t\t\t\t\t;Tipo de Procesador\n.STACK 200h\t\t\t\t;Bytes en el Stack\n\nMAXTEXTSIZE equ 50\n.DATA\n\n");
   fclose(fileAssembler);
 }
 
@@ -793,10 +793,23 @@ void generarCODEAssembler(int cantidad){
 	 //ponerEnPila_assembler(pila_assembler, 1); printf("apilo con assembler");}
 	    //fprintf(fileAssembler," ;ASGINACION\n");
 		tope_pila(&pVariables,&aux1);
-		//printf("antes de asingar: tope de pila:%s\n",aux1);		
-		sacar_de_pila(&pVariables,&aux1);
-		fprintf(fileAssembler,"\n fld %s",aux1);
-		fprintf(fileAssembler,"\n fstp %s;ASIGNACION\n\n",gci[i].simbolo);
+		//printf("antes de asingar: tope de pila:%s\n",aux1);	
+// NO SSTOY SEGURO SI ES NECESARIO SCAR ESTO DE LA PILA, VI QUE NO PASA NADA SI LO SACO, PERO NO SE		
+		//sacar_de_pila(&pVariables,&aux2);
+		//sacar_de_pila(&pVariables,&aux1);
+		printf("------------------------------------------------id: %d----------------ACA: %s  - %s\n",i+10,gci[i].simbolo,gci[i-1].simbolo);
+		existe_simbolo(gci[i].simbolo);
+		if (strcmp(simbolo_busqueda.tipo_dato, "string")==0){
+			//sacar_de_pila(&pVariables,&aux2);
+			fprintf(fileAssembler,"\n lea si, %s",gci[i-1].simbolo);
+			fprintf(fileAssembler,"\n lea di, %s",gci[i].simbolo);
+			fprintf(fileAssembler,"\n STRCPY;ASIGNACION\n\n");
+		}
+		else{
+			fprintf(fileAssembler,"\n fld %s",aux1);
+			fprintf(fileAssembler,"\n fstp %s;ASIGNACION\n\n",gci[i].simbolo);
+		}
+		
 		//fprintf(fileAssembler,"\n ffree");
 		//tope_pila(&pVariables,&aux1);
 		//printf("despues de asingar: tope de pila:%s\n",aux1);
