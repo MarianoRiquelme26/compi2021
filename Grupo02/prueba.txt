@@ -1,4 +1,4 @@
-DIM [edad,numero,numwin,pivote, bandera, alterar] AS [ integer,real, real, real, integer, integer]
+DIM [edad,numero,numwin,pivote, bandera, alterar,nombre] AS [ integer,real, real, real, integer, integer,string]
 
 */ Error para control de caracteres /*
 */ DISPLAY "Esto es una prueba para que supere la cantidad de 30 caracteres" /*
