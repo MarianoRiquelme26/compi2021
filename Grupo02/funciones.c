@@ -212,7 +212,7 @@ void guardar_cte_string(char * valor) {
 	  char *sust = nombre_constante;
 	  int i;
       for(i = 0; i <= strlen(valor)-1; i++) {
-	  if(*sust == ' ')
+	  if(*sust == ' ' || *sust == '.')
 		*sust = '_';
 		*sust++;
 	  }
@@ -802,7 +802,7 @@ void generarCODEAssembler(int cantidad){
 // NO SSTOY SEGURO SI ES NECESARIO SCAR ESTO DE LA PILA, VI QUE NO PASA NADA SI LO SACO, PERO NO SE		
 		//sacar_de_pila(&pVariables,&aux2);
 		//sacar_de_pila(&pVariables,&aux1);
-		printf("------------------------------------------------id: %d----------------ACA: %s  - %s\n",i+10,gci[i].simbolo,gci[i-1].simbolo);
+		//printf("------------------------------------------------id: %d----------------ACA: %s  - %s\n",i+10,gci[i].simbolo,gci[i-1].simbolo);
 		existe_simbolo(gci[i].simbolo);
 		if (strcmp(simbolo_busqueda.tipo_dato, "string")==0){
 			//sacar_de_pila(&pVariables,&aux2);
@@ -900,5 +900,3 @@ int noExistEtiqueta(int cantEtiq,char* simbolo)
 			noExiste = 0;
 	return noExiste;
 }
-
-//funcion para obtener el tipo del dato que se levanto
